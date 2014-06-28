@@ -1,0 +1,13 @@
+#Informacion sobre el sistema operativo 2014 daniel martin
+echo ------------------------------------------------------
+echo + Guia de Informacion sobre el sistema operativo     +
+echo + Sistema Operativo : AMAYA OS                       +
+echo + Version : 0.0.1                                    +
+echo + Kernel : FNX                                       +
+echo + Version del Kernel : 0.05                          +
+echo + Año de Lanzamiento : AMAYA OS (2014) - FNX (2012)  +
+echo + Sistema de Arranque : GRUB                         +
+echo + Contacto : liberadalinux@openmailbox.org           +
+echo ------------------------------------------------------
+echo Estado de RAM :
+memstat
