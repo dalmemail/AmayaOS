@@ -32,9 +32,9 @@ version.regenerateHeader()
 #
 # Process subscripts.
 #
-SConscript(dirs = ['lib', 'kernel', 'bin', 'sbin', 'srv'])
+SConscript(dirs = ['lib', 'kernel', 'bin', 'sbin', 'srv', 'usr'])
 
 #
 # Per default, build libraries, kernel and user programs.
 #
-Default(['lib', 'kernel', 'bin', 'sbin', 'srv', 'etc'])
+Default(['lib', 'kernel', 'bin', 'sbin', 'srv', 'etc', 'usr'])

@@ -20,4 +20,4 @@ SConscript(dirs = [ 'sh', 'ps', 'memstat', 'mount',
                     'uname', 'cat', 'ls', 'stat',
                     'mknod', 'echo', 'pwd', 'hello',
                     'sleep', 'see', 'about', 'mkdir', 'startx', 'adir', 'axps', 'touch',
-                    'desktop', 'wama' ])
+                    'desktop', 'nice' ])
