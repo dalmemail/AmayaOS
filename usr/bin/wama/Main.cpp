@@ -1,7 +1,7 @@
 /* Wama Loader by Dan Rulos */
 /* Copyright (C) 2014 Team Espartano (AmayaOS) */
 /*
-# Copyright (C) 2014 Team Espartano (AmayaOS)
+# Copyright (C) 2014 Team Espartano (AmayaOS), 2014 Dan Rulos.
 # 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,7 +18,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "written.cpp" /* Importamos la libreria de Wama */
+#include "written.cpp" /* Importamos la libreria de written de Wama */
 #include <errno.h>
 #include <string.h>
 
@@ -45,7 +45,7 @@ int main(int argc, char **argv)
             /* Mensaje de ayuda. */
             else if (strcmp(argv[i + 1], "--help") == 0) {
                 printf( "uso: %s [OPCION]...\r\n"
-                    "Imprime informacion del sistema.\r\n"
+                    "Ejecuta las distintas funciones de WAMA.\r\n"
                     "\r\n"
                     "-r, --reader  Inicia la parte de Wama que se dedica a la lectura.\r\n"
                     "-w, --written Inicia la parte de Wama que se dedica a la escritura.\r\n"
