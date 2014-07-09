@@ -7,6 +7,13 @@ kernel /kernel/kernel
 module /boot/boot.img.gz
 module /boot/boot.linn.gz
 
+title AMAYA OS 0.06 (English)
+
+title AMAYA OS 0.06 (Français)
+
+title AmayaOS 0.06 All
+configfile /boot/grub/all.lst
+
 title	Start from main drive / hard disk
 rootnoverify (hd0)
 chainloader +1

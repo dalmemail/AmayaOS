@@ -23,14 +23,20 @@
 #include <string.h>
 int main(int argc, char **argv)
 {
-    /* Obtenemos los argumentos de la linea de comandos */
-    if(argc < 2) {
-        printf("uso: %s ARCHIVO\n", argv[0]);
+    mode_t dev;
+
+    /* Obtenemos los argumentos de la linea de comandos. */
+    if (argc < 5) {
+        printf("uso: %s DIRECTORIO A SER CREADO c 1 2\r\n",
+            argv[0]);
         return EXIT_FAILURE;
     }
-        
-    /* Función touch */
-    touch(argv[1], S_IWUSR | S_IRUSR);
 
-    return EXIT_SUCCESS; /* Todo ha salido bien */
+    /* Intentamos crear el directorio. */
+    if (mkdir(argv[1], dev) < 0) {
+        printf("%s: error al crear '%s': %s\r\n",
+            argv[0], argv[1], strerror(errno));
+        return EXIT_FAILURE;
+    }
+    return EXIT_SUCCESS;
 }
