@@ -1,6 +1,4 @@
 /srv/input/keyboard/server
-/srv/stdin/server
-/srv/stdout/server
 /srv/video/vga/server
 /srv/terminal/server
 /srv/filesystem/proc/server
