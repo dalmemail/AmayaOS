@@ -24,13 +24,19 @@
 int main(int argc, char **argv)
 {
     /* Obtenemos los argumentos de la linea de comandos */
-    if(argc < 2) {
+    if(argc < 2) { /* Si hay menos de 2 argumentos (palabras) en la linea de comandos avisa */
         printf("uso: %s ARCHIVO\n", argv[0]);
-        return EXIT_FAILURE;
+        return EXIT_FAILURE; /* Hala.... FAILURE! */
+    }
+    if (argv[1][0]!='/') { /* Necesito una ruta... */
+      printf("ERROR ! ");
+      printf(argv[1]);
+      printf(" No es una ruta\r\n");
+      return EXIT_SUCCESS;
     }
         
     /* Función touch */
-    touch(argv[1], S_IWUSR | S_IRUSR);
+    touch(argv[1], S_IWUSR | S_IRUSR); /* Creando el archivo.... Nos dejara el FileSystem ? */
 
     return EXIT_SUCCESS; /* Todo ha salido bien */
 }

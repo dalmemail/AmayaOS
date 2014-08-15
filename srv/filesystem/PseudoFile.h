@@ -27,6 +27,7 @@
 #include <stdio.h>
 #include <stdarg.h>
 #include <string.h>
+#include <stdlib.h>
 
 /**
  * @brief Pseudo files only exist in memory.

@@ -227,6 +227,6 @@ extern C int putchar(int ch);
  */
 
 /* AMAYA_OS */
-
+/* Reads the a number of characters of stdin. */
 #endif /* __ASSEMBLER__ */
 #endif /* __LIBC_STDIO_H */

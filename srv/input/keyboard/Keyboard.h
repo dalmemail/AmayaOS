@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Niek Linnenbank
+ * Copyright (C) 2009 Niek Linnenbank, 2014 Dan Rulos.
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -77,8 +77,7 @@ class Keyboard : public Device
 	/**
 	 * @brief Keyboard map table.
 	 */
-        static const char keymap_es_LA[0x80][2];
-        static const char keymap_es_ES[0x80][2];
+        static const char keymap[0x3a][2];
 
 	/**
 	 * @brief State of the shift key.

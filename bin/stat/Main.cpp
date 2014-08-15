@@ -37,7 +37,7 @@ int statFile(char *prog, char *file)
     
     /* Imprimir el tipo de archivo. */
     if (S_ISREG(st.st_mode))
-        printf("Fichero común\r\n");
+        printf("Fichero comun\r\n");
     else if (S_ISDIR(st.st_mode))
         printf("Directorio\r\n");
     else if (S_ISCHR(st.st_mode)) {
@@ -54,7 +54,7 @@ int statFile(char *prog, char *file)
         printf("Desconocido\r\n");
 
     printf("Modo:     %u\r\n", st.st_mode);
-    printf("Tamaño:   %u\r\n", st.st_size);   
+    printf("Tamano:   %u\r\n", st.st_size);   
     printf("Uid:      %u\r\n", st.st_uid);
     printf("Gid:      %u\r\n", st.st_gid);
 

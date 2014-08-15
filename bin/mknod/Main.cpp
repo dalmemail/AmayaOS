@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Niek Linnenbank
+ * Copyright (C) 2009 Niek Linnenbank, 2014 Dan Rulos
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,6 +30,12 @@ int main(int argc, char **argv)
         printf("usage: %s ARCHIVO TIPO MAYOR MENOR\r\n",
             argv[0]);
         return EXIT_FAILURE;
+    }
+    if (argv[1][0]!='/') { /* Necesito una ruta.... */
+      printf("ERROR ! ");
+      printf(argv[1]);
+      printf(" No es una ruta\r\n");
+      return EXIT_SUCCESS;
     }
     
     /* Dividimos en numeros mayores/menores. */

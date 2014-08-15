@@ -38,4 +38,4 @@ Con lo que la salida se redirigirá hacia la consola que estes usando.
 Para probar Fnx en una PC real debes quemar la imagen ISO en un CD virgen e insertarlo en tu PC, luego reinicias y se iniciara AMAYA. En caso de no ocurrir esto último, deberás configurar la BIOS para que inicie desde tu lector/grabador de CD/DVD.
 
 NOTA: No es recomendable usar Fnx en una PC real, ya que no ha sido testeado profundamente en una arquitectura real.
-NOTA2: La Versión 0.02 de AMAYA OS ha sido testada en distintos pcs X86 con buenos resultados.
+NOTA2: La Versión 0.02/0.05 de AMAYA OS ha sido testada en distintos pcs X86 con buenos resultados.

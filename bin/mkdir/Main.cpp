@@ -21,12 +21,20 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <string.h>
+#include <unistd.h>
+
 int main(int argc, char **argv)
 {
     /* Obtenemos los argumentos de la linea de comandos */
-    if(argc < 2) {
+    if(argc < 2) { /* Si hay menos de 2 avisa al usuario */
         printf("uso: %s DIRECTORIO\n", argv[0]);
         return EXIT_FAILURE;
+    }
+    if (argv[1][0]!='/') { /* Necesito una ruta.... */
+      printf("ERROR ! ");
+      printf(argv[1]);
+      printf(" No es una ruta\r\n");
+      return EXIT_SUCCESS;
     }
         
     /* Función mkdir */

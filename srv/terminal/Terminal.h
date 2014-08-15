@@ -34,7 +34,7 @@
  * @brief Print this banner per default on new Terminals. 
  */
 #define BANNER \
-    "AMAYA OS " RELEASE "\r\n"
+    "AmayaOS " RELEASE "\r\n"
 
 /**
  * @brief A Terminal enables user to interact with the system.

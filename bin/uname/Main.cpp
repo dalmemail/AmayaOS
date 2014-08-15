@@ -61,7 +61,7 @@ int main(int argc, char **argv)
 
             /* OS. */
             else if (strcmp(argv[i + 1], "-os") == 0||strcmp(argv[i + 1], "--operating-system") == 0)
-                printf("AMAYA OS");
+                printf("AmayaOS");
 
             /* Everything. */
             else if (strcmp(argv[i + 1], "-a") == 0||strcmp(argv[i + 1], "--all") == 0)

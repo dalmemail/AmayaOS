@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Niek Linnenbank, 2014 Dan Rulos
+ * Copyright (C) 2014 Dan Rulos
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,13 +22,13 @@
 #include <errno.h>
 #include "sys/stat.h"
 
-int touch(const char *path, mode_t mode)
+int touch(const char *path, mode_t mode) /* Creamos touch */
 {
     FileSystemMessage msg;
     ProcessID mnt = findMount(path);
 
     /* ¿Como es el archivo?. */
-    msg.action = CreateFile;
+    msg.action = CreateFile;    /* ¿Que hacemos con el archivo? */
     msg.buffer = (char *) path;
     msg.mode   = mode;
     msg.filetype = RegularFile; /* Tipo de archivo : txt, directorio, etc */

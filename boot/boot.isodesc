@@ -4,3 +4,4 @@
 ./boot/boot.img.gz
 ./boot/grub/menu.lst
 ./kernel/kernel
+./boot/grub/all.lst
