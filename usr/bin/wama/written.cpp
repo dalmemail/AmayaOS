@@ -16,21 +16,15 @@ along with this program. If not, see <http://www.gnu.org/licenses/>*/
 
 #include <stdio.h>
 
-int written(int argc, char *argv[])
- {
-    if(argc<2) 
-    {
-        printf("\n");
-        printf("********************************************************************************\n");
-        printf("***************************************  WA+  **********************************\n"); 
-        printf("********************************************************************************\n");
-        printf("Modulo de escritura 0.1 junglacode \n");
+int written(char *archivo, char *linea)
+{
+    int fd;
+    char *newline="\r\n";
+    if ((fd = open(archivo, O_WRONLY)) < 0) {
+        printf("Error al abrir '%s': %s\r\n",
+                archivo, strerror(errno));
+        return errno;
     }
-    else
-    {
-      printf("se guardara en memoria:  %s \n", argv[1]);
-
-    }
-
-   //return 0;
+    write(fd, linea, strlen(linea));
+    write(fd, newline, 2);
 }

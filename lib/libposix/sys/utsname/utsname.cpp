@@ -26,7 +26,7 @@ int uname(struct utsname *name)
     gethostname(host, sizeof(host));
     
     /* Fill in the struct. */
-    strlcpy(name->sysname, "Amaya-Kernel", UTSBUF);
+    strlcpy(name->sysname, "FreeNOS", UTSBUF);
     strlcpy(name->nodename, host, UTSBUF);
     strlcpy(name->release,  RELEASE, UTSBUF);
     strlcpy(name->version,  COMPILER " " DATETIME, UTSBUF);

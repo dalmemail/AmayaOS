@@ -25,6 +25,91 @@ along with this program. If not, see <http://www.gnu.org/licenses/> */
 #include "reader.cpp"
 #include "written.cpp"
 #include <amaya.h>
+#include <TerminalCodes.h>
+#include <sys/stat.h>
+
+int wama_a()
+{
+    return EXIT_SUCCESS;
+}
+
+int wama_n()
+{
+    char ruta[128];
+    printf("################################################################################\r\n");
+    printf("# WA+ 0.2                                                                      #\r\n");
+    printf("################################################################################\r\n");
+    printf("#                                                                              #\r\n");
+    printf("#                                                                              #\r\n");
+    printf("#                                                                              #\r\n");
+    printf("#                                                                              #\r\n");
+    printf("#                                                                              #\r\n");
+    printf("#                                                                              #\r\n");
+    printf("#                                                                              #\r\n");
+    printf("#                                                                              #\r\n");
+    printf("#                                                                              #\r\n");
+    printf("#                                                                              #\r\n");
+    printf("#                                                                              #\r\n");
+    printf("#                                                                              #\r\n");
+    printf("#                                                                              #\r\n");
+    printf("#                                                                              #\r\n");
+    printf("#                                                                              #\r\n");
+    printf("#                                                                              #\r\n");
+    printf("#                                                                              #\r\n");
+    printf("#                                                                              #\r\n");
+    printf("#                                                                              #\r\n");
+    printf("################################################################################\r\n");
+    do {
+      printf("Nombre del nuevo archivo (ruta completa) : \r\n");
+      gets(ruta);
+    } while (ruta[0] != '/');
+    touch(ruta, S_IWUSR | S_IRUSR);
+}
+
+int wama()
+{
+    char opcion;
+    printf("################################################################################\r\n");
+    printf("# WA+ 0.2                                                                      #\r\n");
+    printf("################################################################################\r\n");
+    printf("# [-M] Menu | [-G] Guardar | [-S] Salir (sin guardar)                          #\r\n");
+    printf("################################################################################\r\n");
+    printf("# Bienvenido a WA+ 0.2 un componente de AmayaOS/FreeNOS                        #\r\n");
+    printf("# Proyecto por Team Espartano & AmayaOS Team                                   #\r\n");
+    printf("################################################################################\r\n");
+    printf("# Menu                                                                         #\r\n");
+    printf("# [A] Abrir un archivo existente                                               #\r\n");
+    printf("# [N] Nuevo archivo                                                            #\r\n");
+    printf("# [S] Salir de WA+                                                             #\r\n");
+    printf("################################################################################\r\n");
+    printf("# WA+ es un producto licenciado bajo la GNU GPL v3 que respeta su libertad     #\r\n");
+    printf("# WA+ es un editor de texto inspirado en GNU Emacs escrito por Richard Stallman#\r\n");
+    printf("# en 1975. Esta escrito en C++.                                                #\r\n");
+    printf("# Sitio web oficial de WA+ ");
+    printf(GREEN "http://gitlab.com/team-espartano/wama");
+    printf(WHITE "              #\r\n");
+    printf("# Sitio web team espartano ");
+    printf(BLUE "http://junglacode.org");
+    printf(WHITE "                               #\r\n");
+    printf("#                                                                              #\r\n");
+    printf("#                                                                              #\r\n");
+    printf("#                                                                              #\r\n");
+    printf("#                                                                              #\r\n");
+    printf("################################################################################\r\n");
+    do {
+      printf("Introduce una opcion : \r\n");
+      opcion = getchar();
+    } while (opcion != 'A'&& opcion != 'a'&& opcion != 'N'&& opcion != 'n'&& opcion != 'S'&& opcion != 's');
+    if (opcion == 'A'|| opcion == 'a') {
+      wama_a();
+    }
+    if (opcion == 'N'|| opcion == 'n') {
+      wama_n();
+    }
+    if (opcion == 'S'|| opcion == 's') {
+      return EXIT_SUCCESS;
+    }
+}
 
 int main(int argc, char *argv[])
 {
@@ -47,22 +132,10 @@ int main(int argc, char *argv[])
         reader(argc, argv);
       }
       if (argc > 2) {
-        printf("Demasiados argumentos\r\n");
+        wama();
       }
     }
     if (argc == 1) {
-      printf("WAMA 0.2 | JunglaCode.org\r\n");
-      printf("Copyright 2014 Team Espartano\r\n");
-      printf("\r\n");
-      printf("[N]uevo archivo\r\n");
-      printf("[A]brir archivo\r\n");
-      printf("[C]errar\r\n");
-      do {
-        printf("Escoja una opcion:\r\n");
-        opcion = getchar();
-      } while (opcion != 'N'&& opcion != 'n'&& opcion != 'A'&& opcion != 'a'&& opcion != 'C'&& opcion != 'c');
-      if (opcion == 'C'|| opcion == 'c') {
-        return EXIT_SUCCESS;
-      }
+      wama();
     }
 }
