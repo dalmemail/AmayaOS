@@ -25,20 +25,25 @@
 
 int main(int argc, char **argv)
 {
+    int i;
+    int argi;
     /* Obtenemos los argumentos de la linea de comandos */
     if(argc < 2) { /* Si hay menos de 2 avisa al usuario */
         printf("uso: %s DIRECTORIO\n", argv[0]);
         return EXIT_FAILURE;
     }
-    if (argv[1][0]!='/') { /* Necesito una ruta.... */
-      printf("ERROR ! ");
-      printf(argv[1]);
-      printf(" No es una ruta\r\n");
-      return EXIT_SUCCESS;
+    for (argi=1; argv[argi]; argi++) {
+      if (argv[argi][0]!='/') { /* Necesito una ruta.... */
+        printf("ERROR ! ");
+        printf(argv[argi]);
+        printf(" No es una ruta\r\n");
+        return EXIT_SUCCESS;
+      }
     }
         
-    /* Función mkdir */
-    mkdir(argv[1], S_IWUSR | S_IRUSR);
-
+    for (i=1; argv[i]; i++) {
+      /* Función mkdir */
+      mkdir(argv[i], S_IWUSR | S_IRUSR);
+    }
     return EXIT_SUCCESS; /* Todo ha salido bien */
 }
