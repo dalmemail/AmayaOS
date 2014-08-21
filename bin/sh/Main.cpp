@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Niek Linnenbank
+ * Copyright (C) 2009 Niek Linnenbank, 2014 Dan Rulos
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -87,6 +87,11 @@ int main(int argc, char **argv)
                 /*"Entering Shell. Type 'help' for the command list.\r\n"
                 "\r\n"*/);
 
+        /* Entramos al modo grafico */
+        int ix=0;
+        for (ix=0; ix < 1; ix++) {
+          sh.execute("sh /home/live/mode2");
+        }
         /* Entra al bucle. */
         return sh.run();
     }

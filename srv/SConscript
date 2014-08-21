@@ -17,4 +17,4 @@
 
 SConscript(dirs = [ 'log', 'idle', 'memory', 'pci', 'usb', 'ata', 'video', 'input',
 		    'process', 'serial', 'terminal', 'time', 'filesystem', 'null', 'zero',
-		    'hostname', 'stdin', 'stdout', ])
+		    'hostname', 'stdin', 'stdout' ])

@@ -30,14 +30,10 @@ int editar()
     char son='N';
     int fd;
     char *newline="\r\n";
-    printf("Archivo a editar: \r\n");
-    gets(nombre);
-    if (nombre[0] != '/') {
-      printf("ERROR ! ");
-      printf("%s", nombre);
-      printf(" No es una ruta\r\n");
-      editar();
-    }
+    do {
+      printf("Archivo a editar: \r\n");
+      gets(nombre);
+    } while (nombre[0] != '/');
     do {
       printf("Se cambiara el contenido del archivo\r\n");
       printf(" Estas seguro ? [S/N]\r\n");

@@ -20,4 +20,4 @@ SConscript(dirs = [ 'sh', 'ps', 'memstat', 'mount',
                     'uname', 'cat', 'ls', 'stat',
                     'mknod', 'echo', 'pwd', 'hello',
                     'sleep', 'mkdir', 'touch',
-                    'cp', 'killall', 'find', 'sudoku', 'calc', 'rmdir', 'tedit', 'man' ])
+                    'cp', 'killall', 'find', 'sudoku', 'calc', 'rmdir', 'tedit', 'man', 'hola' ])

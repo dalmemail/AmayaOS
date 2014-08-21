@@ -17,7 +17,7 @@
 
 from build import *
 
-env = Prepare(target, [ 'libc', 'libposix' ], [ 'process' ])
+env = Prepare(target, [ 'libc', 'libposix' ], [ 'process', 'video/vga', 'filesystem', 'terminal', 'memory' ])
 env.Library('libamaya', [ Glob('amaya/*.c' ),
 	              Glob('*.c'),
 		      Glob('amaya/*.cpp'),

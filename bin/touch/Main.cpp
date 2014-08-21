@@ -21,28 +21,26 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <string.h>
+#include <unistd.h>
 int main(int argc, char **argv)
 {
     int i;
-    int argi;
+    char cwd[128];
     /* Obtenemos los argumentos de la linea de comandos */
     if(argc < 2) { /* Si hay menos de 2 argumentos (palabras) en la linea de comandos avisa */
         printf("uso: %s ARCHIVO\n", argv[0]);
         return EXIT_FAILURE; /* Hala.... FAILURE! */
     }
-    for (argi=1; argv[argi]; argi++) {
-      if (argv[argi][0]!='/') { /* Necesito una ruta... */
-        printf("ERROR ! ");
-        printf(argv[argi]);
-        printf(" No es una ruta\r\n");
-        return EXIT_SUCCESS;
-      }
-    }
-        
     for (i=1; argv[i]; i++) {
-      /* Función touch */
-      touch(argv[i], S_IWUSR | S_IRUSR); /* Creando el archivo.... Nos dejara el FileSystem ? */
-
+      if (argv[i][0]!='/') { /* Necesito una ruta... */
+        getcwd(cwd, sizeof(cwd));
+        strcat(cwd, "/");
+        strcat(cwd, argv[i]);
+        touch(cwd, S_IWUSR | S_IRUSR);
+      }
+      else {
+        touch(argv[i], S_IWUSR | S_IRUSR);
+      }
     }
       return EXIT_SUCCESS; /* Todo ha salido bien */
 }

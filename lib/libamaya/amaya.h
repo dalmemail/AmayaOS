@@ -18,3 +18,17 @@
 /* PAUSE is a extra function of AmayaOS used to stop the program with a
    Press any key message on stdin. */
 extern C void pause();
+
+/* window() make a new window on desktop */
+/* titulo The name to be will print */
+/* start (0-79) Where want you print the name ? */
+extern C void window(char *titulo, int start);
+
+/* bg() put the color on the window background */
+extern C void bg();
+
+/* bar() print the options on the down bar */
+extern C void bar(char *options);
+
+/* error() print error message */
+extern C void error(char *linea1, char *linea2=" ", char *linea3=" ");

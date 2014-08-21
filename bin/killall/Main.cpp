@@ -17,19 +17,17 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <ExitProcess.cpp>
 
 int main(int argc, char **argv)
 {
+    ProcessMessage *pid;
     /* Obtenemos los argumentos de la linea de comandos */
     if(argc < 2) {
-      printf("Uso: %s PID o CMD del proceso\n", argv[0]);
+      printf("Uso: %s PID del proceso\n", argv[0]);
       return EXIT_FAILURE;
     }
 
-    /* Convertir char a int para usar exit() */
-    int proceso = (int)argv[1];
-
     /* killall */
-    exit(EXIT_SUCCESS);
     return EXIT_SUCCESS; /* Hecho */
 }

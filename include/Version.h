@@ -7,7 +7,7 @@
 #define COPYRIGHT "Copyright (C) 2014 Amaya OS Team\r\n\r\n" \
 
 #define COMPILER  "gcc (Debian 4.4.4-8) 4.4.5 20100728 (prerelease)"
-#define DATETIME  "2014-08-17 13:03:22.196995"
+#define DATETIME  "2014-08-21 14:58:02.152662"
 #define ARCH      "X86"
 
 #define BUILDUSER "dalme"
