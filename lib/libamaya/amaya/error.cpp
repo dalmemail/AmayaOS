@@ -19,7 +19,7 @@
 #include <stdio.h>
 #include <VGA.h>
 
-void error(char *linea1, char *linea2=" ", char *linea3=" ")
+void error(char *linea1, char *linea2, char *linea3)
 {
     char tecla;
     int i;
@@ -59,8 +59,9 @@ void error(char *linea1, char *linea2=" ", char *linea3=" ")
     for (i=980; i < 1020; i++) {
       vga[i] = VGA_CHAR(' ', BLACK, RED);
     }
+    idosr=0;
     for (i=982; idosr < strlen(linea2); i++) {
-      vga[i] = VGA_CHAR(linea3[idosr], BLACK, RED);
+      vga[i] = VGA_CHAR(linea2[idosr], BLACK, RED);
       idosr++;
     }
     for (i=1020; i < 1060; i++) {
@@ -69,7 +70,8 @@ void error(char *linea1, char *linea2=" ", char *linea3=" ")
     for (i=1060; i < 1100; i++) {
       vga[i] = VGA_CHAR(' ', BLACK, RED);
     }
-    for (i=1060; idosr < strlen(linea3); i++) {
+    idosr=0;
+    for (i=1062; idosr < strlen(linea3); i++) {
       vga[i] = VGA_CHAR(linea3[idosr], BLACK, RED);
       idosr++;
     }

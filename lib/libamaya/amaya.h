@@ -31,4 +31,4 @@ extern C void bg();
 extern C void bar(char *options);
 
 /* error() print error message */
-extern C void error(char *linea1, char *linea2=" ", char *linea3=" ");
+extern C void error(char *linea1, char *linea2, char *linea3);

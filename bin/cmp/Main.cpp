@@ -15,20 +15,33 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* PAUSE is a extra function of AmayaOS used to stop the program with a
-   Press any key message on stdin. */
-extern C void pause();
+#include <stdio.h>
+#include <files.h>
+#include <stdlib.h>
 
-/* window() make a new window on desktop */
-/* titulo The name to be will print */
-/* start (0-79) Where want you print the name ? */
-extern C void window(char *titulo, int start);
+int cmp(char *archivo1, char *archivo2);
 
-/* bg() put the color on the window background */
-extern C void bg();
+int main(int argc, char **argv)
+{
+    if (argc < 3) {
+      printf("Uso: cmp archivo archivo\r\n");
+      return EXIT_FAILURE;
+    }
+    cmp(argv[1], argv[2]);
+}
 
-/* bar() print the options on the down bar */
-extern C void bar(char *options);
-
-/* error() print error message */
-extern C void error(char *linea1, char *linea2, char *linea3);
+int cmp(char *archivo1, char *archivo2)
+{
+    char *contenido;
+    int fd;
+    fd = open(archivo1, O_RDONLY);
+    fread(fd, contenido);
+    if (strcmp(contenido, contenido2) == 0) {
+      printf("p");
+      return EXIT_SUCCESS;
+    }
+    else {
+      printf("-1\r\n");
+      return EXIT_FAILURE;
+    }
+}
