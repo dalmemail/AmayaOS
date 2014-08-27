@@ -24,6 +24,7 @@
 #include <stdlib.h>
 #include <API/PrivExec.h>
 #include "wama/wamas.cpp"
+#include "game/game.cpp"
 
 int menu(int argc, char **argv);
 int salir();
@@ -115,6 +116,30 @@ int menu(int argc, char **argv)
     for (i=80; i < 1680; i++) {
       vga[i] = VGA_CHAR(' ', MAGENTA, MAGENTA);
     }
+    vga[1520] = VGA_CHAR('A', BLUE, BROWN);
+    vga[1521] = VGA_CHAR('m', BLUE, BROWN);
+    vga[1522] = VGA_CHAR('a', BLUE, BROWN);
+    vga[1523] = VGA_CHAR('y', BLUE, BROWN);
+    vga[1524] = VGA_CHAR('a', BLUE, BROWN);
+    vga[1525] = VGA_CHAR(' ', BLUE, BROWN);
+    vga[1526] = VGA_CHAR(' ', BLUE, BROWN);
+    vga[1527] = VGA_CHAR(' ', BLUE, BROWN);
+    vga[1528] = VGA_CHAR(' ', BLUE, BROWN);
+    vga[1529] = VGA_CHAR(' ', BLUE, BROWN);
+    vga[1530] = VGA_CHAR(' ', BLUE, BROWN);
+    vga[1531] = VGA_CHAR(' ', BLUE, BROWN);
+    vga[1600] = VGA_CHAR('S', BLUE, BROWN);
+    vga[1601] = VGA_CHAR('c', BLUE, BROWN);
+    vga[1602] = VGA_CHAR('a', BLUE, BROWN);
+    vga[1603] = VGA_CHAR('p', BLUE, BROWN);
+    vga[1604] = VGA_CHAR('e', BLUE, BROWN);
+    vga[1605] = VGA_CHAR('(', BLUE, BROWN);
+    vga[1606] = VGA_CHAR('A', BLUE, BROWN);
+    vga[1607] = VGA_CHAR(')', BLUE, BROWN);
+    vga[1608] = VGA_CHAR(' ', BLUE, BROWN);
+    vga[1609] = VGA_CHAR(' ', BLUE, BROWN);
+    vga[1610] = VGA_CHAR(' ', BLUE, BROWN);
+    vga[1611] = VGA_CHAR(' ', BLUE, BROWN);
     vga[1680] = VGA_CHAR('W', BLUE, BROWN);
     vga[1681] = VGA_CHAR('a', BLUE, BROWN);
     vga[1682] = VGA_CHAR('m', BLUE, BROWN);
@@ -159,7 +184,8 @@ int menu(int argc, char **argv)
     vga[1851] = VGA_CHAR(' ', BLUE, BROWN);
     do {
       tecla = getchar();
-    } while (tecla != 'R'&& tecla != 'r'&& tecla != 'S'&& tecla != 's'&& 'M'&& tecla != 'm'&& tecla != 'W'&& tecla != 'w');
+    } while (tecla != 'R'&& tecla != 'r'&& tecla != 'S'&& tecla != 's'&& 'M'&& tecla != 'm'&& tecla != 'W'&& tecla != 'w'
+             &&tecla != 'A'&& tecla != 'a');
     if (tecla == 'M'|| tecla == 'm') {
       main(argc, argv);
     }
@@ -171,6 +197,9 @@ int menu(int argc, char **argv)
     }
     if (tecla == 'W'|| tecla == 'w') {
       wama();
+    }
+    if (tecla == 'A'|| tecla == 'a') {
+      game();
     }
 }
 
