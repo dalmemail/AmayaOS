@@ -1,0 +1,25 @@
+Instalación de WAMA 0.1 sobre AmayaOS
+--------------------------------------
+Para instalar WA+ en su versión 0.1 sobre AmayaOS 0.05 (Testing):
+Modo normal:
+1- Descomprimir el tar.gz en / de modo que wama quede en /usr/bin/wama/ (Siendo wama una carpeta)
+2- Abrir /SConstruct con un editor de texto y añadir 'usr' en Process subscripts.
+y Per default, build libraries, kernel and user programs. de modo que quede así :
+SConscript(dirs = ['lib', 'kernel', 'bin', 'sbin', 'srv', 'usr'])
+Default(['lib', 'kernel', 'bin', 'sbin', 'srv', 'etc', 'usr'])
+
+3- Compilar AmayaOS con $ scons iso, la iso generada en /boot/ contiene WAMA.
+
+Modo alternativo:
+1 - Crear /usr
+2 - crear /usr/bin
+3 - Crar /usr/bin/wama
+4 - Descomprimir los archivos de wama en esta carpeta (/usr/bin/wama)
+5 - Modificar /SConstruct como se especifica en el modo normal. (Paso 2).
+-------------------------------------
+
+Este es un modo de instalar el paquete WA+ 0.1 en AmayaOS 0.05 Testing, la
+versión 0.06 trae WA+ por defecto.
+
+--------------------------------------
+developer@junglacode.org | dalmemail@gmail.com
