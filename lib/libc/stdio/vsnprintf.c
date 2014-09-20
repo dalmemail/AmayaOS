@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Niek Linnenbank
+ * Copyright (C) 2009 Niek Linnenbank, 2014 Dan Rulos
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -57,7 +57,13 @@ int vsnprintf(char *buffer, unsigned int size, const char *fmt, va_list args)
 		    ptr = buf;
 		    goto string;
 	
-		/* Long integer. */
+		/* Double (AmayaOS */
+	        case 'f':
+		    itoa(buf, 10, va_arg(args, double));
+		    ptr = buf;
+		    goto string;
+
+                /* Long integer. */
 		case 'l':
 		    itoa(buf, 10, va_arg(args, long));
 		    ptr = buf;
