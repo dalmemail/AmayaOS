@@ -1,0 +1,9 @@
+/srv/input/keyboard/server
+/srv/video/vga/server
+/srv/terminal/server
+/srv/filesystem/proc/server
+/srv/filesystem/grub/server
+/srv/filesystem/linn/server /dev/ata0 0x400000 /usr
+/srv/hostname/server
+/srv/time/server
+/bin/sh/sh

@@ -1,0 +1,30 @@
+color	cyan/red white/blue
+timeout 10
+
+title AmayaOS 0.07 (Spanish)
+root (cd)
+kernel /kernel/kernel
+module /boot/boot.img.gz
+module /boot/boot.linn.gz
+
+title AmayaOS 0.06 (English)
+root (cd)
+kernel /boot/eng/kernel
+module /boot/eng/boot.img.gz
+module /boot/eng/boot.linn.gz
+
+title AmayaOS 0.06 (Francais)
+root (cd)
+kernel /boot/fr/kernel
+module /boot/fr/boot.img.gz
+module /boot/fr/boot.linn.gz
+
+title AmayaOS 0.06 (Galego)
+root (cd)
+kernel /boot/gal/kernel
+module /boot/gal/boot.img.gz
+module /boot/gal/boot.linn.gz
+
+title	Start from main drive / hard disk
+rootnoverify (hd0)
+chainloader +1

@@ -1,0 +1,180 @@
+file /home/dalme/Escritorio/fnx/AmayaOS003/site_scons/configure.py,line 52:
+	Configure(confdir = .sconf_temp)
+scons: Configure: Checking for -fno-stack-protector ... 
+scons: Configure: ".sconf_temp/conftest_0.c" is up to date.
+scons: Configure: The original builder output was:
+  |.sconf_temp/conftest_0.c <-
+  |  |int main(int argc, char **argv){    return 0;}
+  |  |
+  |
+scons: Configure: ".sconf_temp/conftest_0.o" is up to date.
+scons: Configure: The original builder output was:
+  |gcc -o .sconf_temp/conftest_0.o -c -fno-stack-protector -Iinclude -I. .sconf_temp/conftest_0.c
+  |
+scons: Configure: ".sconf_temp/conftest_0" is up to date.
+scons: Configure: The original builder output was:
+  |ld -o .sconf_temp/conftest_0 --whole-archive -nostdlib -T kernel/X86/user.ld .sconf_temp/conftest_0.o
+  |
+scons: Configure: (cached) yes
+
+
+file /home/dalme/Escritorio/fnx/AmayaOS003/site_scons/configure.py,line 52:
+	Configure(confdir = .sconf_temp)
+scons: Configure: Checking for -O0 ... 
+scons: Configure: ".sconf_temp/conftest_1.c" is up to date.
+scons: Configure: The original builder output was:
+  |.sconf_temp/conftest_1.c <-
+  |  |int main(int argc, char **argv){    return 0;}
+  |  |
+  |
+scons: Configure: ".sconf_temp/conftest_1.o" is up to date.
+scons: Configure: The original builder output was:
+  |gcc -o .sconf_temp/conftest_1.o -c -fno-stack-protector -O0 -Iinclude -I. .sconf_temp/conftest_1.c
+  |
+scons: Configure: ".sconf_temp/conftest_1" is up to date.
+scons: Configure: The original builder output was:
+  |ld -o .sconf_temp/conftest_1 --whole-archive -nostdlib -T kernel/X86/user.ld .sconf_temp/conftest_1.o
+  |
+scons: Configure: (cached) yes
+
+
+file /home/dalme/Escritorio/fnx/AmayaOS003/site_scons/configure.py,line 52:
+	Configure(confdir = .sconf_temp)
+scons: Configure: Checking for -g3 ... 
+scons: Configure: ".sconf_temp/conftest_2.c" is up to date.
+scons: Configure: The original builder output was:
+  |.sconf_temp/conftest_2.c <-
+  |  |int main(int argc, char **argv){    return 0;}
+  |  |
+  |
+scons: Configure: ".sconf_temp/conftest_2.o" is up to date.
+scons: Configure: The original builder output was:
+  |gcc -o .sconf_temp/conftest_2.o -c -fno-stack-protector -O0 -g3 -Iinclude -I. .sconf_temp/conftest_2.c
+  |
+scons: Configure: ".sconf_temp/conftest_2" is up to date.
+scons: Configure: The original builder output was:
+  |ld -o .sconf_temp/conftest_2 --whole-archive -nostdlib -T kernel/X86/user.ld .sconf_temp/conftest_2.o
+  |
+scons: Configure: (cached) yes
+
+
+file /home/dalme/Escritorio/fnx/AmayaOS003/site_scons/configure.py,line 52:
+	Configure(confdir = .sconf_temp)
+scons: Configure: Checking for -Wall ... 
+scons: Configure: ".sconf_temp/conftest_3.c" is up to date.
+scons: Configure: The original builder output was:
+  |.sconf_temp/conftest_3.c <-
+  |  |int main(int argc, char **argv){    return 0;}
+  |  |
+  |
+scons: Configure: ".sconf_temp/conftest_3.o" is up to date.
+scons: Configure: The original builder output was:
+  |gcc -o .sconf_temp/conftest_3.o -c -fno-stack-protector -O0 -g3 -Wall -Iinclude -I. .sconf_temp/conftest_3.c
+  |
+scons: Configure: ".sconf_temp/conftest_3" is up to date.
+scons: Configure: The original builder output was:
+  |ld -o .sconf_temp/conftest_3 --whole-archive -nostdlib -T kernel/X86/user.ld .sconf_temp/conftest_3.o
+  |
+scons: Configure: (cached) yes
+
+
+file /home/dalme/Escritorio/fnx/AmayaOS003/site_scons/configure.py,line 52:
+	Configure(confdir = .sconf_temp)
+scons: Configure: Checking for -W ... 
+scons: Configure: ".sconf_temp/conftest_4.c" is up to date.
+scons: Configure: The original builder output was:
+  |.sconf_temp/conftest_4.c <-
+  |  |int main(int argc, char **argv){    return 0;}
+  |  |
+  |
+scons: Configure: ".sconf_temp/conftest_4.o" is up to date.
+scons: Configure: The original builder output was:
+  |gcc -o .sconf_temp/conftest_4.o -c -fno-stack-protector -O0 -g3 -Wall -W -Iinclude -I. .sconf_temp/conftest_4.c
+  |
+scons: Configure: ".sconf_temp/conftest_4" is up to date.
+scons: Configure: The original builder output was:
+  |ld -o .sconf_temp/conftest_4 --whole-archive -nostdlib -T kernel/X86/user.ld .sconf_temp/conftest_4.o
+  |
+scons: Configure: (cached) yes
+
+
+file /home/dalme/Escritorio/fnx/AmayaOS003/site_scons/configure.py,line 52:
+	Configure(confdir = .sconf_temp)
+scons: Configure: Checking for -Wno-unused-parameter ... 
+scons: Configure: ".sconf_temp/conftest_5.c" is up to date.
+scons: Configure: The original builder output was:
+  |.sconf_temp/conftest_5.c <-
+  |  |int main(int argc, char **argv){    return 0;}
+  |  |
+  |
+scons: Configure: ".sconf_temp/conftest_5.o" is up to date.
+scons: Configure: The original builder output was:
+  |gcc -o .sconf_temp/conftest_5.o -c -fno-stack-protector -O0 -g3 -Wall -W -Wno-unused-parameter -Iinclude -I. .sconf_temp/conftest_5.c
+  |
+scons: Configure: ".sconf_temp/conftest_5" is up to date.
+scons: Configure: The original builder output was:
+  |ld -o .sconf_temp/conftest_5 --whole-archive -nostdlib -T kernel/X86/user.ld .sconf_temp/conftest_5.o
+  |
+scons: Configure: (cached) yes
+
+
+file /home/dalme/Escritorio/fnx/AmayaOS003/site_scons/configure.py,line 52:
+	Configure(confdir = .sconf_temp)
+scons: Configure: Checking for -fno-builtin ... 
+scons: Configure: ".sconf_temp/conftest_6.c" is up to date.
+scons: Configure: The original builder output was:
+  |.sconf_temp/conftest_6.c <-
+  |  |int main(int argc, char **argv){    return 0;}
+  |  |
+  |
+scons: Configure: ".sconf_temp/conftest_6.o" is up to date.
+scons: Configure: The original builder output was:
+  |gcc -o .sconf_temp/conftest_6.o -c -fno-stack-protector -O0 -g3 -Wall -W -Wno-unused-parameter -fno-builtin -Iinclude -I. .sconf_temp/conftest_6.c
+  |
+scons: Configure: ".sconf_temp/conftest_6" is up to date.
+scons: Configure: The original builder output was:
+  |ld -o .sconf_temp/conftest_6 --whole-archive -nostdlib -T kernel/X86/user.ld .sconf_temp/conftest_6.o
+  |
+scons: Configure: (cached) yes
+
+
+file /home/dalme/Escritorio/fnx/AmayaOS003/site_scons/configure.py,line 52:
+	Configure(confdir = .sconf_temp)
+scons: Configure: Checking for -nostdinc ... 
+scons: Configure: ".sconf_temp/conftest_7.c" is up to date.
+scons: Configure: The original builder output was:
+  |.sconf_temp/conftest_7.c <-
+  |  |int main(int argc, char **argv){    return 0;}
+  |  |
+  |
+scons: Configure: ".sconf_temp/conftest_7.o" is up to date.
+scons: Configure: The original builder output was:
+  |gcc -o .sconf_temp/conftest_7.o -c -fno-stack-protector -O0 -g3 -Wall -W -Wno-unused-parameter -fno-builtin -nostdinc -Iinclude -I. .sconf_temp/conftest_7.c
+  |
+scons: Configure: ".sconf_temp/conftest_7" is up to date.
+scons: Configure: The original builder output was:
+  |ld -o .sconf_temp/conftest_7 --whole-archive -nostdlib -T kernel/X86/user.ld .sconf_temp/conftest_7.o
+  |
+scons: Configure: (cached) yes
+
+
+file /home/dalme/Escritorio/fnx/AmayaOS003/site_scons/configure.py,line 52:
+	Configure(confdir = .sconf_temp)
+scons: Configure: Checking for -Wno-write-strings ... 
+scons: Configure: ".sconf_temp/conftest_8.c" is up to date.
+scons: Configure: The original builder output was:
+  |.sconf_temp/conftest_8.c <-
+  |  |int main(int argc, char **argv){    return 0;}
+  |  |
+  |
+scons: Configure: ".sconf_temp/conftest_8.o" is up to date.
+scons: Configure: The original builder output was:
+  |gcc -o .sconf_temp/conftest_8.o -c -fno-stack-protector -O0 -g3 -Wall -W -Wno-unused-parameter -fno-builtin -nostdinc -Wno-write-strings -Iinclude -I. .sconf_temp/conftest_8.c
+  |
+scons: Configure: ".sconf_temp/conftest_8" is up to date.
+scons: Configure: The original builder output was:
+  |ld -o .sconf_temp/conftest_8 --whole-archive -nostdlib -T kernel/X86/user.ld .sconf_temp/conftest_8.o
+  |
+scons: Configure: (cached) yes
+
+
