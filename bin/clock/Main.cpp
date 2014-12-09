@@ -49,8 +49,8 @@ int main(int argc, char **argv)
       printf("%s error", argv[0]);
       return -1;
     }
-    int i;
-    for(i=0; i > -1; i=i) {
+    int i=0;
+    do {
       usleep(1);
       segundos1++;
       if (segundos1 == 60) {
@@ -70,5 +70,5 @@ int main(int argc, char **argv)
       printf(":");
       printf("%d", segundos1);
       printf("\r\n");
-    }
+    } while(i > -1);
 }
