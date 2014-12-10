@@ -63,11 +63,6 @@ int main(int argc, char **argv)
       if (horas1 == 24) {
         horas1=horas1-24;
       }
-      printf("%d", horas1);
-      printf(":");
-      printf("%d", minutos1);
-      printf(":");
-      printf("%d", segundos1);
-      printf("\r\n");
+      printf("%d:%d:%d\r\n", horas1, minutos1, segundos1);
     }
 }
