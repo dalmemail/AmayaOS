@@ -52,8 +52,8 @@ void amayacalc()
     /* Point to the VGA mapping. */
     vga = (u16 *) mem.virtualAddress;
     bg();
-    window("AmayaCALC v0.1", 35);
-    bar("[N]ueva hoja de calculo [S]alir");
+    window("AmayaFACT v0.1", 35);
+    bar("[N]ueva factura [S]alir");
     do {
       tecla=getchar();
     } while (tecla != 's'&& tecla != 'n');
@@ -127,7 +127,7 @@ void newcalc()
     for (i=0; i < 2000; i++) { //Limpiamos la pantalla....
       vga[i]=VGA_CHAR(' ', BLACK, BLACK);
     }
-    window("AmayaCALC - Sin nombre", 30);
+    window("AmayaFACT - Sin nombre", 30);
     printf("#     A      B     C     D\r\n");
     printf("1   ITEM    NO    UNIT   COST\r\n");
     for (cuenta=0; cuenta <= n; cuenta++) {

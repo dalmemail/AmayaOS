@@ -26,9 +26,12 @@
 #include "wama/wamas.cpp"
 //#include "game/game.cpp"
 #include "AmayaCALC/AmayaCALC.cpp"
+#include <MemoryMessage.h>
+#include <Config.h>
 
 int menu(int argc, char **argv);
 int salir();
+int memoria();
 
 int main(int argc, char **argv)
 {
@@ -75,6 +78,7 @@ int main(int argc, char **argv)
     for (i=1928; i <= 2000; i++) {
       vga[i] = VGA_CHAR(' ', BROWN, BROWN);
     }
+    memoria();
     do {
       tecla = getchar();
     } while (tecla != 'M'&& tecla != 'm');
@@ -122,10 +126,10 @@ int menu(int argc, char **argv)
     vga[1522] = VGA_CHAR('a', BLUE, BROWN);
     vga[1523] = VGA_CHAR('y', BLUE, BROWN);
     vga[1524] = VGA_CHAR('a', BLUE, BROWN);
-    vga[1525] = VGA_CHAR('C', BLUE, BROWN);
+    vga[1525] = VGA_CHAR('F', BLUE, BROWN);
     vga[1526] = VGA_CHAR('A', BLUE, BROWN);
-    vga[1527] = VGA_CHAR('L', BLUE, BROWN);
-    vga[1528] = VGA_CHAR('C', BLUE, BROWN);
+    vga[1527] = VGA_CHAR('C', BLUE, BROWN);
+    vga[1528] = VGA_CHAR('T', BLUE, BROWN);
     vga[1529] = VGA_CHAR('(', BLUE, BROWN);
     vga[1530] = VGA_CHAR('C', BLUE, BROWN);
     vga[1531] = VGA_CHAR(')', BLUE, BROWN);
@@ -183,6 +187,7 @@ int menu(int argc, char **argv)
     vga[1849] = VGA_CHAR(' ', BLUE, BROWN);
     vga[1850] = VGA_CHAR(' ', BLUE, BROWN);
     vga[1851] = VGA_CHAR(' ', BLUE, BROWN);
+    memoria();
     do {
       tecla = getchar();
     } while (tecla != 'R'&& tecla != 'r'&& tecla != 'S'&& tecla != 's'&& 'M'&& tecla != 'm'&& tecla != 'W'&& tecla != 'w'
@@ -225,4 +230,127 @@ int salir()
       vga[i] = VGA_CHAR(' ', BLACK, BLACK);
     }
     return EXIT_SUCCESS;
+}
+
+int memoria()
+{
+    int i;
+    u16 *vga;
+    MemoryMessage mem;
+
+    /* Request VGA memory. */
+    mem.action    = CreatePrivate;
+    mem.bytes     = PAGESIZE;
+    mem.virtualAddress  = ZERO;
+    mem.physicalAddress = VGA_PADDR;
+    mem.protection      = PAGE_RW | PAGE_PINNED;
+    mem.ipc(MEMSRV_PID, SendReceive, sizeof(mem));
+
+    /* Point to the VGA mapping. */
+    vga = (u16 *) mem.virtualAddress;
+
+    /* Obtenemos el uso de la memoria. */
+    mem.action = SystemMemory;
+    mem.ipc(MEMSRV_PID, SendReceive, sizeof(mem));
+    for (i=209; i <= 239; i++) {
+      vga[i] = VGA_CHAR(' ', GREEN, GREEN);
+    }
+    vga[211] = VGA_CHAR('E', BLACK, GREEN);
+    vga[212] = VGA_CHAR('s', BLACK, GREEN);
+    vga[213] = VGA_CHAR('t', BLACK, GREEN);
+    vga[214] = VGA_CHAR('a', BLACK, GREEN);
+    vga[215] = VGA_CHAR('d', BLACK, GREEN);
+    vga[216] = VGA_CHAR('o', BLACK, GREEN);
+    vga[217] = VGA_CHAR(' ', BLACK, GREEN);
+    vga[218] = VGA_CHAR('d', BLACK, GREEN);
+    vga[219] = VGA_CHAR('e', BLACK, GREEN);
+    vga[220] = VGA_CHAR(' ', BLACK, GREEN);
+    vga[221] = VGA_CHAR('l', BLACK, GREEN);
+    vga[222] = VGA_CHAR('a', BLACK, GREEN);
+    vga[223] = VGA_CHAR(' ', BLACK, GREEN);
+    vga[224] = VGA_CHAR('m', BLACK, GREEN);
+    vga[225] = VGA_CHAR('e', BLACK, GREEN);
+    vga[226] = VGA_CHAR('m', BLACK, GREEN);
+    vga[227] = VGA_CHAR('o', BLACK, GREEN);
+    vga[228] = VGA_CHAR('r', BLACK, GREEN);
+    vga[229] = VGA_CHAR('i', BLACK, GREEN);
+    vga[230] = VGA_CHAR('a', BLACK, GREEN);
+    vga[289] = VGA_CHAR(' ', GREEN, GREEN);
+    vga[319] = VGA_CHAR(' ', GREEN, GREEN);
+    vga[369] = VGA_CHAR(' ', GREEN, GREEN);
+    vga[399] = VGA_CHAR(' ', GREEN, GREEN);
+    vga[449] = VGA_CHAR(' ', GREEN, GREEN);
+    vga[479] = VGA_CHAR(' ', GREEN, GREEN);
+    for (i=529; i <= 559; i++) {
+      vga[i] = VGA_CHAR(' ', GREEN, GREEN);
+    }
+    vga[290] = VGA_CHAR('T', BLACK, BLUE);
+    vga[291] = VGA_CHAR('o', BLACK, BLUE);
+    vga[292] = VGA_CHAR('t', BLACK, BLUE);
+    vga[293] = VGA_CHAR('a', BLACK, BLUE);
+    vga[294] = VGA_CHAR('l', BLACK, BLUE);
+    vga[295] = VGA_CHAR(':', BLACK, BLUE);
+    int a=mem.bytes / 1024;
+    char a2[25];
+    itoa(a2, 10, a);
+    vga[297] = VGA_CHAR(a2[0], BLACK, BLUE);
+    vga[298] = VGA_CHAR(a2[1], BLACK, BLUE);
+    vga[299] = VGA_CHAR(a2[2], BLACK, BLUE);
+    vga[300] = VGA_CHAR(a2[3], BLACK, BLUE);
+    vga[301] = VGA_CHAR(a2[4], BLACK, BLUE);
+    vga[302] = VGA_CHAR(a2[5], BLACK, BLUE);
+    vga[303] = VGA_CHAR(a2[6], BLACK, BLUE);
+    vga[304] = VGA_CHAR(a2[7], BLACK, BLUE);
+    vga[305] = VGA_CHAR(a2[8], BLACK, BLUE);
+    vga[306] = VGA_CHAR('K', BLACK, BLUE);
+    vga[307] = VGA_CHAR('i', BLACK, BLUE);
+    vga[308] = VGA_CHAR('B', BLACK, BLUE);
+    vga[370] = VGA_CHAR('D', BLACK, BLUE);
+    vga[371] = VGA_CHAR('i', BLACK, BLUE);
+    vga[372] = VGA_CHAR('s', BLACK, BLUE);
+    vga[373] = VGA_CHAR('p', BLACK, BLUE);
+    vga[374] = VGA_CHAR('o', BLACK, BLUE);
+    vga[375] = VGA_CHAR('n', BLACK, BLUE);
+    vga[376] = VGA_CHAR('i', BLACK, BLUE);
+    vga[377] = VGA_CHAR('b', BLACK, BLUE);
+    vga[378] = VGA_CHAR('l', BLACK, BLUE);
+    vga[379] = VGA_CHAR('e', BLACK, BLUE);
+    vga[380] = VGA_CHAR(':', BLACK, BLUE);
+    int b=mem.free / 1024;
+    char b2[25];
+    itoa(b2, 10, b);
+    vga[381] = VGA_CHAR(b2[0], BLACK, BLUE);
+    vga[382] = VGA_CHAR(b2[1], BLACK, BLUE);
+    vga[383] = VGA_CHAR(b2[2], BLACK, BLUE);
+    vga[384] = VGA_CHAR(b2[3], BLACK, BLUE);
+    vga[385] = VGA_CHAR(b2[4], BLACK, BLUE);
+    vga[386] = VGA_CHAR(b2[5], BLACK, BLUE);
+    vga[387] = VGA_CHAR(b2[6], BLACK, BLUE);
+    vga[388] = VGA_CHAR(b2[7], BLACK, BLUE);
+    vga[389] = VGA_CHAR(b2[8], BLACK, BLUE);
+    vga[390] = VGA_CHAR('K', BLACK, BLUE);
+    vga[391] = VGA_CHAR('i', BLACK, BLUE);
+    vga[392] = VGA_CHAR('B', BLACK, BLUE);
+    vga[450] = VGA_CHAR('E', BLACK, BLUE);
+    vga[451] = VGA_CHAR('n', BLACK, BLUE);
+    vga[452] = VGA_CHAR(' ', BLACK, BLUE);
+    vga[453] = VGA_CHAR('U', BLACK, BLUE);
+    vga[454] = VGA_CHAR('s', BLACK, BLUE);
+    vga[455] = VGA_CHAR('o', BLACK, BLUE);
+    vga[456] = VGA_CHAR(':', BLACK, BLUE);
+    int c=(mem.bytes - mem.free) / 1024;
+    char c2[25];
+    itoa(c2, 10, c);
+    vga[458] = VGA_CHAR(c2[0], BLACK, BLUE);
+    vga[459] = VGA_CHAR(c2[1], BLACK, BLUE);
+    vga[460] = VGA_CHAR(c2[2], BLACK, BLUE);
+    vga[461] = VGA_CHAR(c2[3], BLACK, BLUE);
+    vga[462] = VGA_CHAR(c2[4], BLACK, BLUE);
+    vga[463] = VGA_CHAR(c2[5], BLACK, BLUE);
+    vga[464] = VGA_CHAR(c2[6], BLACK, BLUE);
+    vga[465] = VGA_CHAR(c2[7], BLACK, BLUE);
+    vga[466] = VGA_CHAR(c2[8], BLACK, BLUE);
+    vga[467] = VGA_CHAR('K', BLACK, BLUE);
+    vga[468] = VGA_CHAR('i', BLACK, BLUE);
+    vga[469] = VGA_CHAR('B', BLACK, BLUE);
 }
