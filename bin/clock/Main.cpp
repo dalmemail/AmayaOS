@@ -34,24 +34,31 @@ int main(int argc, char **argv)
     int horas1;
     int minutos1;
     int segundos1;
+    /* Usamos atoi() para poder pasar las variables
+    char* de las horas, minutos y segundos a int y
+    asi poder operar con ellos. */
     horas1=atoi(horas);
     minutos1=atoi(minutos);
     segundos1=atoi(segundos);
+    /* Si las horas son mayores de 24 */
     if (horas1 >= 24) {
       printf("%s error", argv[0]);
       return -1;
     }
+    /* Si los minutos son mayores de 60 */
     if (minutos1 >= 60) {
       printf("%s error", argv[0]);
       return -1;
     }
+    /* Si los segundos son mayores de 60 */
     if (segundos1 >= 60) {
       printf("%s error", argv[0]);
       return -1;
     }
+    /* while(1) genera un bucle infinito */
     while(1) {
-      usleep(1);
-      segundos1++;
+      usleep(1); // Esperamos un segundo y
+      segundos1++; // Sumamos uno (variable++;)
       if (segundos1 == 60) {
         segundos1=segundos1-60;
         minutos1++;
@@ -63,6 +70,7 @@ int main(int argc, char **argv)
       if (horas1 == 24) {
         horas1=horas1-24;
       }
+      /* Escribimos un reloj */
       printf("%d:%d:%d\r\n", horas1, minutos1, segundos1);
     }
 }
