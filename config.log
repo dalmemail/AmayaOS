@@ -171,10 +171,10 @@ scons: Configure: ".sconf_temp/conftest_8.o" is up to date.
 scons: Configure: The original builder output was:
   |gcc -o .sconf_temp/conftest_8.o -c -fno-stack-protector -O0 -g3 -Wall -W -Wno-unused-parameter -fno-builtin -nostdinc -Wno-write-strings -Iinclude -I. .sconf_temp/conftest_8.c
   |
-scons: Configure: ".sconf_temp/conftest_8" is up to date.
+scons: Configure: Building ".sconf_temp/conftest_8" failed in a previous run and all its sources are up to date.
 scons: Configure: The original builder output was:
   |ld -o .sconf_temp/conftest_8 --whole-archive -nostdlib -T kernel/X86/user.ld .sconf_temp/conftest_8.o
   |
-scons: Configure: (cached) yes
+scons: Configure: (cached) no
 
 
