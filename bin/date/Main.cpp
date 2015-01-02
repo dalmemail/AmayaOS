@@ -25,13 +25,13 @@
 
 int main(int argc, char **argv)
 {
-/*    file *f = new file();
+    file *f = new file();
     f->setpath("/dev/time");
     f->f_open(O_RDONLY);
     char *ch = f->readAll();
     f->f_close();
-    int fecha_s = atoi(ch);*/
-    int fecha_s = 1418964411;
+    int fecha_s = atoi(ch);
+//    int fecha_s = 1418964411;
     int year=0;
     int month=0;
     int day=0;
