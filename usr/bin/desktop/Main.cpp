@@ -213,25 +213,9 @@ int menu(int argc, char **argv)
 
 int salir()
 {
-    int i;
-    u16 *vga;
-    MemoryMessage mem;
-
-    /* Request VGA memory. */
-    mem.action    = CreatePrivate;
-    mem.bytes     = PAGESIZE;
-    mem.virtualAddress  = ZERO;
-    mem.physicalAddress = VGA_PADDR;
-    mem.protection      = PAGE_RW | PAGE_PINNED;
-    mem.ipc(MEMSRV_PID, SendReceive, sizeof(mem));
-
-    /* Point to the VGA mapping. */
-    vga = (u16 *) mem.virtualAddress;
-
-    for (i=0; i < 2000; i++) {
-      vga[i] = VGA_CHAR(' ', BLACK, BLACK);
-    }
-    return EXIT_SUCCESS;
+    char clean[] = {0x1b, 0x5b, 0x48, 0x1b, 0x5b, 0x4a, '\0'};
+    printf("%s", clean);
+    return 0;
 }
 
 int memoria()
