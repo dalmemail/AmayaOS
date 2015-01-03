@@ -25,7 +25,7 @@
 #include <API/PrivExec.h>
 #include "wama/wamas.cpp"
 //#include "game/game.cpp"
-#include "AmayaCALC/AmayaCALC.cpp"
+//#include "AmayaCALC/AmayaCALC.cpp"
 #include <MemoryMessage.h>
 #include <Config.h>
 
@@ -121,7 +121,7 @@ int menu(int argc, char **argv)
     for (i=80; i < 1680; i++) {
       vga[i] = VGA_CHAR(' ', WHITE, WHITE);
     }
-    vga[1520] = VGA_CHAR('A', BLUE, BROWN);
+/*    vga[1520] = VGA_CHAR('A', BLUE, BROWN);
     vga[1521] = VGA_CHAR('m', BLUE, BROWN);
     vga[1522] = VGA_CHAR('a', BLUE, BROWN);
     vga[1523] = VGA_CHAR('y', BLUE, BROWN);
@@ -144,7 +144,7 @@ int menu(int argc, char **argv)
     vga[1608] = VGA_CHAR(' ', BLUE, BROWN);
     vga[1609] = VGA_CHAR(' ', BLUE, BROWN);
     vga[1610] = VGA_CHAR(' ', BLUE, BROWN);
-    vga[1611] = VGA_CHAR(' ', BLUE, BROWN);
+    vga[1611] = VGA_CHAR(' ', BLUE, BROWN);*/
     vga[1680] = VGA_CHAR('W', BLUE, BROWN);
     vga[1681] = VGA_CHAR('a', BLUE, BROWN);
     vga[1682] = VGA_CHAR('m', BLUE, BROWN);
@@ -191,7 +191,7 @@ int menu(int argc, char **argv)
     do {
       tecla = getchar();
     } while (tecla != 'R'&& tecla != 'r'&& tecla != 'S'&& tecla != 's'&& 'M'&& tecla != 'm'&& tecla != 'W'&& tecla != 'w'
-             &&tecla != 'C'&& tecla != 'c');
+             /*&&tecla != 'C'&& tecla != 'c'*/);
     if (tecla == 'M'|| tecla == 'm') {
       main(argc, argv);
     }
@@ -204,9 +204,11 @@ int menu(int argc, char **argv)
     if (tecla == 'W'|| tecla == 'w') {
       wama();
     }
+/*
     if (tecla == 'C'|| tecla == 'c') {
       amayacalc();
     }
+*/
 }
 
 int salir()
