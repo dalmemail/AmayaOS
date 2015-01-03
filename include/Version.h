@@ -4,10 +4,10 @@
 #define VERSIONCODE 1792
 #define VERSION(a,b,c) (((a) << 16) + ((b) << 8) + (c))
 #define RELEASE   "0.07-Stable"
-#define COPYRIGHT "Copyright (C) 2014 Amaya OS Team\r\n\r\n" \
+#define COPYRIGHT "Copyright (C) 2015 Amaya OS Team\r\n\r\n" \
 
 #define COMPILER  "gcc (Debian 4.4.4-8) 4.4.5 20100728 (prerelease)"
-#define DATETIME  "2014-12-17 15:06:56.406891"
+#define DATETIME  "2015-01-02 20:10:17.808736"
 #define ARCH      "X86"
 
 #define BUILDUSER "dalme"
