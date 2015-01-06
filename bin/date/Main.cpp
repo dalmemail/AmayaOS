@@ -15,6 +15,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/* This software has been edited to support the FreeNOS time */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -31,7 +33,7 @@ int main(int argc, char **argv)
     char *ch = f->readAll();
     f->f_close();
     int fecha_s = atoi(ch);
-//    int fecha_s = 1418964411;
+    //int fecha_s = 1420453541;
     int year=0;
     int month=0;
     int day=0;
@@ -113,7 +115,7 @@ int main(int argc, char **argv)
        day=day-(334+feb);
     }
     day=day-cuenta;
-    
+
     printf("%d:%d:%d %d/%d/%d\r\n", hour, min, second, day, month, year);
     return 0;
 }
