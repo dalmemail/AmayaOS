@@ -1,6 +1,6 @@
 /* AMAYA OS 2014 */
 /*
- * Copyright (C) 2014 Daniel Martin
+ * Copyright (C) 2014 Dan Rulos
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
