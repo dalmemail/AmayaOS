@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 Dan Rulos.
+ * Copyright (C) 2015 Dan Rulos.
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@ int main(int argc, char **argv)
     int cuenta=0;
     /* Obtenemos los argumentos, en caso de existir */
     if (argc < 3) {
-      printf("Uso: find ruta nombre\r\n");
+      printf("Uso: %s ruta nombre\r\n", argv[0]);
       return EXIT_FAILURE;
     }
     /* Intentamos abrir el directorio. */
