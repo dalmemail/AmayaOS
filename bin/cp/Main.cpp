@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 Dan Rulos.
+ * Copyright (C) 2015 Dan Rulos.
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,11 +27,10 @@
 int main(int argc, char **argv)
 {
     if (argc < 3) {
-      printf("Uso: cp origen destino\r\n");
+      printf("Uso: %s origen destino\r\n", argv[0]);
       return EXIT_FAILURE;
     }
     int fd;
-    char *newline="\r\n";
     file *f = new file();
     f->setpath(argv[1]);
     f->f_open(O_RDONLY);
@@ -43,5 +42,4 @@ int main(int argc, char **argv)
         return errno;
     }
     write(fd, ch, strlen(ch));
-    write(fd, newline, 2);
 }
