@@ -33,16 +33,15 @@ int main(int argc, char **argv)
     int i;
     char v[512];
     int z=0;
+    int x=0;
     for(i=0; i <= strlen(ch); i++) {
-	if (argv[2][i]==ch[i]) {
-	   if (argv[2][i-1]==ch[i-1]) {
-	     v[z]=ch[i];
-	     z++;
-	   } else {
-		z=0;
-	   }
+	if (argv[2][x]==ch[i]) {
+	  v[z]=ch[i];
+	  z++;
+	  x++;
 	}
     }
+    //printf("%s\r\n", v);
     if ((strcmp(v, argv[2]))==0) {
 	printf("%s\r\n", v);
 	return 0;
