@@ -34,6 +34,7 @@ int main(int argc, char **argv)
     char v[512];
     int z=0;
     int x=0;
+    int point=0;
     for(i=0; i <= strlen(ch); i++) {
 	if (argv[1][x]==ch[i]) {
 	  if (argv[1][x-1]==ch[i-1]) {
@@ -45,12 +46,16 @@ int main(int argc, char **argv)
 	    v[z]=ch[i];
 	    z++;
 	    x++;
+	    point=i;
 	  }
 	}
     }
-    //printf("%s\r\n", v);
     if ((strcmp(v, argv[1]))==0) {
-	printf("%s\r\n", v);
+	//printf("%s\r\n", v);
+	for (i=point; ch[i+1] != '\n'; i++) {
+	  printf("%c", ch[i]);
+	}
+	printf("\r\n");
 	return 0;
     }
     return 0;
