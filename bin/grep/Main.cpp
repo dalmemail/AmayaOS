@@ -22,11 +22,11 @@
 int main(int argc, char **argv)
 {
     if (argc < 3) {
-	printf("Uso: %s archivo cadena\r\n", argv[0]);
+	printf("Uso: %s cadena archivo\r\n", argv[0]);
 	return -1;
     }
     file *f = new file();
-    f->setpath(argv[1]);
+    f->setpath(argv[2]);
     f->f_open(O_RDONLY);
     char *ch = f->readAll();
     f->f_close();
@@ -35,8 +35,8 @@ int main(int argc, char **argv)
     int z=0;
     int x=0;
     for(i=0; i <= strlen(ch); i++) {
-	if (argv[2][x]==ch[i]) {
-	  if (argv[2][x-1]==ch[i-1]) {
+	if (argv[1][x]==ch[i]) {
+	  if (argv[1][x-1]==ch[i-1]) {
 	    v[z]=ch[i];
 	    z++;
 	    x++;
@@ -49,7 +49,7 @@ int main(int argc, char **argv)
 	}
     }
     //printf("%s\r\n", v);
-    if ((strcmp(v, argv[2]))==0) {
+    if ((strcmp(v, argv[1]))==0) {
 	printf("%s\r\n", v);
 	return 0;
     }
