@@ -46,14 +46,18 @@ int main(int argc, char **argv)
 	    v[z]=ch[i];
 	    z++;
 	    x++;
-	    point=i;
+	  }
+	  if (x == strlen(argv[1])) {
+	    point=i-x;
+	    point--;
+	    x++;
 	  }
 	}
     }
     if ((strcmp(v, argv[1]))==0) {
 	//printf("%s\r\n", v);
-	for (i=point; ch[i+1] != '\n'; i++) {
-	  printf("%c", ch[i]);
+        for (point=point; ch[point+1] != '\n'; point++) {
+	  printf("%c", ch[point]);
 	}
 	printf("\r\n");
 	return 0;
