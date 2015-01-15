@@ -56,11 +56,13 @@ int main(int argc, char **argv)
     }
     if ((strcmp(v, argv[1]))==0) {
 	//printf("%s\r\n", v);
-        for (point=point; ch[point+1] != '\n'; point++) {
+	for (point=point; ch[point-1] != '\n'&& point > -1; point--) {
+	}
+        for (point=point; ch[point] != '\n'; point++) {
 	  printf("%c", ch[point]);
 	}
-	printf("\r\n");
 	return 0;
     }
+    printf("\r\n");
     return 0;
 }
