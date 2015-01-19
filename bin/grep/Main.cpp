@@ -61,8 +61,7 @@ int main(int argc, char **argv)
         for (point=point; ch[point] != '\n'; point++) {
 	  printf("%c", ch[point]);
 	}
-	return 0;
+    	printf("\r\n");
     }
-    printf("\r\n");
     return 0;
 }
