@@ -1,5 +1,5 @@
 /*
-# Copyright (C) 2014 Team Espartano (AmayaOS) & Dan Rulos (AmayaOS).
+# Copyright (C) 2014 Team Espartano (AmayaOS), 2015 Dan Rulos (AmayaOS).
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,7 +18,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>*/
 #include <VGA.h>
 #include <stdlib.h>
 
-int infosave();
+void infosave();
 
 int errorescritura()
 {
@@ -114,14 +114,15 @@ int errorescritura()
       tecla = getchar();
     } while (tecla != 'A'&& tecla != 'a');
     if (tecla == 'a'|| tecla == 'A') {
-      return i;
+      return -1;
     }
+    return -1;
 }
 
-int nuevo()
+void nuevo()
 {
     int fd;
-    char *newline="\r\n";
+    char newline[3]="\r\n";
     char linea[128];
     char nombre[128];
     char ruta[128]="/dev/";
@@ -181,7 +182,7 @@ int nuevo()
     } while (linea[0] != 'e'|| linea[1] != 'x'|| linea[2] != 'i'|| linea[3] != 't');
 }
 
-int infosave()
+void infosave()
 {
     char tecla;
     int i;

@@ -1,5 +1,5 @@
 /*
-# Copyright (C) 2014 Team Espartano (AmayaOS) & Dan Rulos (AmayaOS).
+# Copyright (C) 2014 Team Espartano (AmayaOS), 2015 Dan Rulos (AmayaOS).
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,11 +17,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <unistd.h>
-#include <errno.h>
-#include <fcntl.h>
 #include <files.h>
-#include <Terminal.h>
  
 int ver2(char *contenido);
 
@@ -119,31 +115,25 @@ int errorlectura()
       tecla = getchar();
     } while (tecla != 'A'&& tecla != 'a');
     if (tecla == 'a'|| tecla == 'A') {
-      return i;
+      return -1;
     }
+    return -1;
 }
 
-int reader(char *archivo)
+void reader(char *archivo)
 {
     int fd;
     if ((fd = open(archivo, O_RDONLY)) < 0) {
       errorlectura();
     }
     close(fd);
-    int ret = EXIT_SUCCESS, result;
-        /* Intentamos mostrar el contenido. */
+    /* Intentamos mostrar el contenido. */
     file *fichero = new file();
     fichero->setpath(archivo);
     fichero->f_open(O_RDONLY);
     char *contenido = fichero->readAll();
     fichero->f_close();
     ver2(contenido);
-
-    /* Actualizamos el resultado si es necesario. */
-    if (result > ret)
-      ret = result;
-
-    return ret;
 }
 
 int ver2(char *contenido)
@@ -202,6 +192,7 @@ int ver2(char *contenido)
       tecla = getchar();
     } while (tecla != 'A'&& tecla != 'a');
     if (tecla == 'A'|| tecla == 'A') {
-      return i;
+      return 0;
     }
+    return 0;
 }

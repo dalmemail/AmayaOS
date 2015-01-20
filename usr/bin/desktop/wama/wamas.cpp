@@ -3,7 +3,7 @@
   email: developer@junglacode.org  web: www.junglacode.org*/
 /* Copyright (C) 2014 Team Espartano (AmayaOS) */
 /*
-# Copyright (C) 2014 Team Espartano (AmayaOS) & Dan Rulos (AmayaOS).
+# Copyright (C) 2014 Team Espartano (AmayaOS), 2015 Dan Rulos (AmayaOS).
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -20,11 +20,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/> */
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <fcntl.h>
-#include <unistd.h>
 #include "reader.cpp"
 #include "written.cpp"
-#include <sys/stat.h>
 #include <VGA.h>
 
 int ver();
@@ -161,7 +158,7 @@ int wama()
     if (tecla == 'E'|| tecla == 'e') {
       editar();
     }
-    return i;
+    return 0;
 }
 
 int info()
@@ -466,5 +463,5 @@ int editar()
     write(fd, linea, strlen(linea));
     write(fd, newline, 2);
     } while (linea[0] != 'e'|| linea[1] != 'x'|| linea[2] != 'i'|| linea[3] != 't');
-    return i;
+    return 0;
 }
