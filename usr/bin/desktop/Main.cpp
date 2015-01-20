@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 Dan Rulos
+ * Copyright (C) 2015 Dan Rulos
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,7 +31,7 @@
 
 int menu(int argc, char **argv);
 int salir();
-int memoria();
+void memoria();
 
 int main(int argc, char **argv)
 {
@@ -209,6 +209,7 @@ int menu(int argc, char **argv)
       amayacalc();
     }
 */
+    return 0;
 }
 
 int salir()
@@ -218,7 +219,7 @@ int salir()
     return 0;
 }
 
-int memoria()
+void memoria()
 {
     int i;
     u16 *vga;
