@@ -18,7 +18,13 @@
 #include <stdio.h>
 #include <amaya.h>
 
-int game()
+void clean()
+{
+    char clean_char[] = {0x1b, 0x5b, 0x48, 0x1b, 0x5b, 0x4a, '\0'};
+    printf("%s", clean_char);
+}
+
+void game()
 {
     int i;
     char tecla;
@@ -27,7 +33,8 @@ int game()
     int valor=0;
     int ball=1000;
     int point=0;
-    error("Pong v0.1", "Controles: Flechas del teclado", "Pulsa A para jugar");
+    int speed=81;
+    error("Pong v0.1", "Player 1: Flechas del teclado", "Player 2: Teclas Z y X");
     u16 *vga;
     MemoryMessage mem;
 
@@ -64,5 +71,51 @@ int game()
 	     player[i]--;
 	  }
 	}
-    } while(valor >= 0);
+	if (tecla == 'x' && ia[4] < 80) {
+	  for (i=0; i <= 4; i++) {
+	     ia[i]++;
+	  }
+	}
+	if (tecla == 'z' && ia[0] > 0) {
+	  for (i=0; i <= 4; i++) {
+	     ia[i]--;
+	  }
+	}
+	if (ball < 80) {
+	  valor++;
+	}
+	if (ball > 1919) {
+	  valor--;
+	}
+	if (ball == ia[0]+80 || ball == ia[1]+80 || ball == ia[2]+80) {
+	  speed=81;
+	}
+	if (ball == ia[3]+80 || ball == ia[4]+80) {
+	  speed=79;
+	}
+	if (ball == player[0]-80 || ball == player[1]-80 || ball == player[2]-80) {
+	  speed=-79;
+	  point++;
+	}
+	if (ball == player[3]-80 || ball == player[4]-80) {
+	  speed=-81;
+	  point++;
+	}
+	/* We calculate the ball position in the screen */
+	ball=ball+speed;
+    } while(valor == 0);
+    /* Cleaning screen */
+    clean();
+    printf("Juego terminado\r\n");
+    if (valor == 1) {
+	printf("Has ganado\r\nPuntuacion total: %d puntos\r\n", point);
+    }
+    if (valor == -1) {
+	printf("Has perdido\r\nPuntuacion total: %d puntos\r\n", point);
+    }
+    printf("Pulsa una tecla\r\n");
+    getchar();
+    int argc;
+    char **argv;
+    main(argc, argv);
 }
