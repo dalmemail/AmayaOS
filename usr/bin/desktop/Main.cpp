@@ -24,8 +24,7 @@
 #include <stdlib.h>
 #include <API/PrivExec.h>
 #include "wama/wamas.cpp"
-//#include "game/game.cpp"
-//#include "AmayaCALC/AmayaCALC.cpp"
+#include "pong/pong.cpp"
 #include <MemoryMessage.h>
 #include <Config.h>
 
@@ -132,19 +131,17 @@ int menu(int argc, char **argv)
     vga[1528] = VGA_CHAR('T', BLUE, BROWN);
     vga[1529] = VGA_CHAR('(', BLUE, BROWN);
     vga[1530] = VGA_CHAR('C', BLUE, BROWN);
-    vga[1531] = VGA_CHAR(')', BLUE, BROWN);
-    vga[1600] = VGA_CHAR(' ', BLUE, BROWN);
-    vga[1601] = VGA_CHAR('C', BLUE, BROWN);
-    vga[1602] = VGA_CHAR('A', BLUE, BROWN);
-    vga[1603] = VGA_CHAR('L', BLUE, BROWN);
-    vga[1604] = VGA_CHAR('C', BLUE, BROWN);
-    vga[1605] = VGA_CHAR('(', BLUE, BROWN);
-    vga[1606] = VGA_CHAR('C', BLUE, BROWN);
-    vga[1607] = VGA_CHAR(')', BLUE, BROWN);
-    vga[1608] = VGA_CHAR(' ', BLUE, BROWN);
-    vga[1609] = VGA_CHAR(' ', BLUE, BROWN);
-    vga[1610] = VGA_CHAR(' ', BLUE, BROWN);
-    vga[1611] = VGA_CHAR(' ', BLUE, BROWN);*/
+    vga[1531] = VGA_CHAR(')', BLUE, BROWN);*/
+    vga[1600] = VGA_CHAR('P', BLUE, BROWN);
+    vga[1601] = VGA_CHAR('o', BLUE, BROWN);
+    vga[1602] = VGA_CHAR('n', BLUE, BROWN);
+    vga[1603] = VGA_CHAR('g', BLUE, BROWN);
+    vga[1604] = VGA_CHAR('(', BLUE, BROWN);
+    vga[1605] = VGA_CHAR('P', BLUE, BROWN);
+    vga[1606] = VGA_CHAR(')', BLUE, BROWN);
+    for (i=1607; i <= 1611; i++) {
+	vga[i] = VGA_CHAR(' ', BLUE, BROWN);
+    }
     vga[1680] = VGA_CHAR('W', BLUE, BROWN);
     vga[1681] = VGA_CHAR('a', BLUE, BROWN);
     vga[1682] = VGA_CHAR('m', BLUE, BROWN);
@@ -191,7 +188,7 @@ int menu(int argc, char **argv)
     do {
       tecla = getchar();
     } while (tecla != 'R'&& tecla != 'r'&& tecla != 'S'&& tecla != 's'&& 'M'&& tecla != 'm'&& tecla != 'W'&& tecla != 'w'
-             /*&&tecla != 'C'&& tecla != 'c'*/);
+             &&tecla != 'P'&& tecla != 'p');
     if (tecla == 'M'|| tecla == 'm') {
       main(argc, argv);
     }
@@ -204,11 +201,10 @@ int menu(int argc, char **argv)
     if (tecla == 'W'|| tecla == 'w') {
       wama();
     }
-/*
-    if (tecla == 'C'|| tecla == 'c') {
-      amayacalc();
+    if (tecla == 'P'|| tecla == 'p') {
+      game();
     }
-*/
+
     return 0;
 }
 
