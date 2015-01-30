@@ -18,8 +18,8 @@
 #include <stdio.h>
 #include <amaya.h>
 #include <unistd.h>
-#include <stdlib.h>
 
+/* clean() cleans the screen */
 void clean()
 {
     char clean_char[] = {0x1b, 0x5b, 0x48, 0x1b, 0x5b, 0x4a, '\0'};
@@ -66,8 +66,7 @@ void game()
 	  tecla = getchar();
 	}
 	else {
-	  /* We wait one second */
-	  usleep(1);
+	  sleep(1);
 	}
 	/* Ball position */
 	if (ball == 79 || ball == 159 || ball == 239 || ball == 319 || ball == 399 || ball == 479 || ball == 559 || ball == 639 || ball == 719 || ball == 799 || ball == 879 || ball == 959 || ball == 1039 || ball == 1119 || ball == 1199 || ball == 1279 || ball == 1359 || ball == 1439 || ball == 1519 || ball == 1599 || ball == 1679 || ball == 1759 || ball == 1839 || ball == 1919 || ball == 1999) {

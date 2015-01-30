@@ -57,7 +57,7 @@ int main(int argc, char **argv)
     }
     /* while(1) genera un bucle infinito */
     while(1) {
-      usleep(1); // Esperamos un segundo y
+      sleep(1); // Esperamos un segundo y
       segundos1++; // Sumamos uno (variable++;)
       if (segundos1 == 60) {
         segundos1=segundos1-60;

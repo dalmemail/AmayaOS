@@ -279,7 +279,8 @@ extern C char *getcwd(char *buf, size_t size);
  */
 extern C int chdir(const char *path);
 
-extern time_t usleep(time_t seconds);
+/* old usleep() */
+extern time_t sleep(time_t seconds);
 
 /**
  * @}

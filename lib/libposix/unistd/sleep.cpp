@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Felipe Cabrera, 2015 Dan Rulos
+ * Copyright (C) 2012 Felipe Cabrera
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,26 +15,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <unistd.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include <time.h>
 
-int main(int argc, char **argv)
+time_t sleep(time_t seconds)
 {
-    if(argc < 2) {
-        printf("uso: %s SEGUNDOS\n", argv[0]);
-        return EXIT_FAILURE;
+    time_t t1 = time(NULL);
+    
+    int s = (seconds % 2);
+    
+    while(1) {
+        time_t t2 = time(NULL);
+        if((t2 - t1) > ((seconds/2)))
+            break;
     }
-    int s = atoi(argv[1]);
-        
-    if (s >= 0) {
-	sleep(atoi(argv[1]));
-	printf("\n");
-
-	return EXIT_SUCCESS;
-    }
-    else {
-	printf("Error: %d\n", s);
-	return EXIT_FAILURE;
-    }
+    
+    return seconds;
 }
