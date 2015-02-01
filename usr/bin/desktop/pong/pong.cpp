@@ -36,7 +36,7 @@ void game()
     int ball=1000;
     int point=0;
     int speed=81;
-    error("Pong v0.1", "Player 1: Flechas del teclado", "Pulsa A para jugar");
+    error("Pong v0.1", "Player 1: Teclas A y D", "Pulsa A para jugar");
     u16 *vga;
     MemoryMessage mem;
 
@@ -90,7 +90,7 @@ void game()
 	     player[i]++;
 	  }
 	}
-	if (tecla == 'b' && player[0] > 1920) {
+	if (tecla == 'a' && player[0] > 1920) {
 	  for (i=0; i <= 9; i++) {
 	     player[i]--;
 	  }

@@ -116,6 +116,6 @@ int main(int argc, char **argv)
     }
     day=day-cuenta;
 
-    printf("%d:%d:%d %d/%d/%d\r\n", hour, min, second, day, month, year-6);
+    printf("%d:%d:%d %d/%d/%d\r\n", hour, min, second, day, month, year);
     return 0;
 }
