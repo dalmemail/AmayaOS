@@ -4,7 +4,7 @@
 # Project related configuration options
 #---------------------------------------------------------------------------
 DOXYFILE_ENCODING      = UTF-8
-PROJECT_NAME           = AMAYA-OS
+PROJECT_NAME           = AmayaOS
 PROJECT_NUMBER         = 
 OUTPUT_DIRECTORY       = doc
 CREATE_SUBDIRS         = NO
