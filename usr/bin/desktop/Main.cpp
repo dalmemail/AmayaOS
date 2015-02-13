@@ -30,7 +30,7 @@
 #include <Config.h>
 
 /* desktop version 0.2 */
-int menu(int argc, char **argv);
+int menu();
 int salir();
 void memoria();
 
@@ -85,12 +85,16 @@ int main(int argc, char **argv)
       tecla = getchar();
     } while (tecla != 'M'&& tecla != 'm');
     if (tecla == 'M'|| tecla == 'm') {
-      menu(argc, argv);
+      if (menu() == -1) {
+    	char clean[] = {0x1b, 0x5b, 0x48, 0x1b, 0x5b, 0x4a, '\0'};
+    	printf("%s", clean);
+	return 0;
+      }
     }
   }
 }
 
-int menu(int argc, char **argv)
+int menu()
 {
     char tecla;
     int i;
@@ -194,13 +198,13 @@ int menu(int argc, char **argv)
     } while (tecla != 'R'&& tecla != 'r'&& tecla != 'S'&& tecla != 's'&& 'M'&& tecla != 'm'&& tecla != 'W'&& tecla != 'w'
              &&tecla != 'P'&& tecla != 'p' &&tecla != 'A'&& tecla != 'a');
     if (tecla == 'M'|| tecla == 'm') {
-      main(argc, argv);
+      return 0;
     }
     if (tecla == 'R'|| tecla == 'r') {
       return PrivExec(Reboot);
     }
     if (tecla == 'S'|| tecla == 's') {
-      salir();
+      return -1;
     }
     if (tecla == 'W'|| tecla == 'w') {
       wama();
@@ -212,13 +216,6 @@ int menu(int argc, char **argv)
       ama_calc();
     }
 
-    return 0;
-}
-
-int salir()
-{
-    char clean[] = {0x1b, 0x5b, 0x48, 0x1b, 0x5b, 0x4a, '\0'};
-    printf("%s", clean);
     return 0;
 }
 
