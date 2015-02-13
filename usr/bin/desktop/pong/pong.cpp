@@ -19,13 +19,6 @@
 #include <amaya.h>
 #include <unistd.h>
 
-/* clean() cleans the screen */
-void clean()
-{
-    char clean_char[] = {0x1b, 0x5b, 0x48, 0x1b, 0x5b, 0x4a, '\0'};
-    printf("%s", clean_char);
-}
-
 void game()
 {
     int i;
@@ -162,7 +155,8 @@ void game()
 	tecla=' ';
     } while(valor == 0);
     /* Cleaning screen */
-    clean();
+    char clean[] = {0x1b, 0x5b, 0x48, 0x1b, 0x5b, 0x4a, '\0'};
+    printf("%s", clean);
     printf("Juego terminado\r\n");
     if (valor == 1) {
 	printf("Has ganado\r\nPuntuacion total: %d puntos\r\n", point);

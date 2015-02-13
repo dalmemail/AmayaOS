@@ -25,6 +25,7 @@
 #include <API/PrivExec.h>
 #include "wama/wamas.cpp"
 #include "pong/pong.cpp"
+#include "AmaCALC/AmaCALC.cpp"
 #include <MemoryMessage.h>
 #include <Config.h>
 
@@ -120,18 +121,18 @@ int menu(int argc, char **argv)
     for (i=80; i < 1680; i++) {
       vga[i] = VGA_CHAR(' ', WHITE, WHITE);
     }
-/*    vga[1520] = VGA_CHAR('A', BLUE, BROWN);
+    vga[1520] = VGA_CHAR('A', BLUE, BROWN);
     vga[1521] = VGA_CHAR('m', BLUE, BROWN);
     vga[1522] = VGA_CHAR('a', BLUE, BROWN);
-    vga[1523] = VGA_CHAR('y', BLUE, BROWN);
-    vga[1524] = VGA_CHAR('a', BLUE, BROWN);
-    vga[1525] = VGA_CHAR('F', BLUE, BROWN);
-    vga[1526] = VGA_CHAR('A', BLUE, BROWN);
-    vga[1527] = VGA_CHAR('C', BLUE, BROWN);
-    vga[1528] = VGA_CHAR('T', BLUE, BROWN);
-    vga[1529] = VGA_CHAR('(', BLUE, BROWN);
-    vga[1530] = VGA_CHAR('C', BLUE, BROWN);
-    vga[1531] = VGA_CHAR(')', BLUE, BROWN);*/
+    vga[1523] = VGA_CHAR('C', BLUE, BROWN);
+    vga[1524] = VGA_CHAR('A', BLUE, BROWN);
+    vga[1525] = VGA_CHAR('L', BLUE, BROWN);
+    vga[1526] = VGA_CHAR('C', BLUE, BROWN);
+    vga[1527] = VGA_CHAR(' ', BLUE, BROWN);
+    vga[1528] = VGA_CHAR('(', BLUE, BROWN);
+    vga[1529] = VGA_CHAR('A', BLUE, BROWN);
+    vga[1530] = VGA_CHAR(')', BLUE, BROWN);
+    vga[1531] = VGA_CHAR(' ', BLUE, BROWN);
     vga[1600] = VGA_CHAR('P', BLUE, BROWN);
     vga[1601] = VGA_CHAR('o', BLUE, BROWN);
     vga[1602] = VGA_CHAR('n', BLUE, BROWN);
@@ -188,7 +189,7 @@ int menu(int argc, char **argv)
     do {
       tecla = getchar();
     } while (tecla != 'R'&& tecla != 'r'&& tecla != 'S'&& tecla != 's'&& 'M'&& tecla != 'm'&& tecla != 'W'&& tecla != 'w'
-             &&tecla != 'P'&& tecla != 'p');
+             &&tecla != 'P'&& tecla != 'p' &&tecla != 'A'&& tecla != 'a');
     if (tecla == 'M'|| tecla == 'm') {
       main(argc, argv);
     }
@@ -203,6 +204,9 @@ int menu(int argc, char **argv)
     }
     if (tecla == 'P'|| tecla == 'p') {
       game();
+    }
+    if (tecla == 'A'|| tecla == 'a') {
+      ama_calc();
     }
 
     return 0;
