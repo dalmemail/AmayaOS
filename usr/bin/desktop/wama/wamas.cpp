@@ -142,9 +142,7 @@ int wama()
     } while (tecla != 'V'&& tecla != 'v'&& tecla != 'N'&& tecla != 'n'
              && tecla != 'E'&& tecla != 'e'&& tecla != 'S'&& tecla != 's'&& tecla != 'I'&& tecla != 'i');
     if (tecla == 'S'|| tecla == 's') {
-      int argc;
-      char **argv;
-      main(argc, argv);
+      return 0;
     }
     if (tecla == 'I'|| tecla == 'i') {
       info();

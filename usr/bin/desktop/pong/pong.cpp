@@ -166,8 +166,4 @@ void game()
     }
     printf("Pulsa una tecla\r\n");
     getchar();
-    /* Declare argc & argv to return to main(); */
-    int argc;
-    char **argv;
-    main(argc, argv);
 }

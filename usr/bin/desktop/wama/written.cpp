@@ -275,9 +275,4 @@ void infosave()
     do {
       tecla = getchar();
     } while (tecla != 'A'&& tecla != 'a');
-    if (tecla == 'a'|| tecla == 'A') {
-      int argc;
-      char **argv;
-      main(argc, argv);
-    }
 }

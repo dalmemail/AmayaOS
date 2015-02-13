@@ -29,12 +29,14 @@
 #include <MemoryMessage.h>
 #include <Config.h>
 
+/* desktop version 0.2 */
 int menu(int argc, char **argv);
 int salir();
 void memoria();
 
 int main(int argc, char **argv)
 {
+  while (1) {
     char tecla;
     int i;
     u16 *vga;
@@ -85,6 +87,7 @@ int main(int argc, char **argv)
     if (tecla == 'M'|| tecla == 'm') {
       menu(argc, argv);
     }
+  }
 }
 
 int menu(int argc, char **argv)

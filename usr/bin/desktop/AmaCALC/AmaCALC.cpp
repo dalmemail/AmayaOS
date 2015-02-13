@@ -113,6 +113,8 @@ int new_csv(char *path)
 	  printf("%d ", izq);
 	}
      } while(strcmp(line, "#exit#") != 0 && strcmp(line, "#exit#\n") != 0);
+     /* Cerramos el archivo */
+     close(fd);
      /* Volvemos al menú */
      ama_calc();
 }
@@ -141,8 +143,4 @@ void ama_calc()
 	gets_s(path, 128);
 	new_csv(path);
      }
-     /* Solución temporal */
-     int argc;
-     char **argv;
-     main(argc, argv);
 }
