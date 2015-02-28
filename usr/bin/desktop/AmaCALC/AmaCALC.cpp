@@ -89,18 +89,75 @@ int new_csv(char *path)
          return errno;
      }
      /* Interfaz */
-     printf("  A  	B 	C 	D 	E	F 	G 	H 	I 	J\r\n");
+     printf("  A  	B 	C 	D 	E	F\r\n");
      int izq=1;
      printf("%d ", izq);
      do {
 	get_input_csv(line, 128);
-	if (strcmp(line, "#exit#") != 0 && line[0] != '=' && line[strlen(line)-1] != '\n') {
+	/* Con 'zzz' llevamos la contabilidad de las letras */
+	int zzz=0;
+	int a[128];
+        int b[128];
+	int c[128];
+	int d[128];
+	int e[128];
+	int f[128];
+	if (strcmp(line, "#exit#") != 0 && line[0] != '=' && line[strlen(line)-1] != '\n' && numberyn(line[0]) == 1) {
 	  write(fd, "\"", 1);
 	  write(fd, line, strlen(line));
 	  write(fd, "\"", 1);
 	  write(fd, ";", 1);
 	}
-	if (line[strlen(line)-1] == '\n' && strcmp(line, "#exit#\n") != 0) {
+	if (strcmp(line, "#exit#") != 0 && line[0] != '=' && numberyn(line[0]) == 0) {
+	  if (line[strlen(line)-1] == '\n') {
+	    for (int i=0; line[i] != '\n'; i++) {
+		  l[i] = line[i];
+	    }
+	    write(fd, l, strlen(l));
+	    write(fd, ";", 1);
+	  }
+	  else {
+	    write(fd, line, strlen(line));
+	    write(fd, ";", 1);
+	  }
+	  char *contenido = reader_csv(path);
+	  int z=0;
+	  /* obtenemos la linea */
+	  for (int p=0; p < (izq - 1); z++) {
+	    if (contenido[z] == '\n') {
+		p++;
+	    }
+	  } 
+	  /* obtenemos la letra */
+	  for (zzz=0; contenido[z] != '\n'; z++) {
+	    if (contenido[z] == ';') {
+		zzz++;
+	    }
+	  }
+	  zzz=zzz-1;
+	  /* Guardamos el dato en el vector */
+	  switch (zzz) {
+	    case 0:
+		a[izq] = atoi(line);
+	    break;
+	    case 1:
+		b[izq] = atoi(line);
+	    break;
+	    case 2:
+		c[izq] = atoi(line);
+	    break;
+	    case 3:
+		d[izq] = atoi(line);
+	    break;
+	    case 4:
+		e[izq] = atoi(line);
+	    break;
+	    case 5:
+		f[izq] = atoi(line);
+	    break;
+	  }
+	}
+	if (line[strlen(line)-1] == '\n' && strcmp(line, "#exit#\n") != 0 && numberyn(line[0]) == 1 && line[0] != '=') {
 	  for (int i=0; line[i] != '\n'; i++) {
 		l[i] = line[i];
 	  }
@@ -112,9 +169,145 @@ int new_csv(char *path)
 	  write(fd, "\n", 1);
 	  printf("%d ", izq);
 	}
+	if (line[strlen(line)-1] == '\n' && strcmp(line, "#exit#\n") != 0 && numberyn(line[0]) == 0 && line[0] != '=') {
+	  zzz=0;
+	  izq++;
+	  write(fd, "\n", 1);
+	  printf("%d ", izq);
+	}
+	if (line[0] == '=') {
+	  if (numberyn(line[1]) == 1 && numberyn(line[2]) == 1 && numberyn(line[3]) == 1) {
+		/* Aquí irán las letras de las celdas */
+		char letter_1 = line[5];
+		char letter_2;
+		char n_1[128];
+		char n_2[128];
+		int numero_c1;
+		int numero_c2;
+		/* Obtenemos letter_2 */
+		for (int i=6; line[i] != ')'; i++) {
+		  if (numberyn(line[i]) == 1 && line[i] != ';' && line[i] != ' ') {
+			letter_2 = line[i];
+		  }
+		}
+		int i;
+		int o=0;
+		for (i=6; line[i] != ';'; i++) {
+		  n_1[o] = line[i];
+		  o++;
+		}
+		i=i+3;
+		for (o=0; line[i] != ')'; i++) {
+		  n_2[o] = line[i];
+		  o++;
+		}
+		numero_c1 = atoi(n_1);
+		numero_c2 = atoi(n_2);
+		int s1;
+		int s2;
+		switch (letter_1) {
+		  case 'A':
+			s1 = a[numero_c1];
+		  break;
+		  case 'B':
+			s1 = b[numero_c1];
+		  break;
+		  case 'C':
+			s1 = c[numero_c1];
+		  break;
+		  case 'D':
+			s1 = d[numero_c1];
+		  break;
+		  case 'E':
+			s1 = e[numero_c1];
+		  break;
+		  case 'F':
+			s1 = f[numero_c1];
+		  break;
+		}
+		switch (letter_2) {
+		  case 'A':
+			s2 = a[numero_c1];
+		  break;
+		  case 'B':
+			s2 = b[numero_c1];
+		  break;
+		  case 'C':
+			s2 = c[numero_c1];
+		  break;
+		  case 'D':
+			s2 = d[numero_c1];
+		  break;
+		  case 'E':
+			s2 = e[numero_c1];
+		  break;
+		  case 'F':
+			s2 = f[numero_c1];
+		  break;
+		}
+		int res;
+		if (line[1] == 'S' && line[2] == 'U' && line[3] == 'M') {
+		  res = s1 + s2;
+		}
+		if (line[1] == 'R' && line[2] == 'E' && line[3] == 'S') {
+		  res = s1 - s2;
+		}
+		if (line[1] == 'M' && line[2] == 'U' && line[3] == 'L') {
+		  res = s1 * s2;
+		}
+		if (line[1] == 'D' && line[2] == 'I' && line[3] == 'V') {
+		  res = s1 / s2;
+		}
+		char *resultado;
+		itoa(resultado, 10, res);
+		write(fd, resultado, strlen(resultado));
+		write(fd, ";", 1);
+		if (line[strlen(line)-1] == '\n') {
+		  write(fd, "\n", 1);
+		  izq++;
+		  printf("%d ", izq);
+		}
+	  }
+	  else {
+	    char o_1[128];
+	    char o_2[128];
+	    int k=1;
+	    for (int p=0; numberyn(line[k]) == 0; k++) {
+		o_1[p] = line[k];
+	    }
+	    int kp=k+1;
+	    for (int p=0; numberyn(line[kp]) == 0; kp++) {
+		o_2[p] = line[kp];
+	    }
+	    int o1 = atoi(o_1);
+	    int o2 = atoi(o_2);
+	    int result;
+	    switch (line[k]) {
+		case '+':
+		  result = o1 + o2;
+		break;
+		case '-':
+		  result = o1 - o2;
+		break;
+		case '*':
+		  result = o1 * o2;
+		break;
+		case '/':
+		  result = o1 / o2;
+		break;
+	    }
+	    char resultado_[128];
+	    itoa(resultado_, 10, result);
+	    write(fd, resultado_, strlen(resultado_));
+	    write(fd, ";", 1);
+	    if (line[strlen(line)-1] == '\n') {
+	      write(fd, "\n", 1);
+	      izq++;
+	      printf("%d ", izq);
+	    }
+	  }
+	}
      } while(strcmp(line, "#exit#") != 0 && strcmp(line, "#exit#\n") != 0);
-     /* Cerramos el archivo */
-     close(fd);
      /* Volvemos al menú */
      ama_calc();
 }
@@ -124,7 +317,7 @@ void ama_calc()
      clean_csv();
      char command[128];
      char path[128];
-     printf("Welcome to Amacalc v0.2\n");
+     printf("Welcome to Amacalc v0.3\n");
      printf("Available commands:\n");
      printf("open --> Open an existant calculation sheet\n");
      printf("new --> Create a new calculation sheet\n");

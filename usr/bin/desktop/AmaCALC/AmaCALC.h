@@ -75,3 +75,28 @@ char *get_input_csv(char *str, size_t size)
     line[total] = ZERO;
     
 }
+
+/* Comprueba si un 'char' es un numero
+ * Devuelve 0 si lo es y 1 si no lo es */
+int numberyn(char number)
+{
+    if (number == '0' || number == '1'|| number == '2'|| number == '3'|| number == '4'|| number == '5'|| number == '6'|| number == '7'|| number == '8'|| number == '9') {
+	return 0;
+    }
+    else {
+	return 1;
+    }
+}
+
+/* Devuelve el numero de lineas
+ * de una variable char* */
+/*int nlineas(char *contenido)
+{
+    int zx=0;
+    for (int m=0; contenido[m] != '\0'; m++) {
+	if (contenido[m] == '\n') {
+	  zx++;
+	}
+    }
+    return zx;
+}*/
