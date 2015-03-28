@@ -31,7 +31,6 @@
 
 /* desktop version 0.2 */
 int menu();
-int salir();
 void memoria();
 
 int main(int argc, char **argv)
