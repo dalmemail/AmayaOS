@@ -7,7 +7,7 @@
 #define COPYRIGHT "Copyright (C) 2015 Amaya OS Team\r\n\r\n" \
 
 #define COMPILER  "gcc (Debian 4.4.4-8) 4.4.5 20100728 (prerelease)"
-#define DATETIME  "2015-02-13 17:31:48.475134"
+#define DATETIME  "2015-03-23 17:01:02.708835"
 #define ARCH      "X86"
 
 #define BUILDUSER "dalme"
@@ -17,7 +17,7 @@
 #define BUILDCPU  ""
 #define BUILDPY   "Python 2.6.5+"
 #define BUILDER   "SCons 2.3.0"
-#define BUILDPATH "/home/dalme/Escritorio/fnx/AmayaOS003"
+#define BUILDPATH "/home/dalme/AmayaOS/AmayaOS"
 #define BUILDURL  BUILDPATH
 
 #endif
