@@ -69,6 +69,23 @@ int uptime()
 
 int main(int argc, char **argv)
 {
+     if (argc == 2) {
+	if (strcmp(argv[1], "--version") == 0 || strcmp(argv[1], "-v") == 0) {
+	  printf("%s (AmayaCoreutils) 0.4\n", argv[0]);
+	  printf("Copyright (C) 2015 AmayaOS Team.\n");
+	  printf("License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.\n");
+	  printf("This is free software: you are free to change and redistribute it.\n");
+	  printf("There is NO WARRANTY, to the extent permitted by law.\n\n");
+	  printf("Escrito por Dan Rulos.\n");
+	  return 0;
+	}
+	if (strcmp(argv[1], "--help") == 0 || strcmp(argv[1], "-h") == 0) {
+	  printf("Usage: %s \n\n", argv[0]);
+	  printf("Imprime el tiempo que lleva encendido el ordenador.\n");
+	  printf("-v --version imprime la version de AmayaCoreutils.\n");
+	  return 0;
+	}
+     }
     /* Averiguamos si es la primera vez que se ejecuta o no */
     if ((open("/dev/uptime", O_RDONLY)) < 0) {
 	/* Ejecutamos el server de uptime */
