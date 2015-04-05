@@ -25,6 +25,7 @@ int main(int argc, char **argv)
 	printf("Uso: %s cadena archivo\r\n", argv[0]);
 	return -1;
     }
+    // Leemos el fichero (argv[2])
     file *f = new file();
     f->setpath(argv[2]);
     f->f_open(O_RDONLY);
@@ -32,8 +33,12 @@ int main(int argc, char **argv)
     f->f_close();
     int i;
     char v[512];
+    /* El punto de la palabra en el vector v[] */
     int z=0;
+    /* El punto de la palabra en el vector argv[1][] */
     int x=0;
+    /* El punto del vector ch[] en el que comienza la frase
+     * donde está la palabra que hemos buscado. */
     int point=0;
     for(i=0; i <= strlen(ch); i++) {
 	if (argv[1][x]==ch[i]) {
@@ -48,20 +53,21 @@ int main(int argc, char **argv)
 	    x++;
 	  }
 	  if (x == strlen(argv[1])) {
-	    point=i-x;
-	    point--;
+	    point=i;
 	    x++;
 	  }
 	}
     }
-    if ((strcmp(v, argv[1]))==0) {
-	//printf("%s\r\n", v);
+    if (strcmp(argv[1], v)==0 || strlen(argv[1]) < strlen(v)) {
 	for (point=point; ch[point-1] != '\n'&& point > -1; point--) {
 	}
-        for (point=point; ch[point] != '\n'; point++) {
+        for (point=point; ch[point] != '\n' && point <= i; point++) {
 	  printf("%c", ch[point]);
 	}
     	printf("\r\n");
+    }
+    else {
+	printf("Cadena no encontrada\n");
     }
     return 0;
 }
