@@ -28,7 +28,7 @@ int main(int argc, char **argv) /* Funcion principal de la calculadora */
     char opcion='I'; /* Importante colocar opciones por defecto I, 0, etc Asi si el usuario pulsa enter el programa no se quedará colgado */
     char numero1[128];
     char numero2[128];
-    int resultado=0;
+    long int resultado=0;
     printf("CALC 0.2\r\n");
     printf("[1] Sumar\r\n");
     printf("[2] Restar\r\n");
