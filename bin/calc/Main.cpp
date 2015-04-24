@@ -22,6 +22,7 @@
 #include <string.h>
 #include <amaya.h>
 
+/* limpia la pantalla */
 void clean_calc()
 {
 	char str[] = {0x1b, 0x5b, 0x48, 0x1b, 0x5b, 0x4a, '\0'};
@@ -40,6 +41,7 @@ bool numberinchar(char *n)
 	return true;
 }
 
+/* suma dos numeros */
 void sumar()
 {
 	int resultado_sum=0;
@@ -60,6 +62,7 @@ void sumar()
 	pause();
 }
 
+/* resta dos numeros */
 void restar()
 {
 	int resultado_res=0;
@@ -80,6 +83,7 @@ void restar()
 	pause();
 }
 
+/* multiplica dos numeros */
 void multiplicar()
 {
 	int resultado_mul=0;
@@ -100,6 +104,7 @@ void multiplicar()
 	pause();
 }
 
+/* divide dos numeros */
 void dividir()
 {
 	int resultado_div=0;
@@ -120,6 +125,7 @@ void dividir()
 	pause();
 }
 
+/* función principal */
 int main(int argc, char **argv)
 {
 	/* declaramos variables */
@@ -136,6 +142,7 @@ int main(int argc, char **argv)
 		printf("[S] Salir\r\n");
 		printf("Seleccione una opcion: \n");
 		option = getchar();
+		/* diferentes opciones */
 		switch (option) {
 			case '1':
 				clean_calc();
@@ -158,6 +165,7 @@ int main(int argc, char **argv)
 				clean_calc();
 				return 0;
 				break;
+			/* si no es ninguna de las anteriores */
 			default:
 				clean_calc();
 				printf("Error: Orden no encontrada\n");
