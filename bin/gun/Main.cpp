@@ -181,6 +181,5 @@ int aleatorio()
     char *ch = f->readAll();
     f->f_close();
     char l[2] = { ch[strlen(ch)-2], ch[strlen(ch)-1]};
-    int n = atoi(l);
-    return n;
+    return atoi(l);
 }
