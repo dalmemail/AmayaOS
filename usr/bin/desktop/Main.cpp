@@ -24,8 +24,10 @@
 #include <stdlib.h>
 #include <API/PrivExec.h>
 #include "wama/wamas.cpp"
-#include "pong/pong.cpp"
+//#include "pong/pong.cpp"
+//#include "commander/commander.cpp"
 #include "AmaCALC/AmaCALC.cpp"
+#include "hangman/hangman.cpp"
 #include <MemoryMessage.h>
 #include <Config.h>
 
@@ -139,16 +141,18 @@ int menu()
     vga[1529] = VGA_CHAR('A', BLUE, BROWN);
     vga[1530] = VGA_CHAR(')', BLUE, BROWN);
     vga[1531] = VGA_CHAR(' ', BLUE, BROWN);
-    vga[1600] = VGA_CHAR('P', BLUE, BROWN);
-    vga[1601] = VGA_CHAR('o', BLUE, BROWN);
+    vga[1600] = VGA_CHAR('H', BLUE, BROWN);
+    vga[1601] = VGA_CHAR('a', BLUE, BROWN);
     vga[1602] = VGA_CHAR('n', BLUE, BROWN);
     vga[1603] = VGA_CHAR('g', BLUE, BROWN);
-    vga[1604] = VGA_CHAR('(', BLUE, BROWN);
-    vga[1605] = VGA_CHAR('P', BLUE, BROWN);
-    vga[1606] = VGA_CHAR(')', BLUE, BROWN);
-    for (i=1607; i <= 1611; i++) {
-	vga[i] = VGA_CHAR(' ', BLUE, BROWN);
-    }
+    vga[1604] = VGA_CHAR('m', BLUE, BROWN);
+    vga[1605] = VGA_CHAR('a', BLUE, BROWN);
+    vga[1606] = VGA_CHAR('n', BLUE, BROWN);
+    vga[1607] = VGA_CHAR(' ', BLUE, BROWN);
+    vga[1608] = VGA_CHAR('(', BLUE, BROWN);
+    vga[1609] = VGA_CHAR('H', BLUE, BROWN);
+    vga[1610] = VGA_CHAR(')', BLUE, BROWN);
+    vga[1611] = VGA_CHAR(' ', BLUE, BROWN);
     vga[1680] = VGA_CHAR('W', BLUE, BROWN);
     vga[1681] = VGA_CHAR('a', BLUE, BROWN);
     vga[1682] = VGA_CHAR('m', BLUE, BROWN);
@@ -195,7 +199,7 @@ int menu()
     do {
       tecla = getchar();
     } while (tecla != 'R'&& tecla != 'r'&& tecla != 'S'&& tecla != 's'&& 'M'&& tecla != 'm'&& tecla != 'W'&& tecla != 'w'
-             &&tecla != 'P'&& tecla != 'p' &&tecla != 'A'&& tecla != 'a');
+             &&tecla != 'H'&& tecla != 'h' &&tecla != 'A'&& tecla != 'a');
     if (tecla == 'M'|| tecla == 'm') {
       return 0;
     }
@@ -208,8 +212,13 @@ int menu()
     if (tecla == 'W'|| tecla == 'w') {
       wama();
     }
+/*
     if (tecla == 'P'|| tecla == 'p') {
       game();
+    }
+*/
+    if (tecla == 'H'|| tecla == 'h') {
+      hangman();
     }
     if (tecla == 'A'|| tecla == 'a') {
       ama_calc();
