@@ -25,37 +25,43 @@ int aleatorio()
     f->f_open(O_RDONLY);
     char *ch = f->readAll();
     f->f_close();
-    switch (ch[9]) {
-	case '0':
-		return 0;
+    if (ch[8] == '0') {
+    	switch (ch[9]) {
+		case '0':
+			return 0;
+			break;
+		case '1':
+			return 1;
+			break;
+		case '2':
+			return 2;
+			break;
+		case '3':
+			return 3;
+			break;
+		case '4':
+			return 4;
+			break;
+		case '5':
+			return 5;
+			break;
+		case '6':
+			return 6;
+			break;
+		case '7':
+			return 7;
+			break;
+			case '8':
+			return 8;
+			break;
+		case '9':
+			return 9;
 		break;
-	case '1':
-		return 1;
-		break;
-	case '2':
-		return 2;
-		break;
-	case '3':
-		return 3;
-		break;
-	case '4':
-		return 4;
-		break;
-	case '5':
-		return 5;
-		break;
-	case '6':
-		return 6;
-		break;
-	case '7':
-		return 7;
-		break;
-	case '8':
-		return 8;
-		break;
-	case '9':
-		return 9;
-		break;
+    	}	
+    }
+    else {
+	char num[2] = {ch[8], ch[9]};
+	return atoi(num);
     }
 }
 
@@ -64,15 +70,21 @@ int hangman()
 	/* numero de intentos (max 10)*/
 	int intentos=0;
 	char key='\b';
-	char words[6][128] = {"ornitorrinco", "gato", "buho", "manzana", "aerogenerador", "arbol"};
+	char words[30][128] = {"ornitorrinco", "gato", "buho", "manzana", "aerogenerador", "arbol", "policia", "noviembre",
+			     "carta", "entrada", "flor", "inteligencia", "chocolate", "literatura", "galleta", "movil",
+			     "ordenador", "chimenea", "caramelo", "cucaracha", "mesa", "ardilla", "ventana", "llaves",
+			     "ladrillo", "coche", "bombilla", "vino", "bicicleta", "atracciones"};
 	char word[128];
 	char fails[128];
 	fails[0] = ' ';
 	int z=0;
 	char str[] = {0x1b, 0x5b, 0x48, 0x1b, 0x5b, 0x4a, '\0'};
 	int n = aleatorio();
-	if (n > 5) {
+	if (n > 29) {
 		n = n / 2;
+		if (n > 29) {
+			n = n / 2;
+		}
 	}
 	printf("%s", str);
 	u16 *vga;
@@ -232,5 +244,3 @@ int hangman()
 			}
 		}
 	}
-
-}
