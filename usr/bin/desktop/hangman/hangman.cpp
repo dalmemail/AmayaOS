@@ -113,7 +113,7 @@ int hangman()
 		window("AmayaOS Hangman", 2);
 		/* cuadro de texto */
 		for (int i=321; i >= 0; i++) {
-			vga[i] = VGA_CHAR(' ', WHITE, WHITE);
+			vga[i] = VGA_CHAR(' ', GREEN, GREEN);
 			switch (i) {
 				case 350:
 					i = 400;
@@ -129,11 +129,11 @@ int hangman()
 					break;
 			}
 			for (int i=0; i < strlen(words[n]); i++) {
-				vga[409+i] = VGA_CHAR(word[i], BLACK, WHITE);
+				vga[409+i] = VGA_CHAR(word[i], BLACK, GREEN);
 			}
 		}
 		for (int i=361; i >= 0; i++) {
-			vga[i] = VGA_CHAR(' ', WHITE, WHITE);
+			vga[i] = VGA_CHAR(' ', GREEN, GREEN);
 			if (i == 390 || i == 470 || i == 550 || i == 630 || i == 710 || i == 790 ||
 			    i == 870 || i == 950 || i == 1030 || i == 1110 || i == 1190 || i == 1270 ||
 			    i == 1350 || i == 1430 || i == 1510 || i == 1590 || i == 1670 || i == 1750 || i == 1830) {
@@ -144,42 +144,42 @@ int hangman()
 			}
 		}
 		if (intentos >= 0) {
-			vga[1572] = VGA_CHAR('-', BLACK, WHITE);
-			vga[1573] = VGA_CHAR('-', BLACK, WHITE);
-			vga[1574] = VGA_CHAR('-', BLACK, WHITE);
-			vga[1575] = VGA_CHAR('-', BLACK, WHITE);
-			vga[1576] = VGA_CHAR('-', BLACK, WHITE);
+			vga[1572] = VGA_CHAR('-', BLACK, GREEN);
+			vga[1573] = VGA_CHAR('-', BLACK, GREEN);
+			vga[1574] = VGA_CHAR('-', BLACK, GREEN);
+			vga[1575] = VGA_CHAR('-', BLACK, GREEN);
+			vga[1576] = VGA_CHAR('-', BLACK, GREEN);
 			if (intentos >= 1) {
-				vga[1494] = VGA_CHAR('|', BLACK, WHITE);
-				vga[1414] = VGA_CHAR('|', BLACK, WHITE);
-				vga[1334] = VGA_CHAR('|', BLACK, WHITE);
+				vga[1494] = VGA_CHAR('|', BLACK, GREEN);
+				vga[1414] = VGA_CHAR('|', BLACK, GREEN);
+				vga[1334] = VGA_CHAR('|', BLACK, GREEN);
 				if (intentos >= 2) {
-					vga[1254] = VGA_CHAR('|', BLACK, WHITE);
-					vga[1174] = VGA_CHAR('|', BLACK, WHITE);
-					vga[1094] = VGA_CHAR('|', BLACK, WHITE);
+					vga[1254] = VGA_CHAR('|', BLACK, GREEN);
+					vga[1174] = VGA_CHAR('|', BLACK, GREEN);
+					vga[1094] = VGA_CHAR('|', BLACK, GREEN);
 					if (intentos >= 3) {
-						vga[1014] = VGA_CHAR('|', BLACK, WHITE);
-						vga[934] = VGA_CHAR('|', BLACK, WHITE);
-						vga[854] = VGA_CHAR('|', BLACK, WHITE);
-						vga[855] = VGA_CHAR('/', BLACK, WHITE);
-						vga[774] = VGA_CHAR('_', BLACK, WHITE);
-						vga[775] = VGA_CHAR('_', BLACK, WHITE);
-						vga[776] = VGA_CHAR('_', BLACK, WHITE);
-						vga[777] = VGA_CHAR('_', BLACK, WHITE);
+						vga[1014] = VGA_CHAR('|', BLACK, GREEN);
+						vga[934] = VGA_CHAR('|', BLACK, GREEN);
+						vga[854] = VGA_CHAR('|', BLACK, GREEN);
+						vga[855] = VGA_CHAR('/', BLACK, GREEN);
+						vga[774] = VGA_CHAR('_', BLACK, GREEN);
+						vga[775] = VGA_CHAR('_', BLACK, GREEN);
+						vga[776] = VGA_CHAR('_', BLACK, GREEN);
+						vga[777] = VGA_CHAR('_', BLACK, GREEN);
 						if (intentos >= 4) {
-							vga[857] = VGA_CHAR('|', BLACK, WHITE);
+							vga[857] = VGA_CHAR('|', BLACK, GREEN);
 							if (intentos >= 5) {
-								vga[937] = VGA_CHAR('O', BLACK, WHITE);
+								vga[937] = VGA_CHAR('O', BLACK, GREEN);
 								if (intentos >= 6) {
-									vga[1016] = VGA_CHAR('-', BLACK, WHITE);
-									vga[1017] = VGA_CHAR('-', BLACK, WHITE);
-									vga[1018] = VGA_CHAR('-', BLACK, WHITE);
+									vga[1016] = VGA_CHAR('-', BLACK, GREEN);
+									vga[1017] = VGA_CHAR('-', BLACK, GREEN);
+									vga[1018] = VGA_CHAR('-', BLACK, GREEN);
 									if (intentos >= 7) {
-										vga[1097] = VGA_CHAR('|', BLACK, WHITE);
+										vga[1097] = VGA_CHAR('|', BLACK, GREEN);
 										if (intentos >= 8) {
-											vga[1176] = VGA_CHAR('/', BLACK, WHITE);
+											vga[1176] = VGA_CHAR('/', BLACK, GREEN);
 											if (intentos >= 9) {
-												vga[1178] = VGA_CHAR('\\', BLACK, WHITE);
+												vga[1178] = VGA_CHAR('\\', BLACK, GREEN);
 											}
 										}
 									}
@@ -191,7 +191,7 @@ int hangman()
 			}
 		}
 		for (int i=0; i < 10; i++) {
-			vga[1642+i] = VGA_CHAR(fails[i], BLACK, WHITE);
+			vga[1642+i] = VGA_CHAR(fails[i], BLACK, GREEN);
 		}
 		bar("PULSA [RETURN] PARA SALIR");
 		key = getchar();
@@ -244,3 +244,5 @@ int hangman()
 			}
 		}
 	}
+
+}
