@@ -93,6 +93,10 @@ int new_csv(char *path)
      int izq=1;
      printf("%d ", izq);
      do {
+	for (int w=0; w < 128; w++) {
+		line[w] = '\0';
+		l[w] = '\0';
+	}
 	get_input_csv(line, 128);
 	/* Con 'zzz' llevamos la contabilidad de las letras */
 	int zzz=0;
@@ -176,7 +180,7 @@ int new_csv(char *path)
 	  printf("%d ", izq);
 	}
 	if (line[0] == '=') {
-	  if (numberyn(line[1]) == 1 && numberyn(line[2]) == 1 && numberyn(line[3]) == 1) {
+	  if (numberyn(line[5]) == 1) {
 		/* Aquí irán las letras de las celdas */
 		char letter_1 = line[5];
 		char letter_2;
@@ -268,44 +272,6 @@ int new_csv(char *path)
 		  printf("%d ", izq);
 		}
 	  }
-	  else {
-	    char o_1[128];
-	    char o_2[128];
-	    int k=1;
-	    for (int p=0; numberyn(line[k]) == 0; k++) {
-		o_1[p] = line[k];
-	    }
-	    int kp=k+1;
-	    for (int p=0; numberyn(line[kp]) == 0; kp++) {
-		o_2[p] = line[kp];
-	    }
-	    int o1 = atoi(o_1);
-	    int o2 = atoi(o_2);
-	    int result;
-	    switch (line[k]) {
-		case '+':
-		  result = o1 + o2;
-		break;
-		case '-':
-		  result = o1 - o2;
-		break;
-		case '*':
-		  result = o1 * o2;
-		break;
-		case '/':
-		  result = o1 / o2;
-		break;
-	    }
-	    char resultado_[128];
-	    itoa(resultado_, 10, result);
-	    write(fd, resultado_, strlen(resultado_));
-	    write(fd, ";", 1);
-	    if (line[strlen(line)-1] == '\n') {
-	      write(fd, "\n", 1);
-	      izq++;
-	      printf("%d ", izq);
-	    }
-	  }
 	}
      } while(strcmp(line, "#exit#") != 0 && strcmp(line, "#exit#\n") != 0);
      /* Volvemos al menú */
@@ -317,7 +283,7 @@ void ama_calc()
      clean_csv();
      char command[128];
      char path[128];
-     printf("Welcome to Amacalc v0.3\n");
+     printf("Welcome to Amacalc v0.3.2\n");
      printf("Available commands:\n");
      printf("open --> Open an existant calculation sheet\n");
      printf("new --> Create a new calculation sheet\n");
@@ -325,6 +291,9 @@ void ama_calc()
      do {
 	printf("amacalc@localhost> ");
 	gets_s(command, 128);
+	if (strcmp(command, "open") != 0 && strcmp(command, "exit") != 0 && strcmp(command, "new") != 0) {
+	  printf("AMACALC ERROR : COMMAND NOT FOUND\n");
+	}
      } while(strcmp(command, "open") != 0 && strcmp(command, "exit") != 0 && strcmp(command, "new") != 0);
      if (strcmp(command, "open") == 0) {
 	printf("File path: ");
