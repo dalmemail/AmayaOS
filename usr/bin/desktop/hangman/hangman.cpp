@@ -76,7 +76,9 @@ int hangman()
 			     "ladrillo", "coche", "bombilla", "vino", "bicicleta", "atracciones"};
 	char word[128];
 	char fails[128];
-	fails[0] = ' ';
+	for (int w=0; w < 128; w++) {
+		fails[w] = ' ';
+	}
 	int z=0;
 	char str[] = {0x1b, 0x5b, 0x48, 0x1b, 0x5b, 0x4a, '\0'};
 	int n = aleatorio();
@@ -196,6 +198,9 @@ int hangman()
 		bar("PULSA [RETURN] PARA SALIR");
 		key = getchar();
 		if (key == '\b') {
+			for (int w=0; w < 128; w++) {
+				fails[w] = ' ';
+			}
 			return 0;
 		}
 		else {
