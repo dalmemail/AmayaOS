@@ -125,6 +125,63 @@ void dividir()
 	pause();
 }
 
+/*convierte temperaturas*/
+int temp()
+{
+	char value = 's';
+	char input[8];
+	int resc = 0;
+	printf("Conversor de temperaturas\n");
+	printf("[1] Celius --> Fahrenheit\n");
+	printf("[2] Fahrenheit --> Celsius\n");
+	printf("[3] Kelvin --> Celsius\n");
+	printf("[4] Kelvin --> Fahrenheit\n");
+	printf("[5] Celsius --> Kelvin\n");
+	printf("[6] Fahrenheit --> Kelvin\n");
+	printf("[S] Cerrar el conversor\n");
+	value = getchar();
+	clean_calc();
+	if (value == 's' || value == 'S') {
+		return 0;
+	}
+	printf("Valor a convertir: ");
+	gets_s(input, 8);
+	clean_calc();
+	switch(value) {
+		case '1':
+			resc = 9 * atoi(input) / 5 + 32;
+			printf("Celsius: %6d Fahrenheit: %6d\n", atoi(input), resc);
+			break;
+		case '2':
+			resc = 5 * (atoi(input)-32) / 9;
+			printf("Fahrenheit: %6d Celsius: %6d\n", atoi(input), resc);
+			break;
+		case '3':
+			resc = atoi(input) - 273;
+			printf("Kelvin: %6d Celsius: %6d\n", atoi(input), resc);
+			break;
+		case '4':
+			/* primero convertimos a celsius */
+			resc = atoi(input) - 273;
+			resc = 9 * resc / 5 + 32;
+			printf("Kelvin: %6d Fahrenheit: %6d\n", atoi(input), resc);
+			break;
+		case '5':
+			resc = atoi(input) + 273;
+			printf("Celsius: %6d Kelvin: %6d\n", atoi(input), resc);
+			break;
+		case '6':
+			/* primero convertimos a celsius */
+			resc = 5 * (atoi(input)-32) / 9;
+			resc = resc + 273;
+			printf("Fahrenheit: %6d Kelvin: %6d\n", atoi(input), resc);
+			break;
+	}
+	pause();
+	clean_calc();
+	return 0;
+}
+
 /* función principal */
 int main(int argc, char **argv)
 {
@@ -134,13 +191,14 @@ int main(int argc, char **argv)
 		/* limpiamos la pantalla */
 		clean_calc();
 		/* mostramos el menú */
-		printf("CALC 0.4\r\n");
+		printf("CALC 0.5\r\n");
 		printf("[1] Sumar\r\n");
 		printf("[2] Restar\r\n");
 		printf("[3] Multiplicar\r\n");
 		printf("[4] Dividir\r\n");
+		printf("[5] Conversor de temperaturas\n");
 		printf("[S] Salir\r\n");
-		printf("Seleccione una opcion: \n");
+		printf("Seleccione una opcion: ");
 		option = getchar();
 		/* diferentes opciones */
 		switch (option) {
@@ -159,6 +217,10 @@ int main(int argc, char **argv)
 			case '4':
 				clean_calc();
 				dividir();
+				break;
+			case '5':
+				clean_calc();
+				temp();
 				break;
 			case 's':
 			case 'S':
