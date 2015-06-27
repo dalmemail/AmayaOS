@@ -19,5 +19,5 @@ SConscript(dirs = [ 'sh', 'ps', 'mount',
                     'bench', 'hostname', 'parse',
                     'uname', 'cat', 'ls', 'stat',
                     'mknod', 'echo', 'pwd', 'hello',
-                    'sleep', 'mkdir', 'touch', 'memstat',
-                    'cp', 'find', 'sudoku', 'calc', 'tedit', 'wc', 'who', 'calendar', 'which', 'clock', 'date', 'grep', 'gun', 'uptime', 'clear'])
+                    'sleep', 'mkdir', 'touch',
+                    'cp', 'find', 'calc', 'tedit', 'wc', 'who', 'which', 'clock', 'date', 'grep', 'gun', 'uptime', 'clear'])
