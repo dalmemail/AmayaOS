@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2009 Niek Linnenbank, 2014 & 2015 Dan Rulos
+# Copyright (C) 2015 Dan Rulos
 # 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,4 +15,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-SConscript(dirs = [ 'desktop', 'memstat', 'sudoku', 'calendar', 'minesweeper' ])
+from build import *
+
+env = Prepare(target, [ 'libcrt', 'liballoc', 'libposix', 'libexec', 'libc', 'libsys' ],
+		      [ 'filesystem', 'process', 'log', 'memory', 'terminal', 'time' ])
+
+env.Program('minesweeper', [ 'Main.cpp' ],
+		         LIBS = env['LIBS'], LIBPATH = env['LIBPATH'])
