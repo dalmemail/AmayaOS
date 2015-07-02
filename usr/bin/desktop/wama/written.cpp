@@ -152,9 +152,7 @@ void nuevo()
     if ((fd = open(ruta, O_WRONLY)) < 0) {
          errorescritura();
     }
-    for (i=0; i < 2000; i++) {
-      vga[i] = VGA_CHAR(' ', BLACK, BLACK);
-    }
+    char str[] = {0x1b, 0x5b, 0x48, 0x1b, 0x5b, 0x4a, '\0'};
     for (i=0; i < 36; i++) {
       vga[i] = VGA_CHAR(' ', GREEN, GREEN);
     }
@@ -169,7 +167,7 @@ void nuevo()
     for (i=44; i < 80; i++) {
       vga[i] = VGA_CHAR(' ', GREEN, GREEN);
     }
-    printf("\r\n");
+    printf("%s\r\n", str);
     printf("Escriba exit para salir\r\n");
     do {
       gets(linea);

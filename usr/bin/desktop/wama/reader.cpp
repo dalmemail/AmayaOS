@@ -18,6 +18,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>*/
 #include <stdlib.h>
 #include <string.h>
 #include <files.h>
+/* C & C++ mod */
+//#include "csupport/creader.cpp"
  
 int ver2(char *contenido);
 
@@ -133,7 +135,13 @@ void reader(char *archivo)
     fichero->f_open(O_RDONLY);
     char *contenido = fichero->readAll();
     fichero->f_close();
-    ver2(contenido);
+    /* C & C++ reader mod */
+    /*if (archivo[strlen(archivo)-2] == '.' && archivo[strlen(archivo)-1] == 'c') {
+      creader(contenido);
+    }
+    else {*/
+      ver2(contenido);
+    //}
 }
 
 int ver2(char *contenido)
@@ -153,10 +161,8 @@ int ver2(char *contenido)
 
     /* Point to the VGA mapping. */
     vga = (u16 *) mem.virtualAddress;
-    for (i=0; i < 2000; i++) {
-      vga[i] = VGA_CHAR(' ', BLACK, BLACK);
-    }
-    printf("\r\n");
+    char str[] = {0x1b, 0x5b, 0x48, 0x1b, 0x5b, 0x4a, '\0'};
+    printf("%s\n", str);
     printf("%s", contenido);
     for (i=0; i < 36; i++) {
       vga[i] = VGA_CHAR(' ', GREEN, GREEN);
