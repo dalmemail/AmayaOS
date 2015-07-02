@@ -18,8 +18,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>*/
 #include <stdlib.h>
 #include <string.h>
 #include <files.h>
-/* C & C++ mod */
-//#include "csupport/creader.cpp"
  
 int ver2(char *contenido);
 
@@ -135,13 +133,7 @@ void reader(char *archivo)
     fichero->f_open(O_RDONLY);
     char *contenido = fichero->readAll();
     fichero->f_close();
-    /* C & C++ reader mod */
-    /*if (archivo[strlen(archivo)-2] == '.' && archivo[strlen(archivo)-1] == 'c') {
-      creader(contenido);
-    }
-    else {*/
-      ver2(contenido);
-    //}
+    ver2(contenido);
 }
 
 int ver2(char *contenido)
