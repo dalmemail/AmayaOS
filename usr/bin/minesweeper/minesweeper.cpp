@@ -14,11 +14,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
-#ifndef MINESWEEPER_H_INCLUDED 
-#define MINESWEEPER_H_INCLUDED 
+
+#include <stdlib.h>
+#include "minesweeper.h"
 
 /* getchar() modificado para leer numeros */
-int getnum();
-
-#endif
+int getnum()
+{
+	static char ch[1024];
+	read(0, ch, 1);
+	int n = atoi(ch);
+    
+	return n;
+}

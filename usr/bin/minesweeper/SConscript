@@ -20,5 +20,5 @@ from build import *
 env = Prepare(target, [ 'libcrt', 'liballoc', 'libposix', 'libexec', 'libc', 'libsys' ],
 		      [ 'filesystem', 'process', 'log', 'memory', 'terminal', 'time' ])
 
-env.Program('minesweeper', [ 'Main.cpp' ],
+env.Program('minesweeper', [ 'minesweeper.cpp', 'Main.cpp' ],
 		         LIBS = env['LIBS'], LIBPATH = env['LIBPATH'])

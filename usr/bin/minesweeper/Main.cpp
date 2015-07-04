@@ -22,6 +22,28 @@
 #include "minesweeper.h"
 //#include "unistd.h"
 
+/* genera un numero aleatorio menor de max utilizando un seeder */
+int random(int max, int seeder)
+{
+	if (seeder > 10 || seeder < 1) {
+		seeder = 4;
+	}
+	/* Nos aprovechamos del contador 'time' para hacer un número medianamente aleatorio */
+	file *f = new file();
+	f->setpath("/dev/time");
+	f->f_open(O_RDONLY);
+	char *ch = f->readAll();
+	f->f_close();
+	/* convertimos de char* a int con atoi() */
+	int n = atoi(ch);
+	for (int i=0; i < seeder; i++) {
+		n = n / 10;
+	}
+	n = n % 10;
+
+	return n;
+}
+
 #define COLUMNAS 9
 #define FILAS 9
 #define SIN_BOMBA -2
@@ -60,12 +82,12 @@ int agregaBombas(/*int nbombas*/){
     printf("Numero de bombas: ");
     int nbombas = getnum();
     printf("%d\n", nbombas);
-    x = aleatorio(FILAS, 1);
-    y = aleatorio(COLUMNAS, 2);
+    x = random(FILAS, 1);
+    y = random(COLUMNAS, 2);
     for (i = 1; i <= nbombas; i++) {
 	campo[x][y] = BOMBA;
-	x = aleatorio(FILAS, i+1);
-	y = aleatorio(FILAS, i+2);
+	x = random(FILAS, i+1);
+	y = random(FILAS, i+2);
     }
     return nbombas;
 }
@@ -190,7 +212,7 @@ int getMenu(){
 void aboutMe(){
     printf("By Edward -> edward1738@gmail.com\n");
     printf("By AmayaOS-> amaya@amayaos.com\n");
-    printf("Version: 0.1.1 Build: 5\n");
+    printf("Version: 0.1.2 Build: 6\n");
 }
 
 void iniciarJuego(){
