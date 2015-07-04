@@ -23,8 +23,8 @@
 #define IN 0
 #define OUT 1
 
-#define YES 0
-#define NO 1
+#define YES 1
+#define NO 0
 
 int main(int argc, char **argv)
 {
@@ -34,22 +34,22 @@ int main(int argc, char **argv)
 		return EXIT_FAILURE;
 	}
 	/* check arguments */
-	int no = 0;
+	int nofiles = 0;
 	for (int i=1; i < argc; i++) {
 		if (strcmp(argv[i], "-c") == 0) {
 			c = YES;
-			no++;
+			nofiles++;
 		}
 		if (strcmp(argv[i], "-l") == 0) {
 			l = YES;
-			no++;
+			nofiles++;
 		}
 		if (strcmp(argv[i], "-w") == 0) {
 			w = YES;
-			no++;
+			nofiles++;
 		}
 	}
-	if (no == 0) {
+	if (nofiles == 0) {
 		c = l = w = YES;
 	}
 	int sc,sl,sw = 0;
@@ -93,7 +93,7 @@ int main(int argc, char **argv)
 			sc = sc + nc;
 		}
 	}
-	if (argc - no > 2) {
+	if (argc - nofiles > 2) {
 		if (l == YES) {
 			printf("\t%d", sl);
 		}
