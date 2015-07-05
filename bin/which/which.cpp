@@ -15,15 +15,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <stdio.h>
 #include "which.h"
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <dirent.h>
+#include <fcntl.h>
+#include <sys/stat.h>
 
-int main(int argc, char **argv)
+unsigned int which(char *command)
 {
-	if (argc < 2) {
-	printf("Uso: %s software\r\n", argv[0]);
-	return -1;
+	char *path[3] = {"/bin/", "/sbin/", "/usr/bin/"};
+	char path_actual[64];
+	struct stat st;
+	for (int i = 0; i < 3; i++) {
+		strcpy(path_actual, path[i]);
+		strcat(path_actual, command);
+		if ((stat(path_actual, &st)) == 0) {
+			printf("%s/%s\n", path_actual, command);
+			return 0;
+		}
 	}
-	which(argv[1]);
 	return 0;
 }

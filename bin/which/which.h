@@ -15,15 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <stdio.h>
-#include "which.h"
-
-int main(int argc, char **argv)
-{
-	if (argc < 2) {
-	printf("Uso: %s software\r\n", argv[0]);
-	return -1;
-	}
-	which(argv[1]);
-	return 0;
-}
+/* which() search "command" in /bin
+ * /sbin and /usr/bin
+ */
+unsigned int which(char *command);
