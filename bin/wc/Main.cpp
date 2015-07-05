@@ -56,9 +56,7 @@ int main(int argc, char **argv)
 	int nc,nl,nw = 0;
 	int state = OUT;
 	for (int i=1; i < argc; i++) {
-		if (strcmp(argv[i], "-c") == 0 ||strcmp(argv[i], "-w") == 0 ||strcmp(argv[i], "-l") == 0) {
-		}
-		else {
+		if (strcmp(argv[i], "-c") != 0 && strcmp(argv[i], "-w") != 0 && strcmp(argv[i], "-l") != 0) {
 			file *f = new file();
 			f->setpath(argv[i]);
 			f->f_open(O_RDONLY);
