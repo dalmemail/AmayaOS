@@ -15,16 +15,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <unistd.h>
-#include <stdlib.h>
 #include "who.h"
+#include <stdlib.h>
+#include <string.h>
+#include <dirent.h>
+#include <fcntl.h>
+#include <sys/stat.h>
 
-int main(int argc, char **argv)
+void who(char *host)
 {
-	char host[128];
-	/* Obtenemos el usuario actual */
-	gethostname(host, sizeof(host));
-	/* funcion principal */
-	who(host);
-	return EXIT_SUCCESS;
+	char *path[5] = {"tty0", "tty1", "tty2", "tty3", "tty4"};
+	char path_actual[64];
+	struct stat st;
+	for (int i = 0; i < 5; i++) {
+		strcpy(path_actual, "/dev/");
+		strcat(path_actual, path[i]);
+		if ((stat(path_actual, &st)) == 0) {
+			printf("%s\t%s\n", host, path[i]);
+		}
+	}
 }

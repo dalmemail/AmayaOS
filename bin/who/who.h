@@ -15,16 +15,5 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <unistd.h>
-#include <stdlib.h>
-#include "who.h"
-
-int main(int argc, char **argv)
-{
-	char host[128];
-	/* Obtenemos el usuario actual */
-	gethostname(host, sizeof(host));
-	/* funcion principal */
-	who(host);
-	return EXIT_SUCCESS;
-}
+/* who() */
+void who(char *host);
