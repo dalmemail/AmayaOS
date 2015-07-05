@@ -19,9 +19,9 @@
 #include <string.h>
 #include <files.h>
 #include <stdlib.h>
-
-#define IN 0
-#define OUT 1
+#include "wordcount.h"
+#include "linecount.h"
+#include "charcount.h"
 
 #define YES 1
 #define NO 0
@@ -52,9 +52,7 @@ int main(int argc, char **argv)
 	if (nofiles == 0) {
 		c = l = w = YES;
 	}
-	int sc,sl,sw = 0;
-	int nc,nl,nw = 0;
-	int state = OUT;
+	int nc = 0, nl = 0, nw = 0, sw = 0, sl = 0, sc = 0;
 	for (int i=1; i < argc; i++) {
 		if (strcmp(argv[i], "-c") != 0 && strcmp(argv[i], "-w") != 0 && strcmp(argv[i], "-l") != 0) {
 			file *f = new file();
@@ -62,33 +60,22 @@ int main(int argc, char **argv)
 			f->f_open(O_RDONLY);
 			char *ch = f->readAll();
 			f->f_close();
-			nc = nl = nw = 0;
-			for (unsigned int k=0; k < strlen(ch); k++) {
-				nc++;
-				if (ch[k] == '\n') {
-					nl++;
-				}
-				if (ch[k] == '\n' || ch[k] == ' ' || ch[k] == '\t') {
-					state = OUT;
-				}
-				else if (state == OUT) {
-					state = IN;
-					nw++;
-				}
-			}
 			if (l == YES) {
+				nl = linecount(ch);
+				sl = sl + nl;
 				printf("\t%d", nl);
 			}
 			if (w == YES) {
+				nw = wordcount(ch);
+				sw = sw + nw;
 				printf("\t%d", nw);
 			}
 			if (c == YES) {
+				nc = charcount(ch);
+				sc = sc + nc;
 				printf("\t%d", nc);
 			}
 			printf("\t%s\n", argv[i]);
-			sl = sl + nl;
-			sw = sw + nw;
-			sc = sc + nc;
 		}
 	}
 	if (argc - nofiles > 2) {
