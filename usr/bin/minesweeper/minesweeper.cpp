@@ -16,6 +16,7 @@
  */
 
 #include <stdlib.h>
+#include <files.h>
 #include "minesweeper.h"
 
 /* getchar() modificado para leer numeros */
@@ -26,4 +27,19 @@ int getnum()
 	int n = atoi(ch);
     
 	return n;
+}
+
+int getTime()
+{
+	file *f = new file();
+	f->setpath("/dev/time");
+	f->f_open(O_RDONLY);
+	char *ch = f->readAll();
+	f->f_close();
+	return atoi(ch);
+}
+
+unsigned int timeplaying(int starttime)
+{
+	return (getTime() - starttime);
 }

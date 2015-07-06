@@ -18,24 +18,20 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <time.h>
+#include <files.h>
 #include "minesweeper.h"
 //#include "unistd.h"
 
 /* genera un numero aleatorio menor de max utilizando un seeder */
 int random(int max, int seeder)
 {
-	if (seeder > 10 || seeder < 1) {
-		seeder = 4;
+	if (seeder > 10) {
+		seeder = seeder / 2;
 	}
-	/* Nos aprovechamos del contador 'time' para hacer un número medianamente aleatorio */
-	file *f = new file();
-	f->setpath("/dev/time");
-	f->f_open(O_RDONLY);
-	char *ch = f->readAll();
-	f->f_close();
-	/* convertimos de char* a int con atoi() */
-	int n = atoi(ch);
+	if (seeder < 1) {
+		seeder = getTime() % 10;
+	}
+	int n = getTime();
 	for (int i=0; i < seeder; i++) {
 		n = n / 10;
 	}
@@ -67,6 +63,12 @@ int build = 4;
 /*
  * 
  */
+void timecount(int starttime)
+{
+	unsigned int secondsplaying = timeplaying(starttime);
+	printf("Tiempo: %d:%d\n", (secondsplaying / 60), (secondsplaying % 60));
+}
+
 void iniciaArr(){
     int i,j;
     for( i = 0; i < FILAS; i++){
@@ -212,7 +214,7 @@ int getMenu(){
 void aboutMe(){
     printf("By Edward -> edward1738@gmail.com\n");
     printf("By AmayaOS-> amaya@amayaos.com\n");
-    printf("Version: 0.1.2 Build: 6\n");
+    printf("Version: 0.1.3 Build: 7\n");
 }
 
 void iniciarJuego(){
@@ -236,9 +238,11 @@ void iniciarJuego(){
     //agregaBombas( nbombas );
     int nbombas = agregaBombas();
     establecerNumeros();
+    int starttime = getTime();
 
     while( estado == ESTADO_EN_JUEGO){ //estado en juego
         aboutMe();
+	timecount(starttime);
         print();
         printf("Fila: ");
         x = getnum();

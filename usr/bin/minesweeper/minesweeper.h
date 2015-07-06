@@ -21,4 +21,10 @@
 /* getchar() modificado para leer numeros */
 int getnum();
 
+/* returns /dev/time value as int value */
+int getTime();
+
+/* time user play*/
+unsigned int timeplaying(int starttime);
+
 #endif
