@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Alvaro Stagg, Dan Rulos
+ * Copyright (C) 2015 Alvaro Stagg, 2015 Dan Rulos
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,12 +19,12 @@
 #include <stdlib.h>
 #include <amaya.h>
 #include <files.h>
+#include "gun.h"
 
 void limpiar();
 void menu();
 int juego();
 void ayuda();
-int aleatorio();
 
 int main(int argc, char* argv[])
 {
@@ -48,7 +48,7 @@ void menu()
 {
     char seleccion = '0';
 
-    printf("=== ADIVINANDO 0.1 ===\n");
+    printf("=== ADIVINANDO 0.2 ===\n");
     printf("     === MENU ===\n\n");
     printf("1. Jugar\n");
     printf("2. Ayuda\n");
@@ -56,6 +56,7 @@ void menu()
 
     printf("Tu seleccion: ");
     seleccion = getchar();
+    putchar(seleccion);
 
     if(seleccion == '1')
     {
@@ -90,8 +91,10 @@ int juego()
     char talvezs[128];
     int talvez = 0;
     char qidn;
+    int np_1 = numero - num1(1);
+    int np_2 = numero + num1(2);
 
-    int np_1 = numero - aleatorio() + 7, np_2 = numero + aleatorio() + 3;
+
     if (np_1 < 0) {
 	np_1 = 0;
     }
@@ -129,6 +132,7 @@ int juego()
     printf("Lo intentaste: %d veces\n", intentos);
     printf("Quieres volver a jugar ? (S/n): ");
     qidn = getchar();
+    putchar(qidn);
 
     if(qidn == 'S' || qidn == 's')
     {
@@ -157,6 +161,7 @@ void ayuda()
 	printf("Hola, en el siguiente juego tendras que adivinar un numero\na partir de una serie de pistas que se te iran dando a\nmedida que vayas digitando tu opcion.\n\n");
 	printf("Entendiste (S/n) ?: ");
 	op = getchar();
+	putchar(op);
 
 	if(op == 'S' || op == 's')
 	{
@@ -166,20 +171,8 @@ void ayuda()
 	else if(op == 'N' || op == 'n')
 	{
 		limpiar();
-		printf("Lee bien... Si tienes alguna duda puedes\ncontactarme a traves de mi E-mail: alvarostagg@hotmail.com\n\n");
+		printf("Lee bien... Si tienes alguna duda puedes\ncontactarme a traves de mi E-mail: alvarostagg@openmailbox.org\n\n");
 		pause();
 		ayuda();
 	}
-}
-
-int aleatorio()
-{
-    /* Nos aprovechamos del contador 'time' para hacer un número medianamente aleatorio */
-    file *f = new file();
-    f->setpath("/dev/time");
-    f->f_open(O_RDONLY);
-    char *ch = f->readAll();
-    f->f_close();
-    char l[2] = { ch[strlen(ch)-2], ch[strlen(ch)-1]};
-    return atoi(l);
 }
