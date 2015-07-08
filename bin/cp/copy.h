@@ -15,17 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <stdio.h>
-#include "copy.h"
-
-int main(int argc, char **argv)
-{
-	if (argc != 3) {
-		printf("%s: origen destino\n", argv[0]);
-		return -1;
-	}
-	copy_file(argv[1], argv[2]);
-	return 0;
-}
-
-
+/* copyfile() copies the file 'origen'
+ * to the file 'destino'
+ */
+int copy_file(char *originalpath, char *destination);
