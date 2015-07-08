@@ -14,37 +14,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <string.h>
-#include <fcntl.h>
-#include "gamemodes.h"
-#include "sudoku.h"
 
-#define EASY 0
-#define DIFFICULT 1
+void clear_window();
 
-int main(int argc, char **argv)
-{
-	int c = 1;
-	while (c != 3) {
-		clear_window();
-		printf("=== SUDOku v0.3 ===\n");
-		printf("[1] Modo facil [4X4]\n");
-		printf("[2] Modo dificil [4X4]\n");
-		printf("[3] Salir de SUDOku\n");
-		printf("Selecciona una opcion: ");
-		c = getnum();
-		printf("%c\n", c);
-		switch (c) {
-			case 1:
-				sudoku(EASY);
-				break;
-			case 2:
-				sudoku(DIFFICULT);
-				break;
-		}
-	}
-	return 0;
-}
+int getnum();
+
+void print_sudoku(int *numbers);
+
+/* returns a random number */
+int randomnumber();
+
+/* make_sudoku() returns the value of a position (pos) in a sudoku
+ * (nsudoku) of a mode (mode) who can be 0 or 1, easy or difficult
+ */
+int make_sudoku(int pos, int nsudoku, int mode);
