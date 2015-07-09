@@ -15,5 +15,5 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* main void of the game */
-int sudoku(int mode);
+/* start a multiplayer game (2 players) */
+void multiplayer_mode();

@@ -21,6 +21,7 @@
 #include <fcntl.h>
 #include "gamemodes.h"
 #include "sudoku.h"
+#include "multiplayer.h"
 
 #define EASY 0
 #define DIFFICULT 1
@@ -28,12 +29,13 @@
 int main(int argc, char **argv)
 {
 	int c = 1;
-	while (c != 3) {
+	while (c != 4) {
 		clear_window();
-		printf("=== SUDOku v0.3 ===\n");
+		printf("=== SUDOku v0.4 ===\n");
 		printf("[1] Modo facil [4X4]\n");
 		printf("[2] Modo dificil [4X4]\n");
-		printf("[3] Salir de SUDOku\n");
+		printf("[3] Modo campeonato [MULTIPLAYER]\n");
+		printf("[4] Salir de SUDOku\n");
 		printf("Selecciona una opcion: ");
 		c = getnum();
 		printf("%c\n", c);
@@ -43,6 +45,9 @@ int main(int argc, char **argv)
 				break;
 			case 2:
 				sudoku(DIFFICULT);
+				break;
+			case 3:
+				multiplayer_mode();
 				break;
 		}
 	}

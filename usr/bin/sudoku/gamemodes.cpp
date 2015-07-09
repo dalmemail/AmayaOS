@@ -25,8 +25,10 @@
 
 #define EASY 0
 #define DIFFICULT 1
+#define COMPETITION_EASY 2
+#define COMPETITION_DIFF 3
 
-void sudoku(int mode)
+int sudoku(int mode)
 {
 	clear_window();
 	int level = 1;
@@ -125,7 +127,7 @@ void sudoku(int mode)
 				i = -1;
 			}
 		}
-		if (gamestate == WIN) {
+		if (gamestate == WIN && mode < 2) {
 			printf("Nivel %d COMPLETADO\n", level);
 			do {
 				printf("[N]ivel %d o [C]errar\n", level+1);
@@ -134,7 +136,7 @@ void sudoku(int mode)
 			n = randomnumber();
 			level++;
 		}
-		else {
+		if (gamestate == LOST && mode < 2) {
 			printf("Nivel %d NO COMPLETADO\n", level);
 			do {
 				printf("[R]eintentar o [C]errar\n");
@@ -146,5 +148,16 @@ void sudoku(int mode)
 				numbers[i] = make_sudoku(i, n, mode);
 			}
 		}
+		/* multiplayer mode */
+		if (mode == COMPETITION_EASY && gamestate == WIN) {
+			return 1;
+		}
+		if (mode == COMPETITION_DIFF && gamestate == WIN) {
+			return 3;
+		}
+		if (mode >= COMPETITION_EASY && gamestate == LOST) {
+			return 0;
+		}
 	}
+	return 0;
 }

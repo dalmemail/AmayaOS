@@ -23,6 +23,8 @@
 
 #define EASY 0
 #define DIFFICULT 1
+#define COMPETITION_EASY 2
+#define COMPETITION_DIFF 3
 
 void clear_window()
 {
@@ -96,9 +98,11 @@ int make_sudoku(int pos, int nsudoku, int mode)
 	difficult[9] = {2,4,0,0,0,1,0,0,0,0,0,1,0,0,2,0};
 	switch (mode) {
 		case EASY:
+		case COMPETITION_EASY:
 			return easy[nsudoku][pos];
 			break;
 		case DIFFICULT:
+		case COMPETITION_DIFF:
 			return difficult[nsudoku][pos];
 			break;
 	}
