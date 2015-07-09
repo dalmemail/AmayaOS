@@ -16,4 +16,4 @@
  */
 
 /* start a multiplayer game (2 players) */
-void multiplayer_mode();
+int multiplayer_mode();

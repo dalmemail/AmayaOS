@@ -31,7 +31,7 @@ int main(int argc, char **argv)
 	int c = 1;
 	while (c != 4) {
 		clear_window();
-		printf("=== SUDOku v0.4 ===\n");
+		printf("=== SUDOku v0.5 ===\n");
 		printf("[1] Modo facil [4X4]\n");
 		printf("[2] Modo dificil [4X4]\n");
 		printf("[3] Modo campeonato [MULTIPLAYER]\n");

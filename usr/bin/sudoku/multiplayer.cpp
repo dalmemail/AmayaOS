@@ -24,21 +24,46 @@
 #define COMPETITION_EASY 2
 #define COMPETITION_DIFF 3
 
-void multiplayer_mode()
+int multiplayer_mode()
 {
-	char player[2][12];
-	do {
-		printf("Nombre del Player 1: ");
-		gets_s(player[0], 12);
-		printf("Nombre del Player 2: ");
-		gets_s(player[1], 12);
-	} while ((strcmp(player[0], player[1])) == 0);
-	int points[2] = {0,0};
+	printf("Introduce el numero de jugadores: ");
+	int player_num = getnum();
+	if (player_num < 2 || player_num > 9) {
+		player_num = 2;
+	}
+	printf("%d\n", player_num);
+	char player[player_num][12];
+	for (int i = 0; i < player_num; i++) {
+		printf("Nombre del Player %d: ", i+1);
+		gets_s(player[i], 12);
+	}
+	/* two players can't have the same name */
+	for (int i = 0; i < player_num; i++) {
+		for (int v = 0; v < player_num; v++) {
+			if ((strcmp(player[i], player[v])) == 0 && i != v) {
+				printf("Error: player %d y player %d se llaman %s\n", i+1, v+1, player[i]);
+				printf("Pulsa una tecla para continuar\n");
+				getchar();
+				return 0;
+			}
+		}
+	}
+	int points[player_num];
+	/* all start points = 0 */
+	for (int i = 0; i < player_num; i++) {
+		points[i] = 0;
+	}
 	int points_now = 0;
 	int mode = COMPETITION_EASY;
+	printf("Numero de turnos: ");
+	int n_games = getnum();
+	if (n_games < 1 && n_games > 9) {
+		n_games = 5;
+	}
+	printf("%d\n", n_games);
 	/* multiplayer main */
-	for (int i = 1; i <= 5; i++) {
-		for (int k = 0; k <= 1; k++) {
+	for (int i = 1; i <= n_games; i++) {
+		for (int k = 0; k < player_num; k++) {
 			clear_window();
 			printf("Es el turno de %s\n", player[k]);
 			do {
@@ -51,28 +76,39 @@ void multiplayer_mode()
 		clear_window();
 		printf("Clasificacion: \n");
 		printf("----------------------\n");
-		printf("%s | %d puntos\n", player[0], points[0]);
-		printf("%s | %d puntos\n", player[1], points[1]);
-		if (i < 5) {
+		for (int x = 0; x < player_num; x++) {
+			printf("%s | %d puntos\n", player[x], points[x]);
+		}
+		if (i < n_games) {
 			printf("Pulsa una tecla\n");
 			getchar();
 		}
 		else {
 			printf("Juego terminado\n");
-			if (points[0] != points[1]) {
-				printf("Ha ganado ");
-				if (points[0] > points[1]) {
-					printf("%s con %d puntos\n", player[0], points[0]);
-				}
-				else {
-					printf("%s con %d puntos\n", player[1], points[1]);
+			/* position of winner on array */
+			int pos = 0;
+			int best_point = 0;
+			int wl = 0;
+			for (int b = 0; b < player_num; b++) {
+				if (points[b] > best_point) {
+					best_point = points[b];
+					pos = b;
 				}
 			}
+			for (int b = 0; b < player_num; b++) {
+				if (points[b] == best_point) {
+					wl++;
+				}
+			}
+			if (wl == 1) {
+				printf("Ha ganado %s con %d puntos\n", player[pos], points[pos]);
+			}
 			else {
-				printf("Empate a %d puntos\n", points[0]);
+				printf("Empate a %d puntos\n", points[pos]);
 			}
 			printf("Pulsa una tecla\n");
 			getchar();
 		}
 	}
+	return 0;
 }
