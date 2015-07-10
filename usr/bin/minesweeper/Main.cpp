@@ -36,6 +36,9 @@ int random(int max, int seeder)
 		n = n / 10;
 	}
 	n = n % 10;
+	if (n >= max) {
+		n--;
+	}
 
 	return n;
 }
@@ -83,13 +86,25 @@ int agregaBombas(/*int nbombas*/){
     int i,x,y;// contador de bombas
     printf("Numero de bombas: ");
     int nbombas = getnum();
+    int seeder = 0;
     printf("%d\n", nbombas);
     x = random(FILAS, 1);
     y = random(COLUMNAS, 2);
     for (i = 1; i <= nbombas; i++) {
 	campo[x][y] = BOMBA;
-	x = random(FILAS, i+1);
-	y = random(FILAS, i+2);
+	x = random(FILAS, i+1+seeder);
+	y = random(FILAS, i+4+seeder);
+	for (int x2 = 0, p = 0; x2 < 9; x2++) {
+		for (int y2 = 0; y2 < 9; y2++) {
+			if (campo[x2][y2] == BOMBA) {
+				p++;
+			}
+		}
+		if (p < i && x2 == 8) {
+			seeder++;
+			i--;
+		}
+	}
     }
     return nbombas;
 }
@@ -214,7 +229,7 @@ int getMenu(){
 void aboutMe(){
     printf("By Edward -> edward1738@gmail.com\n");
     printf("By AmayaOS-> amaya@amayaos.com\n");
-    printf("Version: 0.1.3 Build: 7\n");
+    printf("Version: 0.1.4 Build: 8\n");
 }
 
 void iniciarJuego(){
