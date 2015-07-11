@@ -200,7 +200,7 @@ int new_csv(char *path)
 		  n_1[o] = line[i];
 		  o++;
 		}
-		i=i+3;
+		i=i+2;
 		for (o=0; line[i] != ')'; i++) {
 		  n_2[o] = line[i];
 		  o++;
@@ -231,22 +231,22 @@ int new_csv(char *path)
 		}
 		switch (letter_2) {
 		  case 'A':
-			s2 = a[numero_c1];
+			s2 = a[numero_c2];
 		  break;
 		  case 'B':
-			s2 = b[numero_c1];
+			s2 = b[numero_c2];
 		  break;
 		  case 'C':
-			s2 = c[numero_c1];
+			s2 = c[numero_c2];
 		  break;
 		  case 'D':
-			s2 = d[numero_c1];
+			s2 = d[numero_c2];
 		  break;
 		  case 'E':
-			s2 = e[numero_c1];
+			s2 = e[numero_c2];
 		  break;
 		  case 'F':
-			s2 = f[numero_c1];
+			s2 = f[numero_c2];
 		  break;
 		}
 		int res;
@@ -283,7 +283,7 @@ void ama_calc()
      clean_csv();
      char command[128];
      char path[128];
-     printf("Welcome to Amacalc v0.3.2\n");
+     printf("Welcome to Amacalc v0.3.3\n");
      printf("Available commands:\n");
      printf("open --> Open an existant calculation sheet\n");
      printf("new --> Create a new calculation sheet\n");
@@ -305,4 +305,5 @@ void ama_calc()
 	gets_s(path, 128);
 	new_csv(path);
      }
+     clean_csv();
 }
