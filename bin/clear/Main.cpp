@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Alvaro Stagg
+ * Copyright (C) 2015 Alvaro Stagg [alvarostagg@openmailbox.org]
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@
 
 int main(int argc, char* argv[])
 {
-  char str[] = {0x1b, 0x5b, 0x48, 0x1b, 0x5b, 0x4a, '\0'};
-  printf("%s", str);
-  return 0;
+	char str[] = {0x1b, 0x5b, 0x48, 0x1b, 0x5b, 0x4a, '\0'};
+	printf("%s", str);
+	return 0;
 }
