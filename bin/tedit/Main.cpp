@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 Dan Rulos.
+ * Copyright (C) 2015 Francisco Domínguez, 2015 Dan Rulos
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-/* tedit 0.1 TXT Edit */
+/* tedit 0.2 TXT Edit */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -23,59 +23,89 @@
 #include <errno.h>
 #include <string.h>
 
-int editar()
+int main(int argc, char **argv) /* funcion main() */
 {
-    char nombre[128];
-    char linea[128];
-    char son='N';
-    int fd;
-    char *newline="\r\n";
-    do {
-      printf("Archivo a editar: \r\n");
-      gets(nombre);
-    } while (nombre[0] != '/');
-    do {
-      printf("Se cambiara el contenido del archivo\r\n");
-      printf(" Estas seguro ? [S/N]\r\n");
-      son = getchar();
-      if (son == 'N'|| son == 'n') {
-        return EXIT_SUCCESS;
-      }
-    } while (son != 'S'&& son != 's'&& son != 'N'&& son != 'n');
-    if ((fd = open(nombre, O_WRONLY)) < 0) {
-        printf("Error al abrir '%s': %s\r\n",
-                nombre, strerror(errno));
-        return errno;
+	printf("----------------------------------\n");
+	printf("tedit 0.2 by Francisco Dominguez\n");
+	printf("----------------------------------\n");
+	// creamos los arrays que necesitemos
+	char nombre[128];
+	char option;
+	char linea[128];
+	char buffer[2048];
+	/* number of bytes of argv[2] file (if we need to read argv[2]) */
+	int n_bytes = 0;
+	//creamos el puntero que usaremos como identificador del archivo
+	int fd;
+	FILE *input_file;
+	//copiamos el primer elemento que le pasamos a tedit en el array option, si no se le pasa ninguno, se le pasa h y muestra la ayuda
+	if (argc < 3) {
+		option = 'h';
+	}
+	else {
+		option = argv[1][0];
+	}
+	//abrimos el archivo dependiendo de que opción le pasemos
+	switch (option) {
+		//abre el archivo en modo overwrite
+		case 'w':
+			strcpy(nombre, argv[2]);
+			if ((fd = open(nombre, O_WRONLY)) < 0) {
+        			printf("Error al abrir '%s': %s\r\n",
+                		nombre, strerror(errno));
+        			return errno;
+			}
+			printf("\nArchivo abierto en modo overwrite, usar con precaucion\n");
+			break;;
+		//abre el archivo en modo append
+		case 'a':
+			strcpy(nombre, argv[2]);
+			/* abrimos el archivo en modo lectura */
+			if ((input_file = fopen(nombre, "r")) == NULL) {
+				printf("Error al abrir '%s': %s\r\n",
+				nombre, strerror(errno));
+				return errno;
+			}
+			/* leemos el archivo */
+			n_bytes = fread(buffer, 1, sizeof(buffer), input_file);
+			/* cerramos el archivo */
+			fclose(input_file);
+			/* abrimos el archivo para escribir en el */
+			if ((fd = open(nombre, O_WRONLY)) < 0) {
+        			printf("Error al abrir '%s': %s\r\n",
+                		nombre, strerror(errno));
+        			return errno;
+			}
+			printf("\nArchivo abierto en modo append\n");
+			break;;
+		//Despliega la ayuda de comando
+		case 'h':
+
+			printf("\nuso: tedit opcion_abrir /ruta/de/fichero/fichero.txt\n");
+			printf("--------------------\n");
+			printf("opciones de apertura de ficheros:\n");
+			printf("a -> abre fichero en modo append, lo que permite incluir lineas a un archivo desde el final de este\n");
+			printf("w -> abre fichero en modo overwrite, lo que hace es sobreescribir el contenido del fichero, usar con precaucion\n");
+			return 0;
+			break;;
+    
     }
     printf("Introduzca -Q para salir\r\n");
     printf("------------------------------------\r\n");
-    do {
-      gets(linea);
-      if (linea[0] == '-'&& linea[1] == 'Q') {
-        printf("\r\n");
+    if (option == 'a') {
+	write(fd, buffer, n_bytes);
+    }
+    while( 1 ) {
+     gets_s(linea, 128);
+		//comprobamos si la nueva linea es "-Q"
+        if (linea[0] == '-'&& linea[1] == 'Q') {
+		//cerramos el archivo y el programa
         close(fd);
-        return EXIT_SUCCESS;
+        return 0;
       }
-      /* Comienza la escritura del archivo */
+      // Comienza la escritura del archivo
       write(fd, linea, strlen(linea));
-      write(fd, newline, 2);
-    } while (linea[0] != '-'|| linea[1] != 'Q');
-    return EXIT_SUCCESS;
-}
-      
-
-int main(int argc, char **argv) /* funcion main() */
-{
-    char letra='S';
-    printf("tedit 0.1\r\n");
-    do {
-      printf("[E]ditar archivo / [S]alir\r\n"); /* Opciones N, E o S */
-      letra = getchar();
-    } while (letra != 'E'&& letra != 'e'&& letra != 'S'&& letra != 's'); /* Si no es una de las 3 bucle */
-    if (letra == 'E'|| letra == 'e') { /* Si es E */
-      editar();
+      write(fd, "\n", 1);
     }
-    if (letra == 'S'|| letra == 's') { /* Si es S */
-      return EXIT_SUCCESS; /* Salimos */
-    }
+    close(fd);
 }
