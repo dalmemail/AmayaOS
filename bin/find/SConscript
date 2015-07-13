@@ -19,4 +19,4 @@ from build import *
 
 env = Prepare(target, [ 'libcrt', 'liballoc', 'libposix', 'libexec', 'libc' ],
 		      [ 'terminal', 'filesystem' ])
-env.Program('find',  [ 'Main.cpp' ], LIBS = env['LIBS'], LIBPATH = env['LIBPATH'])
+env.Program('find',  [ 'find.cpp', 'Main.cpp' ], LIBS = env['LIBS'], LIBPATH = env['LIBPATH'])

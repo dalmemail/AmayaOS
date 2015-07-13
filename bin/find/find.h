@@ -15,24 +15,5 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <stdio.h>
-#include <string.h>
-#include "find.h"
-
-int main(int argc, char **argv)
-{
-	if (argc < 4) {
-		printf("%s: path -name file\n", argv[0]);
-		return -1;
-	}
-	else {
-		if ((strcmp(argv[2], "-name")) == 0) {
-			find(argv[1], argv[3]);
-		}
-		else {
-			printf("%s: command not found\n", argv[2]);
-			return -1;
-		}
-	}
-	return 0;
-}
+/* find() seeks file on path */
+int find(char *path, char *file);
