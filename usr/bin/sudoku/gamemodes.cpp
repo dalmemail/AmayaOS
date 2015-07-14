@@ -52,6 +52,16 @@ int sudoku(int mode)
 					numbers[i] = 1;
 					i--;
 				}
+				/* if you press return key */
+				if (numbers[i] == -1) {
+					/* put numbers[i] and numbers[i-1] equal to 0
+					 * if not you can't rewrite it 
+					 */
+					numbers[i] = 0;
+					numbers[i-1] = 0;
+					i--;
+					i--;
+				}
 				printf("%c\n", numbers[i]);
 				print_sudoku(numbers);
 			}

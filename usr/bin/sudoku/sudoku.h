@@ -15,10 +15,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/* clear_window() cleans the screen */
 void clear_window();
 
+/* get a num from the keyboard and return it.
+ * if key is \b returns -1
+ */
 int getnum();
 
+/* put sudoku on the screen */
 void print_sudoku(int *numbers);
 
 /* returns a random number */

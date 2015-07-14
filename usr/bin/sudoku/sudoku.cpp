@@ -36,8 +36,11 @@ int getnum()
 {
 	static char ch[1024];
 	read(0, ch, 1);
+	if (ch[0] == '\b') {
+		return -1;
+	}
 	int n = atoi(ch);
-    
+
 	return n;
 }
 
