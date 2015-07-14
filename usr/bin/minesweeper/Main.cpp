@@ -20,7 +20,7 @@
 #include <stdio.h>
 #include <files.h>
 #include "minesweeper.h"
-//#include "unistd.h"
+#include "minesweeper_colors.h"
 
 /* genera un numero aleatorio menor de max utilizando un seeder */
 int random(int max, int seeder)
@@ -53,6 +53,9 @@ int random(int max, int seeder)
 #define ESTADO_GANADOR  1
 #define ESTADO_EN_JUEGO 2
 
+#define VERSION "0.1.5"
+#define BUILD 9
+
 int campo[FILAS][COLUMNAS];
 bool jugadas[FILAS][COLUMNAS];
 //Casilla jugada
@@ -69,7 +72,7 @@ int build = 4;
 void timecount(int starttime)
 {
 	unsigned int secondsplaying = timeplaying(starttime);
-	printf("Tiempo: %d:%d\n", (secondsplaying / 60), (secondsplaying % 60));
+	printf(CYAN "Tiempo: %d:%d\n", (secondsplaying / 60), (secondsplaying % 60));
 }
 
 void iniciaArr(){
@@ -84,10 +87,10 @@ void iniciaArr(){
 
 int agregaBombas(/*int nbombas*/){
     int i,x,y;// contador de bombas
-    printf("Numero de bombas: ");
+    printf(YELLOW "Numero de bombas: ");
     int nbombas = getnum();
     int seeder = 0;
-    printf("%d\n", nbombas);
+    printf(RED "%d\n", nbombas);
     x = random(FILAS, 1);
     y = random(COLUMNAS, 2);
     for (i = 1; i <= nbombas; i++) {
@@ -111,19 +114,19 @@ int agregaBombas(/*int nbombas*/){
 
 void print(){
     int i,j;
-    printf("[x] 0  1  2  3  4  5  6  7  8\n");
-    printf("------------------------------\n");
+    printf(WHITE "[x] 0  1  2  3  4  5  6  7  8\n");
+    printf(WHITE "------------------------------\n");
     for( i = 0; i < FILAS; i++){
         printf("[%d]", i);
         for(j = 0; j < COLUMNAS; j++){
             if( jugadas[i][j] ){
                 if( campo[i][j] == BOMBA){
-                    printf(" * ");
+                    printf(RED " * ", WHITE);
                 }else{
-                    printf(" %d ", campo[i][j]);
+                    printf(WHITE " %d ", campo[i][j]);
                 }
             }else{
-                printf(" - ");
+                printf(WHITE " - ");
             }
         }
         printf("\n");
@@ -160,9 +163,9 @@ void printAll(){
     for(int i = 0; i < FILAS; i++){
         for(int j = 0; j < COLUMNAS; j++){
             if( campo[i][j] == BOMBA){
-                printf(" * ");
+                printf(RED " * ", WHITE);
             }else{
-                printf(" %d ", campo[i][j]);
+                printf(WHITE " %d ", campo[i][j]);
             }
         }
         printf("\n");
@@ -176,8 +179,8 @@ void jugada(int x, int y){
             estado = ESTADO_PERDEDOR;
         }
     }else{
-        printf("Imposible jugada\n");
-        printf("Pulse una tecla para continuar\n");
+        printf(WHITE "Imposible jugada\n");
+        printf(WHITE "Pulse una tecla para continuar\n");
 	getchar();
     }
 }
@@ -216,20 +219,20 @@ void jugadaEnGrupo(int x, int y){
 }
 
 int getMenu(){
-    printf("1. Jugar Buscaminas\n");
-    printf("2. Sobre el autor\n");
-    printf("3. Salir\n");
-    printf("Opcion: ");
+    printf(WHITE "1. Jugar Buscaminas\n");
+    printf(WHITE "2. Sobre el autor\n");
+    printf(WHITE "3. Salir\n");
+    printf(YELLOW "Opcion: ");
     int opt;
     opt = getnum();
-    printf("%d\n", opt);
+    printf(BLUE "%d\n", opt);
     return opt;
 }
 
 void aboutMe(){
-    printf("By Edward -> edward1738@gmail.com\n");
-    printf("By AmayaOS-> amaya@amayaos.com\n");
-    printf("Version: 0.1.4 Build: 8\n");
+    printf(BLUE "By Edward -> edward1738@gmail.com\n");
+    printf(BLUE "By AmayaOS-> amaya@amayaos.com\n");
+    printf(GREEN "Version: %s Build: %d\n", VERSION, BUILD, WHITE);
 }
 
 void iniciarJuego(){
@@ -259,11 +262,11 @@ void iniciarJuego(){
         aboutMe();
 	timecount(starttime);
         print();
-        printf("Fila: ");
+        printf(WHITE "Fila: ");
         x = getnum();
-        printf("%d\nColumna: ", x);
+        printf(WHITE "%d\nColumna: ", x);
         y = getnum();
-	printf("%d\n", y);
+	printf(WHITE "%d\n", y);
         jugadaEnGrupo(x,y);
         char str[] = {0x1b, 0x5b, 0x48, 0x1b, 0x5b, 0x4a, '\0'};
 	printf("%s", str);
@@ -275,11 +278,11 @@ void iniciarJuego(){
 
     if( estado == ESTADO_PERDEDOR){
         print();
-        printf("perdiste\n");
-        printf("Solucion: \n");
+        printf(RED "perdiste\n");
+        printf(WHITE "Solucion: \n");
         printAll();
     }else{
-        printf("Ganaste !\n");
+        printf(GREEN "Ganaste !\n");
         printAll();
     }
 }
