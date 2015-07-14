@@ -21,177 +21,20 @@
 #include <unistd.h>
 #include <string.h>
 #include <amaya.h>
+#include "calculator.h"
 
-/* limpia la pantalla */
-void clean_calc()
-{
-	char str[] = {0x1b, 0x5b, 0x48, 0x1b, 0x5b, 0x4a, '\0'};
-	printf("%s", str);
-}
+#define VERSION "0.5.1"
 
-/* comprueba si un *char es un numero */
-bool numberinchar(char *n)
-{
-	for (int i=0; i <= (strlen(n)-1); i++) {
-		if (n[i] != '0' && n[i] != '1' && n[i] != '2' && n[i] != '3' && n[i] != '4' && n[i] != '5' && n[i] != '6'&&
-		    n[i] != '7' && n[i] != '8' && n[i] != '9' && n[0] != '-') {
-			return false;
-		}
-	}
-	return true;
-}
-
-/* suma dos numeros */
-void sumar()
-{
-	int resultado_sum=0;
-	char n1_sum[128];
-	char n2_sum[128];
-	printf("Sumar\r\n");
-	printf("Introduce numero 1 : ");
-	gets_s(n1_sum, 128); /* Pedimos al usuario numero1 */
-	printf("Introduce numero 2 : ");
-	gets_s(n2_sum, 128); /* Pedimos al usuario numero2 */
-	if (numberinchar(n1_sum) && numberinchar(n2_sum)) {
-		resultado_sum = atoi(n1_sum) + atoi(n2_sum);
-		printf("El resultado es : %d\n", resultado_sum);
-	}
-	else {
-		printf("Error: Introduce solo numeros.\n");
-	}
-	pause();
-}
-
-/* resta dos numeros */
-void restar()
-{
-	int resultado_res=0;
-	char n1_res[128];
-	char n2_res[128];
-	printf("Restar\r\n");
-	printf("Introduce numero 1 : ");
-	gets_s(n1_res, 128); /* Pedimos al usuario numero1 */
-	printf("Introduce numero 2 : ");
-	gets_s(n2_res, 128); /* Pedimos al usuario numero2 */
-	if (numberinchar(n1_res) && numberinchar(n2_res)) {
-		resultado_res = atoi(n1_res) - atoi(n2_res);
-		printf("El resultado es : %d\n", resultado_res);
-	}
-	else {
-		printf("Error: Introduce solo numeros.\n");
-	}
-	pause();
-}
-
-/* multiplica dos numeros */
-void multiplicar()
-{
-	int resultado_mul=0;
-	char n1_mul[128];
-	char n2_mul[128];
-	printf("Multiplicar\r\n");
-	printf("Introduce numero 1 : ");
-	gets_s(n1_mul, 128); /* Pedimos al usuario numero1 */
-	printf("Introduce numero 2 : ");
-	gets_s(n2_mul, 128); /* Pedimos al usuario numero2 */
-	if (numberinchar(n1_mul) && numberinchar(n2_mul)) {
-		resultado_mul = atoi(n1_mul) * atoi(n2_mul);
-		printf("El resultado es : %d\n", resultado_mul);
-	}
-	else {
-		printf("Error: Introduce solo numeros.\n");
-	}
-	pause();
-}
-
-/* divide dos numeros */
-void dividir()
-{
-	int resultado_div=0;
-	char n1_div[128];
-	char n2_div[128];
-	printf("Sumar\r\n");
-	printf("Introduce numero 1 : ");
-	gets_s(n1_div, 128); /* Pedimos al usuario numero1 */
-	printf("Introduce numero 2 : ");
-	gets_s(n2_div, 128); /* Pedimos al usuario numero2 */
-	if (numberinchar(n1_div) && numberinchar(n2_div)) {
-		resultado_div = atoi(n1_div) / atoi(n2_div);
-		printf("El resultado es : %d\n", resultado_div);
-	}
-	else {
-		printf("Error: Introduce solo numeros.\n");
-	}
-	pause();
-}
-
-/*convierte temperaturas*/
-int temp()
-{
-	char value = 's';
-	char input[8];
-	int resc = 0;
-	printf("Conversor de temperaturas\n");
-	printf("[1] Celius --> Fahrenheit\n");
-	printf("[2] Fahrenheit --> Celsius\n");
-	printf("[3] Kelvin --> Celsius\n");
-	printf("[4] Kelvin --> Fahrenheit\n");
-	printf("[5] Celsius --> Kelvin\n");
-	printf("[6] Fahrenheit --> Kelvin\n");
-	printf("[S] Cerrar el conversor\n");
-	value = getchar();
-	clean_calc();
-	if (value == 's' || value == 'S') {
-		return 0;
-	}
-	printf("Valor a convertir: ");
-	gets_s(input, 8);
-	clean_calc();
-	switch(value) {
-		case '1':
-			resc = 9 * atoi(input) / 5 + 32;
-			printf("Celsius: %6d Fahrenheit: %6d\n", atoi(input), resc);
-			break;
-		case '2':
-			resc = 5 * (atoi(input)-32) / 9;
-			printf("Fahrenheit: %6d Celsius: %6d\n", atoi(input), resc);
-			break;
-		case '3':
-			resc = atoi(input) - 273;
-			printf("Kelvin: %6d Celsius: %6d\n", atoi(input), resc);
-			break;
-		case '4':
-			/* primero convertimos a celsius */
-			resc = atoi(input) - 273;
-			resc = 9 * resc / 5 + 32;
-			printf("Kelvin: %6d Fahrenheit: %6d\n", atoi(input), resc);
-			break;
-		case '5':
-			resc = atoi(input) + 273;
-			printf("Celsius: %6d Kelvin: %6d\n", atoi(input), resc);
-			break;
-		case '6':
-			/* primero convertimos a celsius */
-			resc = 5 * (atoi(input)-32) / 9;
-			resc = resc + 273;
-			printf("Fahrenheit: %6d Kelvin: %6d\n", atoi(input), resc);
-			break;
-	}
-	pause();
-	clean_calc();
-	return 0;
-}
-
-/* función principal */
+/* main function */
 int main(int argc, char **argv)
 {
 	/* declaramos variables */
 	char option='s';
 	while(1) {
-		/* limpiamos la pantalla */
+		/* clean screen */
 		clean_calc();
 		/* mostramos el menú */
-		printf("CALC 0.5\r\n");
+		printf("CALC %s\r\n", VERSION);
 		printf("[1] Sumar\r\n");
 		printf("[2] Restar\r\n");
 		printf("[3] Multiplicar\r\n");
@@ -200,23 +43,23 @@ int main(int argc, char **argv)
 		printf("[S] Salir\r\n");
 		printf("Seleccione una opcion: ");
 		option = getchar();
-		/* diferentes opciones */
+		/* you can do different things */
 		switch (option) {
 			case '1':
 				clean_calc();
-				sumar();
+				calculator(0);
 				break;
 			case '2':
 				clean_calc();
-				restar();
+				calculator(1);
 				break;
 			case '3':
 				clean_calc();
-				multiplicar();
+				calculator(2);
 				break;
 			case '4':
 				clean_calc();
-				dividir();
+				calculator(3);
 				break;
 			case '5':
 				clean_calc();
