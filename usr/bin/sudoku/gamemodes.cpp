@@ -35,9 +35,13 @@ int sudoku(int mode)
 	/* we get a random number to select a sudoku */
 	int n = randomnumber();
 	int numbers[16];
+	int numbers_def[16];
 	/* get sudoku */
 	for (int i = 0; i < 16; i++) {
-		numbers[i] = make_sudoku(i, n, mode);
+		numbers_def[i] = make_sudoku(i, n, mode);
+	}
+	for (int i = 0; i < 16; i++) {
+		numbers[i] = numbers_def[i];
 	}
 	int sudoku4x4[4][4];
 	int subregions[4][4];
@@ -58,9 +62,11 @@ int sudoku(int mode)
 					 * if not you can't rewrite it 
 					 */
 					numbers[i] = 0;
-					numbers[i-1] = 0;
 					i--;
-					i--;
+					if (numbers[i] != numbers_def[i]) {
+						numbers[i] = 0;
+						i--;
+					}
 				}
 				printf("%c\n", numbers[i]);
 				print_sudoku(numbers);
