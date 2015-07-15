@@ -44,30 +44,46 @@ bool numberinchar(char *n)
 int calculator(unsigned int operation)
 {
 	int res = 0;
-	char n1[8];
-	char n2[8];
-	printf("Numero 1: ");
-	gets_s(n1, 8);
-	printf("Numero 2: ");
-	gets_s(n2, 8);
-	switch (operation) {
-		case 0:
-			res = atoi(n1) + atoi(n2);
-			break;
-		case 1:
-			res = atoi(n1) - atoi(n2);
-			break;
-		case 2:
-			res = atoi(n1) * atoi(n2);
-			break;
-		case 3:
-			res = atoi(n1) / atoi(n2);
-			break;
-		default:
-			clean_calc();
-			printf("Se ha producido un error: Operacion no reconocida\n");
-			pause();
-			return -1;
+	char nc[8];
+	int n = 0;
+	char nx[8];
+	if (operation < 3) {
+		printf("Numero de factores: ");
+		gets_s(nc, 8);
+		n = atoi(nc);
+		if (operation == 2) {
+			res++;
+		}
+		for (int i = 0; i < n; i++) {
+			printf("Numero %d: ", i+1);
+			gets_s(nx, 8);
+			switch (operation) {
+				case 0:
+					res = res + atoi(nx);
+					break;
+				case 1:
+					if (res == 0) {
+						res = atoi(nx);
+					}
+					else {
+						res = res - atoi(nx);
+					}
+					break;
+				case 2:
+					res = res * atoi(nx);
+					break;
+				default:
+					printf("Error: Operacion no reconocida.\n");
+					return -1;
+			}
+		}
+	}
+	else {
+		printf("Numero 1: ");
+		gets_s(nx, 8);
+		printf("Numero 2: ");
+		gets_s(nc, 8);
+		res = atoi(nx) / atoi(nc);
 	}
 	printf("Resultado: %d\n", res);
 	pause();

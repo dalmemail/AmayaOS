@@ -23,7 +23,7 @@
 #include <amaya.h>
 #include "calculator.h"
 
-#define VERSION "0.5.1"
+#define VERSION "0.5.2"
 
 /* main function */
 int main(int argc, char **argv)
