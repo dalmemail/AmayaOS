@@ -54,7 +54,7 @@ int random(int max, int seeder)
 #define ESTADO_EN_JUEGO 2
 
 #define VERSION "0.1.5"
-#define BUILD 9
+#define BUILD 10
 
 int campo[FILAS][COLUMNAS];
 bool jugadas[FILAS][COLUMNAS];
@@ -62,9 +62,6 @@ bool jugadas[FILAS][COLUMNAS];
 
 int njugadas;
 int estado;
-
-float version = 0.1;
-int build = 4;
 
 /*
  * 
@@ -271,7 +268,7 @@ void iniciarJuego(){
         char str[] = {0x1b, 0x5b, 0x48, 0x1b, 0x5b, 0x4a, '\0'};
 	printf("%s", str);
         njugadas = contarJugadas();
-        if( njugadas == ( FILAS*COLUMNAS - nbombas) ){
+        if( njugadas == ( FILAS*COLUMNAS - nbombas) && estado != ESTADO_PERDEDOR){
             estado = ESTADO_GANADOR;
         }
     }
