@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2015 Alvaro Stagg. [alvarostagg@openmailbox.org]
+ *		 2015 Dan Rulos. [amaya@amayaos.com]
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,6 +26,7 @@
 
 struct avim_command_tag;
 int avim_command_execute(char* c_cmd);
-/* int create_file_and_edit; */
+//int create_file_and_edit;
+//int create_file_and_edit_at_end;
 
 #endif

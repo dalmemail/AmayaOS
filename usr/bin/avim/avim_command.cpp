@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2015 Alvaro Stagg. [alvarostagg@openmailbox.org]
+ *		 2015 Dan Rulos. [amaya@amayaos.com]
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,8 +22,6 @@
  #include <stdio.h>
  #include <string.h>
 
-int create_file_and_edit;
-
  typedef struct avim_command_tag
  {
  	char* nombre;
@@ -42,13 +41,18 @@ int create_file_and_edit;
  	printf("-h          Muestra esta ayuda.\n");
  	printf("-c          Lista de comandos dentro del editor.\n");
  	printf("-o <nombre> Crea un archivo para editar.\n");
+ 	printf("-s <nombre> Abre un archivo y escribe al final de el.\n");
  	return;
  }
 
 void create_and_edit_file()
 {
-	create_file_and_edit = _TRUE;
-	return;
+	printf("Loading AVIM %s...\n", VERSION);
+}
+
+void open_file_and_write_at_end()
+{
+	printf("Loading AVIM %s...\n", VERSION);
 }
 
  void avim_command_commands_in_editor()
@@ -57,19 +61,20 @@ void create_and_edit_file()
  	return;
  }
 
-/* comandos permitidos, de momento solo 4... */
-int avim_command_count = 4;
+/* comandos permitidos, de momento solo 5... */
+int avim_command_count = 5;
 
-avim_command avim_commands[4] = { 
+avim_command avim_commands[5] = { 
 	{"-version", "-v", avim_command_version}, 
 	{"-help", "-h", avim_command_help},
 	{"-cie", "-c", avim_command_commands_in_editor},
-	{"-ofte", "-o", create_and_edit_file}
+	{"-ofte", "-o", create_and_edit_file},
+	{"-cfee", "-s", open_file_and_write_at_end}
  };
 
 int avim_command_execute(char* c_cmd)
 {
-	int i = 0;
+	int i;
 
  	for(i = 0; i < avim_command_count; i++)
  	{

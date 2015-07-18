@@ -18,10 +18,10 @@
 #ifndef COLORES_H
 #define COLORES_H
 
-#define VERDE		"\e[32m"
-#define ROJO    	"\e[31m"
-#define NORMAL  	"\e[m"
-#define MAGENTA 	"\e[35m"
-#define AMARILLO        "\e[33m"
+#define VERDE       "\e[32m"
+#define ROJO        "\e[31m"
+#define NORMAL      "\e[m"
+#define MAGENTA     "\e[35m"
+#define AMARILLO    "\e[33m"
 
 #endif

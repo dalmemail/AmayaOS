@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2015 Alvaro Stagg. [alvarostagg@openmailbox.org]
+ *		 2015 Dan Rulos. [amaya@amayaos.com]
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +19,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <sys/stat.h>
+#include <unistd.h>
 #include "avim_command.h"
 #include "avim_colores.h"
 #include "avim_version.h"
@@ -51,13 +53,12 @@ int main(int argc, char* argv[])
       int n = avim_command_execute(argv[1]);
 
       /* quiere que creemos un archivo */
-      if(n == 3)
+      if(n == 3 && argc == 3)
       {
         n_archivo = argv[2];
-	/* en linux es creat() */
-	touch(argv[2], S_IWUSR | S_IRUSR);
 
-        if((fp = open(argv[2], O_WRONLY | O_TRUNC)) < 0)
+	touch(argv[2], S_IWUSR | S_IRUSR);
+        if((fp = open(argv[2], O_WRONLY)) < 0)
         {
           printf(ROJO "Error: " NORMAL "el archivo no pudo ser creado.\n");
           return -1;
@@ -66,6 +67,34 @@ int main(int argc, char* argv[])
         {
           /* comienza la edición */
           cls();
+          editor();
+
+          /* salida exitosa */
+          return 0;
+        }
+      }
+      else if(n == 4 && argc == 3)
+      {
+        n_archivo = argv[2];
+
+	FILE *file1;
+	if ((file1 = fopen(argv[2], "r")) == NULL) {
+		printf("El archivo de origen '%s' no existe\n", argv[2]);
+		return -1;
+	}
+	char contenido[2048];
+	int n_bytes = fread(contenido, 1, sizeof(contenido), file1);
+	fclose(file1);
+        if((fp = open(argv[2], O_WRONLY)) < 0)
+        {
+          printf(ROJO "Error: " NORMAL "el archivo %s no pudo ser abierto.\n", argv[0]);
+          return -1;
+        }
+        else
+        {
+          /* comienza la edición */
+          cls();
+	  write(fp, contenido, n_bytes);
           editor();
 
           /* salida exitosa */
@@ -98,14 +127,13 @@ void editor()
   printf(VERDE "AVIM %s" NORMAL " | Editando archivo: " VERDE "%s " NORMAL "|\n\n", VERSION, n_archivo);
   do
   {
-    printf(" %d ", n_linea);
+    printf("%d ", n_linea);
     gets(linea);
 
     if(linea[0] == ':' && linea[1] == 'x')
     {
       close(fp);
     }
-
     n_linea++;
 
     write(fp, linea, strlen(linea));
