@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 Dan Rulos.
+ * Copyright (C) 2014 Dan Rulos, 2015 Francisco Domínguez
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,25 +17,25 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+
+#define VERSION "1.1"
+#define AUTHOR "Francisco Dominguez"
 
 int main(int argc, char **argv)
 {
-    char d[128];
-    char m[128];
-    char y[128];
-    int dia=0;
-    int mes=0;
-    int year=0;
-    int tyear=0;
-    printf("Dia: ");
-    gets_s(d, 128);
-    dia = atoi(d);
-    printf("Mes: ");
-    gets_s(m, 128);
-    mes = atoi(m);
-    printf("A%co: ", 164);
-    gets_s(y, 128);
-    year = atoi(y);
+
+	if (!argv[1] || (strcmp(argv[1], "--help"))==0) {
+
+		printf("----- CALENDAR %s by %s -----\n", VERSION, AUTHOR);
+		printf("Uso: %s dia mes a%co\n", argv[0], 164);
+		printf("Ejemplo: calendar 14 7 2015\n");
+		return 0;
+
+	}
+    int dia = atoi(argv[1]);
+    int mes = atoi(argv[2]);
+    int year = atoi(argv[3]);
     if (year < 1582) {
       printf("FECHA NO VALIDA\r\n");
       return -1;
@@ -100,30 +100,44 @@ int main(int argc, char **argv)
     if (year == 1582) {
       cuenta = cuenta - 273;
     }
-    if (mes == 1) //Sumamos los meses
+	switch (mes) {
+    case 1: //Sumamos los meses
       cuenta = cuenta + 0;
-    if (mes == 2)
+	  break;;
+    case 2:
       cuenta = cuenta + 31;
-    if (mes == 3)
+	  break;;
+    case 3:
       cuenta = cuenta + 59;
-    if (mes == 4)
+	  break;;
+    case 4:
       cuenta = cuenta + 90;
-    if (mes == 5)
+	  break;;
+    case 5:
       cuenta = cuenta + 120;
-    if (mes == 6)
+	  break;;
+    case 6:
       cuenta = cuenta + 151;
-    if (mes == 7)
+	  break;;
+    case 7:
       cuenta = cuenta + 181;
-    if (mes == 8)
+	  break;;
+    case 8:
       cuenta = cuenta + 212;
-    if (mes == 9)
+	  break;;
+    case 9:
       cuenta = cuenta + 243;
-    if (mes == 10)
+	  break;;
+    case 10:
       cuenta = cuenta + 273;
-    if (mes == 11)
+	  break;;
+    case 11:
       cuenta = cuenta + 304;
-    if (mes == 12)
+	  break;;
+    case 12:
       cuenta = cuenta + 334;
+	  break;;
+	}
     cuenta = cuenta + dia; //sumamos los dias
     int i;
     for (i=1582; i <= year; i++) {
@@ -150,34 +164,30 @@ int main(int argc, char **argv)
       cuenta = cuenta - 11;
       cuenta = cuenta + 284;
     }
-    //cout << cuenta<< endl; //Código del día....
     int valor;
     valor = cuenta % 7;
-    if (valor == 0) {
+
+    switch (valor) {
+    case 0:
       printf("LUNES\r\n");
       return 0;
-    }
-    if (valor == 1) {
+
+    case 1:
       printf("MARTES\r\n");
       return 0;
-    }
-    if (valor == 2) {
+    case 2:
       printf("MIERCOLES\r\n");
       return 0;
-    }
-    if (valor == 3) {
+    case 3:
       printf("JUEVES\r\n");
       return 0;
-    }
-    if (valor == 4) {
+    case 4:
       printf("VIERNES\r\n");
       return 0;
-    }
-    if (valor == 5) {
+    case 5:
       printf("SABADO\r\n");
       return 0;
-    }
-    if (valor == 6) {
+    case 6:
       printf("DOMINGO\r\n");
       return 0;
     }
