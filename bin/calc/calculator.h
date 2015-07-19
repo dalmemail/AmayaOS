@@ -21,18 +21,13 @@
 /* clean_calc() cleans the screen */
 void clean_calc();
 
-/* numberinchar() return true if a char*
- * is a number and false unless
- */
-bool numberinchar(char *n);
-
 /* calculator() does operations
- * 0 +
- * 1 -
- * 2 *
- * 3 / 
+ * +
+ * -
+ * *
+ * / 
  */
-int calculator(unsigned int operation);
+int calculator(int num1, char operation, int num2);
 
 /* convert temperatures (kelvin, celsius, fahrenheit) */
 int temp();

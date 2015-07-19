@@ -18,7 +18,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <amaya.h>
 #include "calculator.h"
 
 /* clean the screen */
@@ -28,66 +27,29 @@ void clean_calc()
 	printf("%s", str);
 }
 
-/* check if n is a number */
-bool numberinchar(char *n)
-{
-	for (unsigned int i=0; i <= (strlen(n)-1); i++) {
-		if (n[i] != '0' && n[i] != '1' && n[i] != '2' && n[i] != '3' && n[i] != '4' && n[i] != '5' && n[i] != '6'&&
-		    n[i] != '7' && n[i] != '8' && n[i] != '9' && n[0] != '-') {
-			return false;
-		}
-	}
-	return true;
-}
-
 /* do operations */
-int calculator(unsigned int operation)
+int calculator(int num1, char operation, int num2)
 {
-	int res = 0;
-	char nc[8];
-	int n = 0;
-	char nx[8];
-	if (operation < 3) {
-		printf("Numero de factores: ");
-		gets_s(nc, 8);
-		n = atoi(nc);
-		if (operation == 2) {
-			res++;
-		}
-		for (int i = 0; i < n; i++) {
-			printf("Numero %d: ", i+1);
-			gets_s(nx, 8);
-			switch (operation) {
-				case 0:
-					res = res + atoi(nx);
-					break;
-				case 1:
-					if (res == 0) {
-						res = atoi(nx);
-					}
-					else {
-						res = res - atoi(nx);
-					}
-					break;
-				case 2:
-					res = res * atoi(nx);
-					break;
-				default:
-					printf("Error: Operacion no reconocida.\n");
-					return -1;
-			}
-		}
+	int result;
+	switch (operation) {
+		case '+':
+			result = num1 + num2;
+			break;
+		case '-':
+			result = num1 - num2;
+			break;
+		case '*':
+			result = num1 * num2;
+			break;
+		case '/':
+			result = num1 / num2;
+			break;
+		default:
+			printf("error: operador %c desconocido\n", operation);
+			return EXIT_FAILURE;
 	}
-	else {
-		printf("Numero 1: ");
-		gets_s(nx, 8);
-		printf("Numero 2: ");
-		gets_s(nc, 8);
-		res = atoi(nx) / atoi(nc);
-	}
-	printf("Resultado: %d\n", res);
-	pause();
-	return 0;
+	printf("%d\n", result);
+	return EXIT_SUCCESS;
 }
 
 /*convert temperatures (original from calc v0.5) */
@@ -142,7 +104,5 @@ int temp()
 			printf("Fahrenheit: %6d Kelvin: %6d\n", atoi(input), resc);
 			break;
 	}
-	pause();
-	clean_calc();
 	return 0;
 }
