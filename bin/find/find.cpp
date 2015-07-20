@@ -63,5 +63,5 @@ int find(char *path, char *file)
 	}
 	/* close path */
 	closedir(d);
-	return 0;
+	return EXIT_SUCCESS;
 }

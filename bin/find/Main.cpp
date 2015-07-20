@@ -21,18 +21,19 @@
 
 int main(int argc, char **argv)
 {
+	int ret;
 	if (argc < 4) {
 		printf("%s: path -name file\n", argv[0]);
 		return -1;
 	}
 	else {
 		if ((strcmp(argv[2], "-name")) == 0) {
-			find(argv[1], argv[3]);
+			ret = find(argv[1], argv[3]);
 		}
 		else {
 			printf("%s: command not found\n", argv[2]);
 			return -1;
 		}
 	}
-	return 0;
+	return ret;
 }
