@@ -50,13 +50,16 @@ int mkfolder(char *prog, char *path)
 
 int main(int argc, char **argv)
 {
-	int i, ret = EXIT_SUCCESS;
+	int i, ret, result = EXIT_SUCCESS;
 	if (argc < 2) {
 		printf("uso: %s DIRECTORIO1 DIRECTORIO2 ...\n", argv[0]);
 		return EXIT_SUCCESS;
 	}
 	for (i = 1; i < argc; i++) {
 		ret = mkfolder(argv[0], argv[i]);
+		if (ret > result) {
+			result = ret;
+		}
 	}
-	return ret;
+	return result;
 }
