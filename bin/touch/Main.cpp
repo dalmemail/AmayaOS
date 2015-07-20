@@ -50,13 +50,16 @@ int mkfile(char *prog, char *path)
 
 int main(int argc, char **argv)
 {
-	int i, ret = EXIT_SUCCESS;
+	int i, ret, result = EXIT_SUCCESS;
 	if (argc < 2) {
 		printf("uso: %s FILE1 FILE2 ...\n", argv[0]);
 		return EXIT_SUCCESS;
 	}
 	for (i = 1; i < argc; i++) {
 		ret = mkfile(argv[0], argv[i]);
+		if (ret > result) {
+			result = ret;
+		}
 	}
-	return ret;
+	return result;
 }
