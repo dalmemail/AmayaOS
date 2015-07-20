@@ -24,8 +24,8 @@ int main(int argc, char **argv)
 		printf("%s: origen destino\n", argv[0]);
 		return -1;
 	}
-	copy_file(argv[1], argv[2]);
-	return 0;
+	int ret = copy_file(argv[1], argv[2]);
+	return ret;
 }
 
 

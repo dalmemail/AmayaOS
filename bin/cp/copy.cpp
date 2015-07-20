@@ -35,7 +35,7 @@ int copy_file(char *originalpath, char *destination)
 	/* open origin file to read it */
 	if ((file1 = fopen(originalpath, "r")) == NULL) {
 		printf("El archivo de origen '%s' no existe\n", originalpath);
-		return -1;
+		return EXIT_FAILURE;
 	}
 	/* make the file 'destination' */
 	touch(destination, S_IWUSR | S_IRUSR);
@@ -52,5 +52,5 @@ int copy_file(char *originalpath, char *destination)
 	fclose(file1);
 	close(fd);
 	/* all OK */
-	return 0;
+	return EXIT_SUCCESS;
 }
