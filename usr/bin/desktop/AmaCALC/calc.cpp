@@ -23,58 +23,58 @@
 
 char *get_input_csv(char *str, size_t size)
 {
-    char line[1024 + size];
-    Size total = 0;
-    Size point = 0;
+	char line[1024 + size];
+	Size total = 0;
+	Size point = 0;
 
-    /* Leemos una linea. */
-    while (total < sizeof(line)) {
-        /* Leemos un caracter. */
-        read(0, line + point, 1);
+	/* Leemos una linea. */
+	while (total < sizeof(line)) {
+		/* Leemos un caracter. */
+		read(0, line + point, 1);
 
-        /* Procesamos el caracter. */
-        switch (line[point]) {
-            case '\r':
-            case '\n':
-                putchar('\n');
-		point++;
-		total++;
-                line[total] = ZERO;
-                strlcpy(str, line, size);
-                return str;
+		/* Procesamos el caracter. */
+		switch (line[point]) {
+			case '\r':
+			case '\n':
+				putchar('\n');
+				point++;
+				total++;
+				line[total] = ZERO;
+				strlcpy(str, line, size);
+				return str;
 
-            case '@':
-                printf("  ");
-                line[total] = ZERO;
-                strlcpy(str, line, size);
-                return str;
+			case '@':
+				printf("  ");
+				line[total] = ZERO;
+				strlcpy(str, line, size);
+				return str;
 
-            case '\b':
-                if (total > 0) {
-                    line[--total] = ZERO;
-                    point--;
-                    printf("\b \b");
-                }
-                break;
+			case '\b':
+				if (total > 0) {
+					line[--total] = ZERO;
+					point--;
+					printf("\b \b");
+				}
+				break;
                 
-            case '\a':
+			case '\a':
                 /*
                 if (point > 0) {
                     printf("\b");
                     point--;
                 }
                 */
-                break;
+				break;
                 
-            default:
-                printf("%c", line[point]);
-                point++;
-                total++;
-                break;
-        }
-    }
+			default:
+				printf("%c", line[point]);
+				point++;
+				total++;
+				break;
+		}
+	}
     
-    line[total] = ZERO;
+	line[total] = ZERO;
     
 }
 
@@ -82,23 +82,10 @@ char *get_input_csv(char *str, size_t size)
  * Devuelve 0 si lo es y 1 si no lo es */
 int numberyn(char number)
 {
-    if (number == '0' || number == '1'|| number == '2'|| number == '3'|| number == '4'|| number == '5'|| number == '6'|| number == '7'|| number == '8'|| number == '9') {
-	return 0;
-    }
-    else {
-	return 1;
-    }
-}
-
-/* Devuelve el numero de lineas
- * de una variable char* */
-/*int nlineas(char *contenido)
-{
-    int zx=0;
-    for (int m=0; contenido[m] != '\0'; m++) {
-	if (contenido[m] == '\n') {
-	  zx++;
+	if (number == '0' || number == '1'|| number == '2'|| number == '3'|| number == '4'|| number == '5'|| number == '6'|| number == '7'|| number == '8'|| number == '9') {
+		return 0;
 	}
-    }
-    return zx;
-}*/
+	else {
+		return 1;
+	}
+}
