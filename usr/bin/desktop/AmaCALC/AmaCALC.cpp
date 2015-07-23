@@ -127,6 +127,7 @@ int new_csv(char *path)
 		path, strerror(errno));
 		return errno;
 	}
+	int md = 0;
 	/* Interfaz */
 	printf("  A  	B 	C 	D 	E	F\r\n");
 	int izq=1;
@@ -177,7 +178,8 @@ int new_csv(char *path)
 					zzz++;
 				}
 			}
-			zzz=zzz-1;
+			md = zzz;
+			zzz--;
 			/* Guardamos el dato en el vector */
 			switch (zzz) {
 				case 0:
@@ -305,6 +307,26 @@ int new_csv(char *path)
 		itoa(resultado, 10, res);
 		write(fd, resultado, strlen(resultado));
 		write(fd, ";", 1);
+		switch (md) {
+			case 0:
+				a[izq] = res;
+				break;
+			case 1:
+				b[izq] = res;
+				break;
+			case 2:
+				c[izq] = res;
+				break;
+			case 3:
+				d[izq] = res;
+				break;
+			case 4:
+				e[izq] = res;
+				break;
+			case 5:
+				f[izq] = res;
+			break;
+		}
 		if (line[strlen(line)-1] == '\n') {
 			write(fd, "\n", 1);
 			izq++;
