@@ -15,6 +15,44 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define AMACALC_V "0.4"
+
+/* get_s() fork */
 char *get_input_csv(char *str, size_t size);
 
+/* returns 0 if a char is a number 
+ * and 1 if not
+ */
 int numberyn(char number);
+
+/* returns a letter code 
+ * 0 A
+ * 1 B
+ * 2 C
+ * 3 D
+ * 4 E
+ * 5 F
+ */
+int get_letter(char *c, int rp);
+
+/* returns the number of lines in 'c' */
+int get_point(char *c, int izq);
+
+/* write 'c' in file 'fd' using the mode 'mode'
+ * 'c' is the line to write
+ * 'fd' is the file descriptor
+ * 'mode' is the write mode
+ */
+void writter_csv(char *c, int fd, int mode);
+
+/* cleans the internal command and print 'res' */
+void print_line(char *line, char *res);
+
+/* returns 0 if letter == 'A'...*/
+int get_letter_num(char letter);
+
+/* check if line it's a valid amacalc command 
+ * returns 0 if yes
+ * returns a negative number if not
+ */
+int checkCommand(char *line);
