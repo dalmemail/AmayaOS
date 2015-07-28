@@ -15,28 +15,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include "wama.h"
-#include "reader.h"
- 
-void read_wama_file()
-{
-	char path[128];
-	clean_screen();
-	printf("Ruta del archivo: ");
-	gets_s(path, 128);
-	clean_screen();
-	if (path[0] != '/') {
-		char dev_path[128] = "/dev/";
-		strcat(dev_path, path);
-		strcpy(path, dev_path);
-	}
-	char *data = read_file(path);
-	printf("\n\n%s ", data);
-	setwindow();
-	printf("\nPRESS ENTER TO CONTINUE\n");
-	while (getchar() != '\n') {
-	}
-}
+#ifndef WAMAS_H
+#define WAMAS_H
+
+/* main function of wa+ */
+void wama();
+
+#endif
