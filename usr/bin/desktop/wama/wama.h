@@ -38,6 +38,6 @@ int linecounter(char *c);
 
 char *read_file(char *path);
 
-int goto_wama_command(char *path);
+int goto_wama_command(char *path, int line_counter);
 
 #endif

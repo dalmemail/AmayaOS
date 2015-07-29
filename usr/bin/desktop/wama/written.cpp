@@ -57,7 +57,7 @@ int new_wama_file()
 				break;
 			case 1:
 				close(fd);
-				if (goto_wama_command(path) < 0) {
+				if (goto_wama_command(path, line_count) < 0) {
 					return -1;
 				}
 				data = read_file(path);

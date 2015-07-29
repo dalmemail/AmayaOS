@@ -345,12 +345,16 @@ char *read_file(char *path)
 	return data;
 }
 
-int goto_wama_command(char *path)
+int goto_wama_command(char *path, int line_counter)
 {
 	char nl[5];
 	printf("Numero de linea: ");
 	gets_s(nl, 5);
 	int nline = atoi(nl);
+	/* nline can't be > line_counter */
+	if (line_counter == 1 || nline > line_counter) {
+		return -1;
+	}
 	printf("\n %d ", nline);
 	char *data = read_file(path);
 	int n_lines = linecounter(data);
