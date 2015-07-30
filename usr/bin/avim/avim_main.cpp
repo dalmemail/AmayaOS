@@ -65,7 +65,7 @@ int main(int argc, char* argv[])
         }
         else
         {
-          /* comienza la edición */
+          /* comienza la ediciÃ³n */
           cls();
           editor();
 
@@ -92,7 +92,7 @@ int main(int argc, char* argv[])
         }
         else
         {
-          /* comienza la edición */
+          /* comienza la ediciÃ³n */
           cls();
 	  write(fp, contenido, n_bytes);
           editor();
@@ -104,7 +104,7 @@ int main(int argc, char* argv[])
     }
     else
     {
-      /* comienza la edición */
+      /* comienza la ediciÃ³n */
       cls();
       editor();
     }
@@ -123,22 +123,44 @@ void editor()
 {
   char linea[128];
   int n_linea = 1;
+  int condition = 0;
 
   printf(VERDE "AVIM %s" NORMAL " | Editando archivo: " VERDE "%s " NORMAL "|\n\n", VERSION, n_archivo);
   do
   {
     printf("%d ", n_linea);
-    gets(linea);
+    gets_s(linea, 128);
 
-    if(linea[0] == ':' && linea[1] == 'x')
+    if(linea[0] == ':')
     {
-      close(fp);
+	if (linea[1] == 'x') {
+		close(fp);
+		condition = -1;
+	}
+	if (linea[1] == 'e') {
+		close(fp);
+		condition = -1;
+		printf("Nombre del archivo: ");
+		gets_s(linea, 128);
+		cls();
+        	if((fp = open(linea, O_WRONLY)) < 0)
+        	{
+          		printf(ROJO "Error: " NORMAL "el archivo %s no pudo ser abierto.\n", linea);
+        	}
+		else {
+			n_archivo = linea;
+			editor();
+		}
+	}
     }
-    n_linea++;
+    else {
+	n_linea++;
+	condition = 0;
 
-    write(fp, linea, strlen(linea));
-    write(fp, "\r\n", 2);
-  } while (linea[0] != ':' || linea[1] != 'x');
+	write(fp, linea, strlen(linea));
+	write(fp, "\n", 1);
+    }
+  } while (condition == 0);
 
   cls();
 }

@@ -55,11 +55,12 @@ void open_file_and_write_at_end()
 	printf("Loading AVIM %s...\n", VERSION);
 }
 
- void avim_command_commands_in_editor()
- {
+void avim_command_commands_in_editor()
+{
  	printf(":x         Salir y guardar\n");
+	printf(":e	Cambiar de archivo sin salir del editor\n");
  	return;
- }
+}
 
 /* comandos permitidos, de momento solo 5... */
 int avim_command_count = 5;
