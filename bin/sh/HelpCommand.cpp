@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Niek Linnenbank, 2014 Daniel Martin
+ * Copyright (C) 2009 Niek Linnenbank, 2015 Dan Rulos
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,18 +22,17 @@
 
 int HelpCommand::execute(Size nparams, char **params)
 {
-    printf("Amaya-OS Help\r\n");
+    printf("AmayaOS Help\r\n");
     printf("Lista de comandos integrados de la consola:\r\n\r\n");
 
     for (HashIterator<String, ShellCommand> i(&commands); i.hasNext(); i++) {
         printf("%s  %s\r\n", i.current()->getName(), i.current()->help());
     }
     
-    printf("\r\n");
-    
-    printf("Escriba 'ls /bin' para ver los comandos de usuario disponibles\r\n");
+    printf("\nEscriba 'ls /bin' para ver los comandos de usuario disponibles\r\n");
     printf("Escriba 'ls /sbin' para ver los comandos de sistema disponibles\r\n");
-    printf("Escriba 'ls /bin /sbin' para ver todos los comandos disponibles\r\n");
+    printf("Escriba 'ls /usr/bin' para ver software de usuario disponible\r\n");
+    printf("Escriba 'ls /bin /sbin /usr/bin' para ver todos los comandos disponibles\r\n");
 
     
     return 0;
