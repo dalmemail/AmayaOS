@@ -22,7 +22,11 @@
 #include "wama.h"
 #include "written.h"
 
-int new_wama_file()
+
+/* mode 0 new file
+ * mode 1 edit file
+ */
+int wama_file(int mode)
 {
 	char path[128];
 	clean_screen();
@@ -35,7 +39,7 @@ int new_wama_file()
 		strcpy(path, dev_path);
 	}
 	/* creamos el archivo 'path' */
-	if ((touch(path, S_IRUSR | S_IWUSR)) < 0) {
+	if ((touch(path, S_IRUSR | S_IWUSR)) < 0 && mode == 0) {
 		return -1;
 	}
 	int line_count = 1;
@@ -43,6 +47,12 @@ int new_wama_file()
 	int fd;
 	if ((fd = open(path, O_WRONLY)) < 0) {
 		return -1;
+	}
+	if (mode == 1) {
+		char *ch = read_file(path);
+		write(fd, ch, strlen(ch));
+		line_count = linecounter(ch);
+		line_count++;
 	}
 	printf("\n\n\n %d ", line_count);
 	char *data;

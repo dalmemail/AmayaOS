@@ -19,6 +19,6 @@
 #define WRITTEN_H
 
 /* returns -1 in error case */
-int new_wama_file();
+int wama_file(int mode);
 
 #endif

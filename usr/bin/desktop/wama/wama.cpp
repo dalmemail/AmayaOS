@@ -45,7 +45,7 @@ void setwindow()
 	vga[39] = VGA_CHAR('A', BLACK, GREEN);
 	vga[41] = VGA_CHAR('0', BLACK, GREEN);
 	vga[42] = VGA_CHAR('.', BLACK, GREEN);
-	vga[43] = VGA_CHAR('3', BLACK, GREEN);
+	vga[43] = VGA_CHAR('4', BLACK, GREEN);
 }
 
 void setscreenblue()
@@ -80,42 +80,20 @@ void setoption()
 	for (int i = 1920; i < 2000; i++) {
 		vga[i] = VGA_CHAR(' ', BROWN, BROWN);
 	}
-	vga[1921] = VGA_CHAR('[', BLACK, BROWN);
-	vga[1922] = VGA_CHAR('V', BLACK, BROWN);
-	vga[1923] = VGA_CHAR(']', BLACK, BROWN);
-	vga[1925] = VGA_CHAR('V', BLACK, BROWN);
-	vga[1926] = VGA_CHAR('e', BLACK, BROWN);
-	vga[1927] = VGA_CHAR('r', BLACK, BROWN);
-	vga[1929] = VGA_CHAR('a', BLACK, BROWN);
-	vga[1930] = VGA_CHAR('r', BLACK, BROWN);
-	vga[1931] = VGA_CHAR('c', BLACK, BROWN);
-	vga[1932] = VGA_CHAR('h', BLACK, BROWN);
-	vga[1933] = VGA_CHAR('i', BLACK, BROWN);
-	vga[1934] = VGA_CHAR('v', BLACK, BROWN);
-	vga[1935] = VGA_CHAR('o', BLACK, BROWN);
-	vga[1937] = VGA_CHAR('[', BLACK, BROWN);
-	vga[1938] = VGA_CHAR('N', BLACK, BROWN);
-	vga[1939] = VGA_CHAR(']', BLACK, BROWN);
-	vga[1941] = VGA_CHAR('N', BLACK, BROWN);
-	vga[1942] = VGA_CHAR('u', BLACK, BROWN);
-	vga[1943] = VGA_CHAR('e', BLACK, BROWN);
-	vga[1944] = VGA_CHAR('v', BLACK, BROWN);
-	vga[1945] = VGA_CHAR('o', BLACK, BROWN);
-	vga[1947] = VGA_CHAR('a', BLACK, BROWN);
-	vga[1948] = VGA_CHAR('r', BLACK, BROWN);
-	vga[1949] = VGA_CHAR('c', BLACK, BROWN);
-	vga[1950] = VGA_CHAR('h', BLACK, BROWN);
-	vga[1951] = VGA_CHAR('i', BLACK, BROWN);
-	vga[1952] = VGA_CHAR('v', BLACK, BROWN);
-	vga[1953] = VGA_CHAR('o', BLACK, BROWN);
-	vga[1955] = VGA_CHAR('[', BLACK, BROWN);
-	vga[1956] = VGA_CHAR('S', BLACK, BROWN);
-	vga[1957] = VGA_CHAR(']', BLACK, BROWN);
-	vga[1958] = VGA_CHAR('S', BLACK, BROWN);
-	vga[1959] = VGA_CHAR('a', BLACK, BROWN);
-	vga[1960] = VGA_CHAR('l', BLACK, BROWN);
-	vga[1961] = VGA_CHAR('i', BLACK, BROWN);
-	vga[1962] = VGA_CHAR('r', BLACK, BROWN);
+	char *menu[4];
+	menu[0] = "[V]er Archivo";
+	menu[1] = "[N]uevo Archivo";
+	menu[2] = "[E]ditar Archivo";
+	menu[3] = "[S]alir";
+	int y = 1921;
+	for (int i = 0; i < 4; i++) {
+		for (unsigned int x = 0; x < strlen(menu[i]); x++) {
+			vga[y] = VGA_CHAR(menu[i][x], BLACK, BROWN);
+			y++;
+		}
+		vga[y] = VGA_CHAR(' ', BLACK, BROWN);
+		y++;
+	}
 }
 
 void clean_screen()

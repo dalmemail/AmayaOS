@@ -22,6 +22,9 @@
 #include "wama.h"
 #include "wamas.h"
 
+#define NEW_FILE 0
+#define EDIT_FILE 1
+
 void wama()
 {
 	char tecla = 's';
@@ -31,12 +34,20 @@ void wama()
 	do {
 		tecla = getchar();
 	} while (tecla != 'V'&& tecla != 'v'&& tecla != 'N'&& tecla != 'n'
-		&& tecla != 'S'&& tecla != 's');
+		&& tecla != 'S'&& tecla != 's'&& tecla != 'e'&& tecla != 'E');
 	if (tecla == 'V'|| tecla == 'v') {
 		read_wama_file();
 	}
 	if (tecla == 'N'|| tecla == 'n') {
-		if (new_wama_file() < 0) {
+		if (wama_file(NEW_FILE) < 0) {
+			error();
+		}
+		else {
+			save();
+		}
+	}
+	if (tecla == 'E'|| tecla == 'e') {
+		if (wama_file(EDIT_FILE) < 0) {
 			error();
 		}
 		else {
