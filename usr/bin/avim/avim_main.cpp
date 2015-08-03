@@ -24,6 +24,9 @@
 #include "avim_colores.h"
 #include "avim_version.h"
 
+#define FILE_LINE 0
+#define AVIM_COMMAND 1
+
 void cls();
 void editor();
 
@@ -123,7 +126,7 @@ void editor()
 {
   char linea[128];
   int n_linea = 1;
-  int condition = 0;
+  int last_line = FILE_LINE;
 
   printf(VERDE "AVIM %s" NORMAL " | Editando archivo: " VERDE "%s " NORMAL "|\n\n", VERSION, n_archivo);
   do
@@ -133,13 +136,12 @@ void editor()
 
     if(linea[0] == ':')
     {
+	last_line = AVIM_COMMAND;
 	if (linea[1] == 'x') {
 		close(fp);
-		condition = -1;
 	}
 	if (linea[1] == 'e') {
 		close(fp);
-		condition = -1;
 		printf("Nombre del archivo: ");
 		gets_s(linea, 128);
 		cls();
@@ -152,15 +154,46 @@ void editor()
 			editor();
 		}
 	}
+	if (linea[1] == 'c' && linea[2] == 'f') {
+		close(fp);
+		printf("Archivo a crear: ");
+		gets_s(linea, 128);
+		touch(linea, S_IWUSR | S_IRUSR);
+        	if((fp = open(linea, O_WRONLY)) < 0)
+        	{
+          		printf(ROJO "Error: " NORMAL "el archivo %s no pudo ser abierto.\n", linea);
+        	}
+		n_archivo = linea;
+		cls();
+		editor();
+	}
+	if (linea[1] == 'o' && linea[2] == 'a' && linea[3] == 'e') {
+		close(fp);
+		printf("Archivo a abrir: ");
+		gets_s(linea, 128);
+        	if((fp = open(linea, O_WRONLY)) < 0)
+        	{
+          		printf(ROJO "Error: " NORMAL "el archivo %s no pudo ser abierto.\n", linea);
+        	}
+		FILE *file1;
+		file1 = fopen(linea, "r");
+		char contenido[2048];
+		int n_bytes = fread(contenido, 1, sizeof(contenido), file1);
+		fclose(file1);
+		write(fp, contenido, n_bytes);
+		n_archivo = linea;
+		cls();
+		editor();
+	}
     }
     else {
+	last_line = FILE_LINE;
 	n_linea++;
-	condition = 0;
 
 	write(fp, linea, strlen(linea));
 	write(fp, "\n", 1);
     }
-  } while (condition == 0);
+  } while (last_line != AVIM_COMMAND);
 
   cls();
 }

@@ -59,6 +59,8 @@ void avim_command_commands_in_editor()
 {
  	printf(":x         Salir y guardar\n");
 	printf(":e	Cambiar de archivo sin salir del editor\n");
+	printf(":cf  	Crear un archivo y editar en el sin salir del editor.\n");
+ 	printf(":oae  	Abrir archivo y escribir al final de el.\n");
  	return;
 }
 
