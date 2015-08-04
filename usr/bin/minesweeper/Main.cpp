@@ -53,8 +53,10 @@ int random(int max, int seeder)
 #define ESTADO_GANADOR  1
 #define ESTADO_EN_JUEGO 2
 
-#define VERSION "0.1.5"
-#define BUILD 10
+#define VERSION "0.1.6"
+#define BUILD 11
+
+#define MAX_BOMBAS 17
 
 int campo[FILAS][COLUMNAS];
 bool jugadas[FILAS][COLUMNAS];
@@ -84,10 +86,14 @@ void iniciaArr(){
 
 int agregaBombas(/*int nbombas*/){
     int i,x,y;// contador de bombas
-    printf(YELLOW "Numero de bombas: ");
-    int nbombas = getnum();
+    char n_bombas[4];
+    int nbombas = 0;
+    do {
+	printf(YELLOW "Numero de bombas: ");
+	gets_s(n_bombas, 4);
+	nbombas = atoi(n_bombas);
+    } while(nbombas > MAX_BOMBAS);
     int seeder = 0;
-    printf(RED "%d\n", nbombas);
     x = random(FILAS, 1);
     y = random(COLUMNAS, 2);
     for (i = 1; i <= nbombas; i++) {
