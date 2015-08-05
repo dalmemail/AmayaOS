@@ -26,7 +26,7 @@
 #define EASY 0
 #define DIFFICULT 1
 
-#define VERSION "0.5.1"
+#define VERSION "0.5.1.1"
 
 int main(int argc, char **argv)
 {

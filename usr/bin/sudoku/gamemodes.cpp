@@ -63,7 +63,7 @@ int sudoku(int mode)
 					 */
 					numbers[i] = 0;
 					i--;
-					if (numbers[i] != numbers_def[i]) {
+					if (numbers[i] != numbers_def[i] && i > 1) {
 						numbers[i] = 0;
 						i--;
 					}
