@@ -18,6 +18,6 @@
 #ifndef _AVIM_VERSION_H
 #define _AVIM_VERSION_H
 
-#define VERSION "0.1.4"
+#define VERSION "0.1.4a"
 
 #endif
