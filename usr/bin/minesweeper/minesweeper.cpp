@@ -19,7 +19,6 @@
 #include <files.h>
 #include "minesweeper.h"
 
-/* getchar() modificado para leer numeros */
 int getnum()
 {
 	static char ch[1024];
