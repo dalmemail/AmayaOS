@@ -23,7 +23,7 @@
 
 int random(int seeder)
 {
-	int random_n = getTime();
+	int random_n = (getTime()%10) + ((getTime()%100)*10);
 	while (random_n > 8) {
 		random_n = random_n / seeder;
 	}
@@ -40,8 +40,8 @@ int random(int seeder)
 #define ESTADO_GANADOR  1
 #define ESTADO_EN_JUEGO 2
 
-#define VERSION "0.1.7"
-#define BUILD 12
+#define VERSION "0.1.8"
+#define BUILD 13
 
 #define MAX_BOMBAS 40
 
@@ -71,7 +71,7 @@ void iniciaArr(){
     }
 }
 
-int agregaBombas(/*int nbombas*/){
+int agregaBombas(){
     int i,x,y;// contador de bombas
     char n_bombas[4];
     int nbombas = 0;
@@ -91,7 +91,7 @@ int agregaBombas(/*int nbombas*/){
 		i--;
 	}
 	seeder = seeder + (getTime()%10);
-	if (seeder > 200) {
+	if (seeder > 30) {
 		seeder = 2;
 	}
     }
