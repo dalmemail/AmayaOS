@@ -36,7 +36,9 @@ void wama()
 	} while (tecla != 'V'&& tecla != 'v'&& tecla != 'N'&& tecla != 'n'
 		&& tecla != 'S'&& tecla != 's'&& tecla != 'e'&& tecla != 'E');
 	if (tecla == 'V'|| tecla == 'v') {
-		read_wama_file();
+		if (read_wama_file() < 0) {
+			error();
+		}
 	}
 	if (tecla == 'N'|| tecla == 'n') {
 		if (wama_file(NEW_FILE) < 0) {

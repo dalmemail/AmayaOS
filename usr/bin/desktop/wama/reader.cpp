@@ -18,10 +18,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
+#include <sys/stat.h>
 #include "wama.h"
 #include "reader.h"
  
-void read_wama_file()
+int read_wama_file()
 {
 	char path[128];
 	clean_screen();
@@ -33,10 +35,37 @@ void read_wama_file()
 		strcat(dev_path, path);
 		strcpy(path, dev_path);
 	}
-	char *data = read_file(path);
-	printf("\n\n%s ", data);
-	setwindow();
-	printf("\nPRESS ENTER TO CONTINUE\n");
-	while (getchar() != '\n') {
+	struct stat st;
+	if ((stat(path, &st)) < 0) {
+		return -1;
 	}
+	FILE *file;
+	file = fopen(path, "r");
+	char data[4];
+	int file_size = st.st_size;
+	printf("\n\n");
+	int linecount = 0;
+	char key = 's';
+	for (int i = 0; i < file_size && key != 'n'; i++) {
+		read(file->fd, data, 1);
+		printf("%c", data[0]);
+		if (data[0] == '\n') {
+			linecount++;
+		}
+		if (linecount == 20) {
+			linecount = 0;
+			do {
+				printf("\nContinue? [S/N]\n");
+				setwindow();
+				key = getchar();
+			} while (key != 's' && key != 'n');
+		}
+		if (i+1 == file_size) {
+			printf("\nPRESS ANY KEY TO EXIT\n");
+			setwindow();
+			getchar();
+		}
+	}
+	fclose(file);
+	return 0;
 }

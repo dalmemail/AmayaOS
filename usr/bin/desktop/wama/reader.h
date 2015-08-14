@@ -18,6 +18,6 @@
 #ifndef READER_H
 #define READER_H
 
-void read_wama_file();
+int read_wama_file();
 
 #endif
