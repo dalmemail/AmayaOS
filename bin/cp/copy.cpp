@@ -24,6 +24,7 @@
 
 int copy_file(char *originalpath, char *destination)
 {
+	int ret = EXIT_SUCCESS;
 	/* the file 'originalpath' */
 	FILE *file1;
 	/* the file 'destination' */
@@ -33,24 +34,23 @@ int copy_file(char *originalpath, char *destination)
 	/* number of bytes read */
 	int n_bytes = 0;
 	/* open origin file to read it */
-	if ((file1 = fopen(originalpath, "r")) == NULL) {
-		printf("El archivo de origen '%s' no existe\n", originalpath);
-		return EXIT_FAILURE;
-	}
+	file1 = fopen(originalpath, "r");
 	/* make the file 'destination' */
 	touch(destination, S_IWUSR | S_IRUSR);
 	/* open destination to write */
 	if ((fd = open(destination, O_WRONLY)) < 0) {
 		printf("Error al abrir '%s': %s\n", destination, strerror(errno));
-		return errno;
+		ret = errno;
 	}
-	/* read file1 data */
-	n_bytes = fread(buffer, 1, sizeof(buffer), file1);
-	/* write file1 data to fd */
-	write(fd, buffer, n_bytes);
+	else {
+		/* read file1 data */
+		n_bytes = fread(buffer, 1, sizeof(buffer), file1);
+		/* write file1 data to fd */
+		write(fd, buffer, n_bytes);
+	}
 	/* close file1 and fd */
 	fclose(file1);
 	close(fd);
 	/* all OK */
-	return EXIT_SUCCESS;
+	return ret;
 }
