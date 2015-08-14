@@ -17,57 +17,62 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <files.h>
+#include <unistd.h>
+#include <errno.h>
+
+void grep(char *string, char *c, int n_bytes)
+{
+	int final_pos = 0;
+	bool exists = false;
+	for (int i = 0; i < n_bytes; i++) {
+		int start_check;
+		for (unsigned int x = 0; c[i] != '\n' && i < n_bytes; i++) {
+			if (string[x] == c[i] && !exists) {
+				if (x++ == 0) {
+					start_check = i;
+				}
+				if (x == strlen(string)) {
+					exists = true;
+				}
+			}
+			else if (!exists) {
+				x = 0;
+			}
+		}
+		if (exists) {
+			final_pos = i;
+			while (c[i-1] != '\n' && i > 0) {
+				i--;
+			}
+			while (i <= final_pos) {
+				printf("%c", c[i++]);
+			}
+		}
+		exists = false;
+	}
+}
 
 int main(int argc, char **argv)
 {
-    if (argc < 3) {
-	printf("Uso: %s cadena archivo\r\n", argv[0]);
-	return -1;
-    }
-    // Leemos el fichero (argv[2])
-    file *f = new file();
-    f->setpath(argv[2]);
-    f->f_open(O_RDONLY);
-    char *ch = f->readAll();
-    f->f_close();
-    int i;
-    char v[512];
-    /* El punto de la palabra en el vector v[] */
-    int z=0;
-    /* El punto de la palabra en el vector argv[1][] */
-    int x=0;
-    /* El punto del vector ch[] en el que comienza la frase
-     * donde está la palabra que hemos buscado. */
-    int point=0;
-    for(i=0; i <= strlen(ch); i++) {
-	if (argv[1][x]==ch[i]) {
-	  if (argv[1][x-1]==ch[i-1]) {
-	    v[z]=ch[i];
-	    z++;
-	    x++;
-	  }
-	  if (x == 0) {
-	    v[z]=ch[i];
-	    z++;
-	    x++;
-	  }
-	  if (x == strlen(argv[1])) {
-	    point=i;
-	    x++;
-	  }
+	int ret = EXIT_SUCCESS;
+	if (argc != 3) {
+		printf("Uso: %s cadena archivo\r\n", argv[0]);
+		ret = EXIT_FAILURE;
 	}
-    }
-    if (strcmp(argv[1], v)==0 || strlen(argv[1]) < strlen(v)) {
-	for (point=point; ch[point-1] != '\n'&& point > -1; point--) {
+	else {
+		char buffer[2048];
+		int n_bytes = 0;
+		FILE *file1;
+		file1 = fopen(argv[2], "r");
+		n_bytes = fread(buffer, 1, sizeof(buffer), file1);
+		if (n_bytes < 0) {
+			printf("Error al leer '%s'\n", argv[2]);
+			ret = EXIT_FAILURE;
+		}
+		else {
+			grep(argv[1], buffer, n_bytes);
+		}
+		fclose(file1);
 	}
-        for (point=point; ch[point] != '\n' && point <= i; point++) {
-	  printf("%c", ch[point]);
-	}
-    	printf("\r\n");
-    }
-    else {
-	printf("Cadena no encontrada\n");
-    }
-    return 0;
+	return ret;
 }
