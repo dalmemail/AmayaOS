@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2009 Niek Linnenbank, 2014 Dan Rulos
+# Copyright (C) 2009 Niek Linnenbank, 2015 Dan Rulos
 # 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,6 +18,6 @@
 SConscript(dirs = [ 'sh', 'ps', 'mount',
                     'bench', 'hostname', 'parse',
                     'uname', 'cat', 'ls', 'stat',
-                    'mknod', 'echo', 'pwd', 'hello',
+                    'mknod', 'echo', 'pwd',
                     'sleep', 'mkdir', 'touch',
-                    'cp', 'find', 'calc', 'tedit', 'wc', 'who', 'which', 'clock', 'date', 'grep', 'gun', 'uptime', 'clear'])
+                    'cp', 'find', 'calc', 'tedit', 'wc', 'who', 'which', 'date', 'grep', 'gun', 'uptime', 'clear'])
