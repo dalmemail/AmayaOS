@@ -49,7 +49,7 @@ int calculator(int num1, char operation, int num2)
 			return EXIT_FAILURE;
 	}
 	printf("%d\n", result);
-	return EXIT_SUCCESS;
+	return result;
 }
 
 /*convert temperatures (original from calc v0.5) */

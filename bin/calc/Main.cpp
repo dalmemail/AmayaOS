@@ -20,7 +20,7 @@
 #include <string.h>
 #include "calculator.h"
 
-#define VERSION "0.6"
+#define VERSION "0.7"
 
 /* main function */
 int main(int argc, char **argv)
@@ -28,12 +28,20 @@ int main(int argc, char **argv)
 	int ret = EXIT_SUCCESS;
 	if (argc == 2 && (strcmp(argv[1], "--temp")) == 0) {
 		ret = temp();
-		return ret;
 	}
-	if (argc != 4) {
-		printf("uso: %s num1 operador num2\n", argv[0]);
-		return EXIT_FAILURE;
+	else if (argc == 2 && (strcmp(argv[1], "--version")) == 0) {
+		printf("Version: %s\n", VERSION);
 	}
-	ret = calculator(atoi(argv[1]), argv[2][0], atoi(argv[3]));
+	else if (argc < 4) {
+		printf("uso: %s num1 operator1 num2 operator2 num3 ...\n", argv[0]);
+		ret = EXIT_FAILURE;
+	}
+	else if (argc >= 4) {
+		int result = atoi(argv[1]);
+		int i = 2;
+		do {
+			result = calculator(result, argv[i][0], atoi(argv[i+1]));
+		} while((i += 2) < argc);
+	}
 	return ret;
 }
