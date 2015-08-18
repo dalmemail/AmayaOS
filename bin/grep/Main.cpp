@@ -18,7 +18,20 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <errno.h>
+#include <sys/stat.h>
+
+int f_size(char *path)
+{
+	struct stat st;
+	int ssize;
+	if ((stat(path, &st)) < 0) {
+		ssize = -1;
+	}
+	else {
+		ssize = st.st_size;
+	}
+	return ssize;
+}
 
 void grep(char *string, char *c, int n_bytes)
 {
@@ -60,19 +73,19 @@ int main(int argc, char **argv)
 		ret = EXIT_FAILURE;
 	}
 	else {
-		char buffer[2048];
-		int n_bytes = 0;
-		FILE *file1;
-		file1 = fopen(argv[2], "r");
-		n_bytes = fread(buffer, 1, sizeof(buffer), file1);
-		if (n_bytes < 0) {
+		int fsize = f_size(argv[2]);
+		char *buffer = new char [fsize];
+		int fd;
+		if ((fd = open(argv[2], O_RDONLY)) < 0) {
 			printf("Error al leer '%s'\n", argv[2]);
 			ret = EXIT_FAILURE;
 		}
 		else {
-			grep(argv[1], buffer, n_bytes);
+			read(fd, buffer, fsize);
+			grep(argv[1], buffer, fsize);
 		}
-		fclose(file1);
+		close(fd);
+		delete buffer;
 	}
 	return ret;
 }
