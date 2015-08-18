@@ -19,6 +19,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <files.h>
+#include <sys/stat.h>
 #include "wama.h"
 
 u16 *vga;
@@ -39,13 +40,15 @@ void setwindow()
 	for (int i = 0; i < 80; i++) {
 		vga[i] = VGA_CHAR(' ', GREEN, GREEN);
 	}
-	vga[36] = VGA_CHAR('W', BLACK, GREEN);
+	vga[34] = VGA_CHAR('W', BLACK, GREEN);
+	vga[35] = VGA_CHAR('A', BLACK, GREEN);
+	vga[36] = VGA_CHAR('M', BLACK, GREEN);
 	vga[37] = VGA_CHAR('A', BLACK, GREEN);
-	vga[38] = VGA_CHAR('M', BLACK, GREEN);
-	vga[39] = VGA_CHAR('A', BLACK, GREEN);
-	vga[41] = VGA_CHAR('0', BLACK, GREEN);
+	vga[39] = VGA_CHAR('0', BLACK, GREEN);
+	vga[40] = VGA_CHAR('.', BLACK, GREEN);
+	vga[41] = VGA_CHAR('5', BLACK, GREEN);
 	vga[42] = VGA_CHAR('.', BLACK, GREEN);
-	vga[43] = VGA_CHAR('5', BLACK, GREEN);
+	vga[43] = VGA_CHAR('1', BLACK, GREEN);
 }
 
 void setscreenblue()
@@ -311,14 +314,15 @@ int linecounter(char *c)
 	return n_lines;
 }
 
+int get_size(char *path);
+
 char *read_file(char *path)
 {
-	/* Abrimos y leemos el fichero */
-	file *fichero = new file();
-	fichero->setpath(path);
-	fichero->f_open(O_RDONLY);
-	char *data = fichero->readAll();
-	fichero->f_close();
+	int file_size = get_size(path);
+	char *data = new char [file_size];
+	int fd = open(path, O_RDONLY);
+	read(fd, data, file_size);
+	close(fd);
 	/* Devolvemos el contenido del fichero */
 	return data;
 }
@@ -348,6 +352,9 @@ int goto_wama_command(char *path, int line_counter)
 		}
 		for (int k = 0; (i_point+k) < f_point; k++) {
 			lines[i][k] = data[(i_point+k)];
+			if (i_point+k+1 == f_point) {
+				lines[i][k+1] = '\0';
+			}
 		}
 		f_point++;
 	}
@@ -363,4 +370,17 @@ int goto_wama_command(char *path, int line_counter)
 	printf("\n");
 	close(fd);
 	return 0;
+}
+
+int get_size(char *path)
+{
+	struct stat st;
+	int ssize;
+	if ((stat(path, &st)) < 0) {
+		ssize = -1;
+	}
+	else {
+		ssize = st.st_size;
+	}
+	return ssize;
 }

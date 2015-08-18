@@ -22,6 +22,8 @@
 #include "wama.h"
 #include "written.h"
 
+#define NEW_FILE_MODE 0
+#define EDIT_FILE_MODE 1
 
 /* mode 0 new file
  * mode 1 edit file
@@ -39,7 +41,7 @@ int wama_file(int mode)
 		strcpy(path, dev_path);
 	}
 	/* creamos el archivo 'path' */
-	if ((touch(path, S_IRUSR | S_IWUSR)) < 0 && mode == 0) {
+	if ((touch(path, S_IRUSR | S_IWUSR)) < 0 && mode == NEW_FILE_MODE) {
 		return -1;
 	}
 	int line_count = 1;
@@ -48,7 +50,7 @@ int wama_file(int mode)
 	if ((fd = open(path, O_WRONLY)) < 0) {
 		return -1;
 	}
-	if (mode == 1) {
+	if (mode == EDIT_FILE_MODE) {
 		char *ch = read_file(path);
 		write(fd, ch, strlen(ch));
 		line_count = linecounter(ch);

@@ -19,7 +19,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#include <sys/stat.h>
 #include "wama.h"
 #include "reader.h"
  
@@ -35,14 +34,10 @@ int read_wama_file()
 		strcat(dev_path, path);
 		strcpy(path, dev_path);
 	}
-	struct stat st;
-	if ((stat(path, &st)) < 0) {
-		return -1;
-	}
 	FILE *file;
 	file = fopen(path, "r");
 	char data[4];
-	int file_size = st.st_size;
+	int file_size = get_size(path);
 	printf("\n\n");
 	int linecount = 0;
 	char key = 's';

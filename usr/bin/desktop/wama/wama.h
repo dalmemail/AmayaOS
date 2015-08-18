@@ -40,4 +40,6 @@ char *read_file(char *path);
 
 int goto_wama_command(char *path, int line_counter);
 
+int get_size(char *path);
+
 #endif
