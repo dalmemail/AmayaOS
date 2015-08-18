@@ -22,35 +22,50 @@
 #include <unistd.h>
 #include "copy.h"
 
+int f_size(char *path)
+{
+	struct stat st;
+	int ssize;
+	if ((stat(path, &st)) < 0) {
+		ssize = -1;
+	}
+	else {
+		ssize = st.st_size;
+	}
+	return ssize;
+}
+
 int copy_file(char *originalpath, char *destination)
 {
 	int ret = EXIT_SUCCESS;
 	/* the file 'originalpath' */
-	FILE *file1;
+	int read_fd;
 	/* the file 'destination' */
-	int fd;
-	/* buffer to save originalpath's contains */
-	char buffer[2048];
-	/* number of bytes read */
-	int n_bytes = 0;
-	/* open origin file to read it */
-	file1 = fopen(originalpath, "r");
+	int write_fd;
 	/* make the file 'destination' */
-	touch(destination, S_IWUSR | S_IRUSR);
+	if ((touch(destination, S_IWUSR | S_IRUSR)) < 0) {
+		printf("Error al crear '%s': %s\n", destination, strerror(errno));
+		ret = errno;
+	}
 	/* open destination to write */
-	if ((fd = open(destination, O_WRONLY)) < 0) {
+	else if ((write_fd = open(destination, O_WRONLY)) < 0) {
 		printf("Error al abrir '%s': %s\n", destination, strerror(errno));
 		ret = errno;
 	}
-	else {
-		/* read file1 data */
-		n_bytes = fread(buffer, 1, sizeof(buffer), file1);
-		/* write file1 data to fd */
-		write(fd, buffer, n_bytes);
+	else if ((read_fd = open(originalpath, O_RDONLY)) >= 0) {
+		int fsize = f_size(originalpath);
+		char *data = new char [fsize];
+		read(read_fd, data, fsize);
+		write(write_fd, data, fsize);
+		delete data;
 	}
-	/* close file1 and fd */
-	fclose(file1);
-	close(fd);
+	else {
+		printf("Error al abrir '%s': %s\n", originalpath, strerror(errno));
+		ret = errno;
+	}
+	/* close read_fd and write_fd */
+	close(read_fd);
+	close(write_fd);
 	/* all OK */
 	return ret;
 }
