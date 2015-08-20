@@ -22,19 +22,6 @@
 #include <unistd.h>
 #include "copy.h"
 
-int f_size(char *path)
-{
-	struct stat st;
-	int ssize;
-	if ((stat(path, &st)) < 0) {
-		ssize = -1;
-	}
-	else {
-		ssize = st.st_size;
-	}
-	return ssize;
-}
-
 int copy_file(char *originalpath, char *destination)
 {
 	int ret = EXIT_SUCCESS;
@@ -42,8 +29,14 @@ int copy_file(char *originalpath, char *destination)
 	int read_fd;
 	/* the file 'destination' */
 	int write_fd;
+	/* get file information */
+	struct stat st;
+	if ((stat(originalpath, &st)) < 0) {
+		printf("Error al leer '%s': %s\n", originalpath, strerror(errno));
+		ret = errno;
+	}
 	/* make the file 'destination' */
-	if ((touch(destination, S_IWUSR | S_IRUSR)) < 0) {
+	else if ((touch(destination, S_IRUSR | S_IWUSR)) < 0) {
 		printf("Error al crear '%s': %s\n", destination, strerror(errno));
 		ret = errno;
 	}
@@ -53,7 +46,7 @@ int copy_file(char *originalpath, char *destination)
 		ret = errno;
 	}
 	else if ((read_fd = open(originalpath, O_RDONLY)) >= 0) {
-		int fsize = f_size(originalpath);
+		int fsize = st.st_size;
 		char *data = new char [fsize];
 		read(read_fd, data, fsize);
 		write(write_fd, data, fsize);

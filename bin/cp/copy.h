@@ -15,9 +15,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* f_size() returns the size of file 'path' */
-int f_size(char *path);
-
 /* copyfile() copies the file 'origen'
  * to the file 'destino'
  */
