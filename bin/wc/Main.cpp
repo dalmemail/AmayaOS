@@ -71,11 +71,12 @@ int main(int argc, char **argv)
 	for (int i=1; i < argc; i++) {
 		if (strcmp(argv[i], "-c") != 0 && strcmp(argv[i], "-w") != 0 && strcmp(argv[i], "-l") != 0) {
 			char *ch = new char [f_size(argv[i])];
-			if ((fd = open(argv[i], O_WRONLY)) < 0) {
+			if ((fd = open(argv[i], O_RDONLY)) < 0) {
 				printf("Error al abrir '%s': %s\n", argv[i], strerror(errno));
 			}
 			else {
 				read(fd, ch, f_size(argv[i]));
+				close(fd);
 				if (l == YES) {
 					nl = linecount(ch);
 					sl += nl;
