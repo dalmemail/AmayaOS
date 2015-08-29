@@ -41,7 +41,7 @@ int main(int argc, char **argv)
 		int i = 2;
 		do {
 			result = calculator(result, argv[i][0], atoi(argv[i+1]));
-		} while((i += 2) < argc);
+		} while((i += 2)+1 < argc);
 	}
 	return ret;
 }
