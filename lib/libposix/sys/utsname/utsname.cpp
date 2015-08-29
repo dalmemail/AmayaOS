@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Niek Linnenbank, 2012 Felipe Cabrera, 2014 Daniel Martin
+ * Copyright (C) 2009 Niek Linnenbank, 2012 Felipe Cabrera, 2015 Dan Rulos
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,7 +26,7 @@ int uname(struct utsname *name)
     gethostname(host, sizeof(host));
     
     /* Fill in the struct. */
-    strlcpy(name->sysname, "FreeNOS", UTSBUF);
+    strlcpy(name->sysname, "AmayaOS", UTSBUF);
     strlcpy(name->nodename, host, UTSBUF);
     strlcpy(name->release,  RELEASE, UTSBUF);
     strlcpy(name->version,  COMPILER " " DATETIME, UTSBUF);
