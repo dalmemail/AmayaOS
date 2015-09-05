@@ -1,11 +1,14 @@
-# Bulids objects a pre-compiled files
+# Bulids objects and pre-compiled files
 *.o
 *.a
 *.pyc
+*.gz
+*.iso
 
 # Cache
 .sconf_temp
 .sconsign.dblite
+config.log
 
 # Include compiled
 include/Version.h
@@ -15,9 +18,8 @@ include/Fnx
 # Build Files
 kernel/kernel
 boot/boot.*
-config.log
 
-# Bin Build Files
+# /bin Build Files
 bin/bench/bench
 bin/cat/cat
 bin/echo/echo
@@ -32,9 +34,19 @@ bin/pwd/pwd
 bin/sh/sh
 bin/sleep/sleep
 bin/stat/stat
+bin/uname/uname
+bin/parse/parse
 
+# /sbin Build Files
+sbin/img/img
+sbin/init/init
+sbin/reboot/reboot
+sbin/shutdown/shutdown
 
-
-
+# /srv Build Files
+server
+dump
+create
+detect
 
 host/
