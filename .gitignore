@@ -1,6 +1,7 @@
 *.o
 *.a
 *.pyc
+kernel
 include/Version.h
 config.log
 .sconf_temp
