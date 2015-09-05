@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Felipe Cabrera
+ * Copyright (C) 2015 Dan Rulos [amaya@amayaos.com]
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,30 +15,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <TerminalCodes.h>
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <files.h>
-#include <debug.h>
+#ifndef WRITTEN_H
+#define WRITTEN_H
 
-using namespace debug;
+/* returns -1 in error case */
+int wama_file(int mode);
 
-int main(int argc, char **argv)
-{
-    out() << "Hola Mundo" << endl;
-    error() << "Este es un mensaje de error" << endl;
-    
-    char *s;
-    puts("[Probando gets()...]");
-    printf("Escriba texto aleatorio: ");
-    gets_s(s, 1024);
-    out() << s << endl;
-    
-    puts("[Probando getchar()...]");
-    puts("Presione una tecla para salir...");
-    getchar();
-
-    return EXIT_SUCCESS;
-}
+#endif

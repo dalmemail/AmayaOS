@@ -25,10 +25,10 @@
 
 int mkfile(char *prog, char *path)
 {
-	char *final_path;
+	int ret = EXIT_SUCCESS;
+	char final_path[128];
 	/* if there isn't a path */
 	if (path[0] != '/') {
-		final_path = new char [128];
 		getcwd(final_path, sizeof(final_path));
 		if ((strcmp(final_path, "/")) != 0) {
 			strcat(final_path, "/");
@@ -36,16 +36,14 @@ int mkfile(char *prog, char *path)
 		strcat(final_path, path);
 	}
 	else {
-		final_path = new char [strlen(path)];
 		strcpy(final_path, path);
 	}
 	if ((touch(final_path, S_IRUSR | S_IWUSR)) < 0) {
 		printf("%s: error al abrir '%s': %s\r\n",
                 prog, path, strerror(errno));
-		return EXIT_FAILURE;
+		ret = EXIT_FAILURE;
 	}
-	delete final_path;
-	return EXIT_SUCCESS;
+	return ret;
 }
 
 int main(int argc, char **argv)
@@ -53,7 +51,7 @@ int main(int argc, char **argv)
 	int i, ret, result = EXIT_SUCCESS;
 	if (argc < 2) {
 		printf("uso: %s FILE1 FILE2 ...\n", argv[0]);
-		return EXIT_SUCCESS;
+		result = EXIT_SUCCESS;
 	}
 	for (i = 1; i < argc; i++) {
 		ret = mkfile(argv[0], argv[i]);

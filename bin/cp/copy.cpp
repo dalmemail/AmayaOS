@@ -24,33 +24,41 @@
 
 int copy_file(char *originalpath, char *destination)
 {
+	int ret = EXIT_SUCCESS;
 	/* the file 'originalpath' */
-	FILE *file1;
+	int read_fd;
 	/* the file 'destination' */
-	int fd;
-	/* buffer to save originalpath's contains */
-	char buffer[2048];
-	/* number of bytes read */
-	int n_bytes = 0;
-	/* open origin file to read it */
-	if ((file1 = fopen(originalpath, "r")) == NULL) {
-		printf("El archivo de origen '%s' no existe\n", originalpath);
-		return EXIT_FAILURE;
+	int write_fd;
+	/* get file information */
+	struct stat st;
+	if ((stat(originalpath, &st)) < 0) {
+		printf("Error al leer '%s': %s\n", originalpath, strerror(errno));
+		ret = errno;
 	}
 	/* make the file 'destination' */
-	touch(destination, S_IWUSR | S_IRUSR);
-	/* open destination to write */
-	if ((fd = open(destination, O_WRONLY)) < 0) {
-		printf("Error al abrir '%s': %s\n", destination, strerror(errno));
-		return errno;
+	else if ((touch(destination, S_IRUSR | S_IWUSR)) < 0) {
+		printf("Error al crear '%s': %s\n", destination, strerror(errno));
+		ret = errno;
 	}
-	/* read file1 data */
-	n_bytes = fread(buffer, 1, sizeof(buffer), file1);
-	/* write file1 data to fd */
-	write(fd, buffer, n_bytes);
-	/* close file1 and fd */
-	fclose(file1);
-	close(fd);
+	/* open destination to write */
+	else if ((write_fd = open(destination, O_WRONLY)) < 0) {
+		printf("Error al abrir '%s': %s\n", destination, strerror(errno));
+		ret = errno;
+	}
+	else if ((read_fd = open(originalpath, O_RDONLY)) >= 0) {
+		int fsize = st.st_size;
+		char *data = new char [fsize];
+		read(read_fd, data, fsize);
+		write(write_fd, data, fsize);
+		delete data;
+	}
+	else {
+		printf("Error al abrir '%s': %s\n", originalpath, strerror(errno));
+		ret = errno;
+	}
+	/* close read_fd and write_fd */
+	close(read_fd);
+	close(write_fd);
 	/* all OK */
-	return EXIT_SUCCESS;
+	return ret;
 }

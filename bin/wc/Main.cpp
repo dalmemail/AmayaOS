@@ -17,8 +17,9 @@
 
 #include <stdio.h>
 #include <string.h>
-#include <files.h>
+#include <unistd.h>
 #include <stdlib.h>
+#include <sys/stat.h>
 #include "wordcount.h"
 #include "linecount.h"
 #include "charcount.h"
@@ -26,8 +27,22 @@
 #define YES 1
 #define NO 0
 
+int f_size(char *path)
+{
+	struct stat st;
+	int ssize;
+	if ((stat(path, &st)) < 0) {
+		ssize = -1;
+	}
+	else {
+		ssize = st.st_size;
+	}
+	return ssize;
+}
+
 int main(int argc, char **argv)
 {
+	int fd;
 	int c,l,w = NO;
 	if (argc < 2) {
 		printf("Uso: %s FILE1 FILE2...\n", argv[0]);
@@ -55,27 +70,31 @@ int main(int argc, char **argv)
 	int nc = 0, nl = 0, nw = 0, sw = 0, sl = 0, sc = 0;
 	for (int i=1; i < argc; i++) {
 		if (strcmp(argv[i], "-c") != 0 && strcmp(argv[i], "-w") != 0 && strcmp(argv[i], "-l") != 0) {
-			file *f = new file();
-			f->setpath(argv[i]);
-			f->f_open(O_RDONLY);
-			char *ch = f->readAll();
-			f->f_close();
-			if (l == YES) {
-				nl = linecount(ch);
-				sl = sl + nl;
-				printf("\t%d", nl);
+			char *ch = new char [f_size(argv[i])];
+			if ((fd = open(argv[i], O_RDONLY)) < 0) {
+				printf("Error al abrir '%s': %s\n", argv[i], strerror(errno));
 			}
-			if (w == YES) {
-				nw = wordcount(ch);
-				sw = sw + nw;
-				printf("\t%d", nw);
+			else {
+				read(fd, ch, f_size(argv[i]));
+				close(fd);
+				if (l == YES) {
+					nl = linecount(ch);
+					sl += nl;
+					printf("\t%d", nl);
+				}
+				if (w == YES) {
+					nw = wordcount(ch);
+					sw += nw;
+					printf("\t%d", nw);
+				}
+				if (c == YES) {
+					nc = charcount(ch);
+					sc += nc;
+					printf("\t%d", nc);
+				}
+				printf("\t%s\n", argv[i]);
 			}
-			if (c == YES) {
-				nc = charcount(ch);
-				sc = sc + nc;
-				printf("\t%d", nc);
-			}
-			printf("\t%s\n", argv[i]);
+			delete ch;
 		}
 	}
 	if (argc - nofiles > 2) {

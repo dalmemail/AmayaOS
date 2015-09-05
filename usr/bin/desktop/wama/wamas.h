@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2015 Alvaro Stagg. [alvarostagg@openmailbox.org]
- *
+ * Copyright (C) 2015 Dan Rulos [amaya@amayaos.com]
+ * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -15,9 +15,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _AVIM_VERSION_H
-#define _AVIM_VERSION_H
+#ifndef WAMAS_H
+#define WAMAS_H
 
-#define VERSION "0.1.4a"
+/* main function of wa+ */
+void wama();
 
 #endif

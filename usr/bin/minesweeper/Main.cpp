@@ -18,29 +18,16 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <files.h>
 #include "minesweeper.h"
 #include "minesweeper_colors.h"
 
-/* genera un numero aleatorio menor de max utilizando un seeder */
-int random(int max, int seeder)
+int random(int seeder)
 {
-	if (seeder > 10) {
-		seeder = seeder / 2;
+	int random_n = (getTime()%10) + ((getTime()%100)*10);
+	while (random_n > 8) {
+		random_n = random_n / seeder;
 	}
-	if (seeder < 1) {
-		seeder = getTime() % 10;
-	}
-	int n = getTime();
-	for (int i=0; i < seeder; i++) {
-		n = n / 10;
-	}
-	n = n % 10;
-	if (n >= max) {
-		n--;
-	}
-
-	return n;
+	return random_n;
 }
 
 #define COLUMNAS 9
@@ -53,8 +40,10 @@ int random(int max, int seeder)
 #define ESTADO_GANADOR  1
 #define ESTADO_EN_JUEGO 2
 
-#define VERSION "0.1.5"
-#define BUILD 10
+#define VERSION "0.1.8"
+#define BUILD 13
+
+#define MAX_BOMBAS 40
 
 int campo[FILAS][COLUMNAS];
 bool jugadas[FILAS][COLUMNAS];
@@ -82,28 +71,28 @@ void iniciaArr(){
     }
 }
 
-int agregaBombas(/*int nbombas*/){
+int agregaBombas(){
     int i,x,y;// contador de bombas
-    printf(YELLOW "Numero de bombas: ");
-    int nbombas = getnum();
-    int seeder = 0;
-    printf(RED "%d\n", nbombas);
-    x = random(FILAS, 1);
-    y = random(COLUMNAS, 2);
+    char n_bombas[4];
+    int nbombas = 0;
+    do {
+	printf(YELLOW "Numero de bombas: ");
+	gets_s(n_bombas, 4);
+	nbombas = atoi(n_bombas);
+    } while(nbombas > MAX_BOMBAS);
+    int seeder = 2;
     for (i = 1; i <= nbombas; i++) {
-	campo[x][y] = BOMBA;
-	x = random(FILAS, i+1+seeder);
-	y = random(FILAS, i+4+seeder);
-	for (int x2 = 0, p = 0; x2 < 9; x2++) {
-		for (int y2 = 0; y2 < 9; y2++) {
-			if (campo[x2][y2] == BOMBA) {
-				p++;
-			}
-		}
-		if (p < i && x2 == 8) {
-			seeder++;
-			i--;
-		}
+	x = random(seeder);
+	y = random(i+seeder);
+	if (campo[x][y] != BOMBA) {
+		campo[x][y] = BOMBA;
+	}
+	else {
+		i--;
+	}
+	seeder = seeder + (getTime()%10);
+	if (seeder > 30) {
+		seeder = 2;
 	}
     }
     return nbombas;
@@ -233,24 +222,12 @@ void aboutMe(){
 }
 
 void iniciarJuego(){
-    /*int nbombas = -1;
-    while( nbombas < 0 || nbombas > 70 ){
-        printf("Numero de bombas: ");
-	nbombas = getnum();
-	printf("%d\n", nbombas);
-    }*/
 
     int x,y;
     estado = ESTADO_EN_JUEGO;
     njugadas = 0;
     iniciaArr();
 
-    //PID es un identificador de procesos, cada vez
-    // que un nuevo proceso se ejectua se le asigna un PID
-    // diferente - Se necesita libreria - unistd.h
-    //srand( getpid() );
-    //srand ( time(NULL) );
-    //agregaBombas( nbombas );
     int nbombas = agregaBombas();
     establecerNumeros();
     int starttime = getTime();

@@ -16,6 +16,7 @@
  */
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include "find.h"
 
@@ -24,7 +25,7 @@ int main(int argc, char **argv)
 	int ret;
 	if (argc < 4) {
 		printf("%s: path -name file\n", argv[0]);
-		return -1;
+		ret = EXIT_FAILURE;
 	}
 	else {
 		if ((strcmp(argv[2], "-name")) == 0) {
@@ -32,7 +33,7 @@ int main(int argc, char **argv)
 		}
 		else {
 			printf("%s: command not found\n", argv[2]);
-			return -1;
+			ret = EXIT_FAILURE;
 		}
 	}
 	return ret;

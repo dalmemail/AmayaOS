@@ -26,7 +26,5 @@
 
 struct avim_command_tag;
 int avim_command_execute(char* c_cmd);
-//int create_file_and_edit;
-//int create_file_and_edit_at_end;
 
 #endif

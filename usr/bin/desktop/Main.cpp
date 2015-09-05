@@ -23,7 +23,7 @@
 #include <MemoryMessage.h>
 #include <stdlib.h>
 #include <API/PrivExec.h>
-#include "wama/wamas.cpp"
+#include "wama/wamas.h"
 //#include "pong/pong.cpp"
 //#include "commander/commander.cpp"
 #include "AmaCALC/AmaCALC.cpp"
@@ -283,15 +283,15 @@ void memoria()
     int a=mem.bytes / 1024;
     char a2[25];
     itoa(a2, 10, a);
-    vga[297] = VGA_CHAR(a2[0], BLACK, GREEN);
-    vga[298] = VGA_CHAR(a2[1], BLACK, GREEN);
-    vga[299] = VGA_CHAR(a2[2], BLACK, GREEN);
-    vga[300] = VGA_CHAR(a2[3], BLACK, GREEN);
-    vga[301] = VGA_CHAR(a2[4], BLACK, GREEN);
-    vga[302] = VGA_CHAR(a2[5], BLACK, GREEN);
-    vga[303] = VGA_CHAR(a2[6], BLACK, GREEN);
-    vga[304] = VGA_CHAR(a2[7], BLACK, GREEN);
-    vga[305] = VGA_CHAR(a2[8], BLACK, GREEN);
+    for (int i=0; i+297 < 306; i++) {
+	if (a2[i] == '0' ||a2[i] == '1' ||a2[i] == '2' ||a2[i] == '3' ||a2[i] == '4' ||a2[i] == '5' ||a2[i] == '6'
+	    ||a2[i] == '7' ||a2[i] == '8' ||a2[i] == '9') {
+    		vga[297+i] = VGA_CHAR(a2[i], BLACK, GREEN);
+	}
+	else {
+		vga[297+i] = VGA_CHAR(' ', GREEN, GREEN);
+	}
+    }
     vga[306] = VGA_CHAR('K', BLACK, GREEN);
     vga[307] = VGA_CHAR('i', BLACK, GREEN);
     vga[308] = VGA_CHAR('B', BLACK, GREEN);
@@ -312,15 +312,15 @@ void memoria()
     int b=mem.free / 1024;
     char b2[25];
     itoa(b2, 10, b);
-    vga[381] = VGA_CHAR(b2[0], BLACK, GREEN);
-    vga[382] = VGA_CHAR(b2[1], BLACK, GREEN);
-    vga[383] = VGA_CHAR(b2[2], BLACK, GREEN);
-    vga[384] = VGA_CHAR(b2[3], BLACK, GREEN);
-    vga[385] = VGA_CHAR(b2[4], BLACK, GREEN);
-    vga[386] = VGA_CHAR(b2[5], BLACK, GREEN);
-    vga[387] = VGA_CHAR(b2[6], BLACK, GREEN);
-    vga[388] = VGA_CHAR(b2[7], BLACK, GREEN);
-    vga[389] = VGA_CHAR(b2[8], BLACK, GREEN);
+    for (int i=0; i+381 < 390; i++) {
+	if (b2[i] == '0' ||b2[i] == '1' ||b2[i] == '2' ||b2[i] == '3' ||b2[i] == '4' ||b2[i] == '5' ||b2[i] == '6'
+	    ||b2[i] == '7' ||b2[i] == '8' ||b2[i] == '9') {
+    		vga[381+i] = VGA_CHAR(b2[i], BLACK, GREEN);
+	}
+	else {
+		vga[381+i] = VGA_CHAR(' ', GREEN, GREEN);
+	}
+    }
     vga[390] = VGA_CHAR('K', BLACK, GREEN);
     vga[391] = VGA_CHAR('i', BLACK, GREEN);
     vga[392] = VGA_CHAR('B', BLACK, GREEN);
@@ -338,15 +338,15 @@ void memoria()
     int c=(mem.bytes - mem.free) / 1024;
     char c2[25];
     itoa(c2, 10, c);
-    vga[458] = VGA_CHAR(c2[0], BLACK, GREEN);
-    vga[459] = VGA_CHAR(c2[1], BLACK, GREEN);
-    vga[460] = VGA_CHAR(c2[2], BLACK, GREEN);
-    vga[461] = VGA_CHAR(c2[3], BLACK, GREEN);
-    vga[462] = VGA_CHAR(c2[4], BLACK, GREEN);
-    vga[463] = VGA_CHAR(c2[5], BLACK, GREEN);
-    vga[464] = VGA_CHAR(c2[6], BLACK, GREEN);
-    vga[465] = VGA_CHAR(c2[7], BLACK, GREEN);
-    vga[466] = VGA_CHAR(c2[8], BLACK, GREEN);
+    for (int i=0; i+458 < 467; i++) {
+	if (c2[i] == '0' ||c2[i] == '1' ||c2[i] == '2' ||c2[i] == '3' ||c2[i] == '4' ||c2[i] == '5' ||c2[i] == '6'
+	    ||c2[i] == '7' ||c2[i] == '8' ||c2[i] == '9') {
+    		vga[458+i] = VGA_CHAR(c2[i], BLACK, GREEN);
+	}
+	else {
+		vga[458+i] = VGA_CHAR(' ', GREEN, GREEN);
+	}
+    }
     vga[467] = VGA_CHAR('K', BLACK, GREEN);
     vga[468] = VGA_CHAR('i', BLACK, GREEN);
     vga[469] = VGA_CHAR('B', BLACK, GREEN);

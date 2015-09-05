@@ -76,7 +76,6 @@ void read_csv(char *path)
 	}
 	/* Numero de barra lateral */
 	int izq=1;
-	int p = 1;
 	char *letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	printf("  ");
 	for (int i = 0; i < n_letters; i++) {
@@ -119,7 +118,11 @@ int new_csv(char *path)
 	/* Limpiamos la pantalla */
 	clean_csv();
 	/* Creamos el archivo deseado */
-	touch(path, S_IWUSR | S_IRUSR);
+	if ((touch(path, S_IWUSR | S_IRUSR)) < 0 ) {
+		printf("Error al crear el archivo '%s': %s\r\n",
+		path, strerror(errno));
+		return errno;
+	}
 	/* Abrimos el archivo */
 	int fd;
 	if ((fd = open(path, O_WRONLY)) < 0) {
@@ -127,100 +130,60 @@ int new_csv(char *path)
 		path, strerror(errno));
 		return errno;
 	}
-	int md = 0;
+	int n_letters = 0;
+	int read_point = 0;
+	int data[6][48];
 	/* Interfaz */
 	printf("  A  	B 	C 	D 	E	F\r\n");
 	int izq=1;
+	int old_izq = izq;
 	printf("%d ", izq);
 	do {
+		old_izq = izq;
+		if (izq >= 48) {
+			ama_calc();
+		}
 		for (int w=0; w < 128; w++) {
 			line[w] = '\0';
 			l[w] = '\0';
 		}
 		get_input_csv(line, 128);
-		/* Con 'zzz' llevamos la contabilidad de las letras */
-		int zzz=0;
-		int a[128];
-		int b[128];
-		int c[128];
-		int d[128];
-		int e[128];
-		int f[128];
 		if (strcmp(line, "#exit#") != 0 && line[0] != '=' && line[strlen(line)-1] != '\n' && numberyn(line[0]) == 1) {
-			write(fd, "\"", 1);
-			write(fd, line, strlen(line));
-			write(fd, "\"", 1);
-			write(fd, ";", 1);
+			writter_csv(line, fd, 1);
 		}
 		if (strcmp(line, "#exit#") != 0 && line[0] != '=' && numberyn(line[0]) == 0) {
 			if (line[strlen(line)-1] == '\n') {
 				for (int i=0; line[i] != '\n'; i++) {
 					l[i] = line[i];
 				}
-				write(fd, l, strlen(l));
-				write(fd, ";", 1);
+				writter_csv(l, fd, 0);
 			}
 			else {
-				write(fd, line, strlen(line));
-				write(fd, ";", 1);
+				writter_csv(line, fd, 0);
 	  		}
 			char *contenido = reader_csv(path);
-			int z=0;
-			/* obtenemos la linea */
-			for (int p=0; p < (izq - 1); z++) {
-				if (contenido[z] == '\n') {
-					p++;
-				}
-			} 
+			/* obtenemos el punto de lectura */
+			read_point = get_point(contenido, izq);
 			/* obtenemos la letra */
-			for (zzz=0; contenido[z] != '\n'; z++) {
-				if (contenido[z] == ';') {
-					zzz++;
-				}
-			}
-			md = zzz;
-			zzz--;
+			n_letters = get_letter(contenido, read_point);
 			/* Guardamos el dato en el vector */
-			switch (zzz) {
-				case 0:
-					a[izq] = atoi(line);
-					break;
-				case 1:
-					b[izq] = atoi(line);
-					break;
-				case 2:
-					c[izq] = atoi(line);
-					break;
-				case 3:
-					d[izq] = atoi(line);
-					break;
-				case 4:
-					e[izq] = atoi(line);
-					break;
-				case 5:
-					f[izq] = atoi(line);
-				break;
-			}
+			data[n_letters][izq] = atoi(line);
 		}
 		if (line[strlen(line)-1] == '\n' && strcmp(line, "#exit#\n") != 0 && numberyn(line[0]) == 1 && line[0] != '=') {
 			for (int i=0; line[i] != '\n'; i++) {
 				l[i] = line[i];
 			}
 			izq++;
-			write(fd, "\"", 1);
-			write(fd, l, strlen(l));
-			write(fd, "\"", 1);
-			write(fd, ";", 1);
-			write(fd, "\n", 1);
+			writter_csv(l, fd, 2);
 			printf("%d ", izq);
 		}
 		if (line[strlen(line)-1] == '\n' && strcmp(line, "#exit#\n") != 0 && numberyn(line[0]) == 0 && line[0] != '=') {
-			zzz=0;
+			n_letters = 0;
 			izq++;
 			write(fd, "\n", 1);
 			printf("%d ", izq);
 		}
-		if (line[0] == '=') {
+		if (line[0] == '=' && checkCommand(line) == 0) {
 			if (numberyn(line[5]) == 1) {
 				/* Aquí irán las letras de las celdas */
 				char letter_1 = line[5];
@@ -248,90 +211,33 @@ int new_csv(char *path)
 		}
 		numero_c1 = atoi(n_1);
 		numero_c2 = atoi(n_2);
-		int s1;
-		int s2;
-		switch (letter_1) {
-			case 'A':
-				s1 = a[numero_c1];
-		  		break;
-			case 'B':
-				s1 = b[numero_c1];
-		  		break;
-			case 'C':
-				s1 = c[numero_c1];
-				break;
-			case 'D':
-				s1 = d[numero_c1];
-		  		break;
-		  	case 'E':
-				s1 = e[numero_c1];
-		  		break;
-		  	case 'F':
-				s1 = f[numero_c1];
-		  		break;
-		}
-		switch (letter_2) {
-		  	case 'A':
-				s2 = a[numero_c2];
-		  		break;
-		  	case 'B':
-				s2 = b[numero_c2];
-		  		break;
-		  	case 'C':
-				s2 = c[numero_c2];
-		  		break;
-		  	case 'D':
-				s2 = d[numero_c2];
-		  		break;
-		  	case 'E':
-				s2 = e[numero_c2];
-		  	break;
-		  	case 'F':
-				s2 = f[numero_c2];
-		  	break;
-		}
-		int res;
+		int l1 = get_letter_num(letter_1);
+		int l2 = get_letter_num(letter_2);
+		int res = 0;
 		if (line[1] == 'S' && line[2] == 'U' && line[3] == 'M') {
-		  res = s1 + s2;
+		  res = data[l1][numero_c1] + data[l2][numero_c2];
 		}
 		if (line[1] == 'R' && line[2] == 'E' && line[3] == 'S') {
-		  res = s1 - s2;
+		  res = data[l1][numero_c1] - data[l2][numero_c2];
 		}
 		if (line[1] == 'M' && line[2] == 'U' && line[3] == 'L') {
-		  res = s1 * s2;
+		  res = data[l1][numero_c1] * data[l2][numero_c2];
 		}
 		if (line[1] == 'D' && line[2] == 'I' && line[3] == 'V') {
-		  res = s1 / s2;
+		  res = data[l1][numero_c1] / data[l2][numero_c2];
 		}
 		char *resultado;
 		itoa(resultado, 10, res);
-		write(fd, resultado, strlen(resultado));
-		write(fd, ";", 1);
-		switch (md) {
-			case 0:
-				a[izq] = res;
-				break;
-			case 1:
-				b[izq] = res;
-				break;
-			case 2:
-				c[izq] = res;
-				break;
-			case 3:
-				d[izq] = res;
-				break;
-			case 4:
-				e[izq] = res;
-				break;
-			case 5:
-				f[izq] = res;
-			break;
-		}
-		if (line[strlen(line)-1] == '\n') {
+		writter_csv(resultado, fd, 0);
+		print_line(line, resultado);
+		if (line[strlen(line)-1] == '?') {
 			write(fd, "\n", 1);
 			izq++;
-			printf("%d ", izq);
+			printf("\n%d ", izq);
 		}
+		read_point = get_point(reader_csv(path), old_izq);
+		n_letters = get_letter(reader_csv(path), read_point);
+		data[n_letters][old_izq] = res;
 	  }
 	}
      } while(strcmp(line, "#exit#") != 0 && strcmp(line, "#exit#\n") != 0);
@@ -344,7 +250,7 @@ void ama_calc()
 	clean_csv();
 	char command[128];
 	char path[128];
-	printf("Welcome to Amacalc v0.3.4\n");
+	printf("Welcome to Amacalc v%s\n", AMACALC_V);
 	printf("Available commands:\n");
 	printf("open --> Open an existant calculation sheet\n");
 	printf("new --> Create a new calculation sheet\n");

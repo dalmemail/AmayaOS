@@ -52,9 +52,8 @@ int sudoku(int mode)
 			if (numbers[i] == 0) {
 				printf("Introduce el valor a la X%d: ", i+1);
 				numbers[i] = getnum();
-				if (numbers[i] == 0) {
+				if (numbers[i] > 4 || numbers[i] == 0) {
 					numbers[i] = 1;
-					i--;
 				}
 				/* if you press return key */
 				if (numbers[i] == -1) {
@@ -63,7 +62,7 @@ int sudoku(int mode)
 					 */
 					numbers[i] = 0;
 					i--;
-					if (numbers[i] != numbers_def[i]) {
+					if (numbers[i] != numbers_def[i] && i > 0) {
 						numbers[i] = 0;
 						i--;
 					}
@@ -81,25 +80,35 @@ int sudoku(int mode)
 			p++;
 		}
 		for(int i = 0, k = 0; i < 4; i++) {
+			int action = 0;
 			for(int j = 0; j < 4; j++) {
 				subregions[i][j] = numbers[k];
-				k++;
+				if ((k+1) % 2 == 0) {
+					if ((k+1) == 8) {
+						k = 5;
+						action = 0;
+					}
+					if (action == 0) {
+						k += 3;
+						action++;
+					}
+					else {
+						k -= 3;
+						action--;
+					}
+				}
+				else {
+					k++;
+				}
 			}
 		}
 		int gamestate = WIN;
 		/* check rows and columns */
 		for (int i = 0, k = 0; k < 4; i++) {
-			if (sudoku4x4[k][i] == sudoku4x4[k][0] && i != 0) {
-				gamestate = LOST;
-			}
-			if (sudoku4x4[k][i] == sudoku4x4[k][1] && i != 1) {
-				gamestate = LOST;
-			}
-			if (sudoku4x4[k][i] == sudoku4x4[k][2] && i != 2) {
-				gamestate = LOST;
-			}
-			if (sudoku4x4[k][i] == sudoku4x4[k][3] && i != 3) {
-				gamestate = LOST;
+			for (int x = 0; x < 4; x++) {
+				if (sudoku4x4[k][i] == sudoku4x4[k][x] && i != x) {
+					gamestate = LOST;
+				}
 			}
 			if ((i+1) % 4 == 0) {
 				k++;
@@ -107,17 +116,10 @@ int sudoku(int mode)
 			}
 		}
 		for (int i = 0, k = 0; i < 4; k++) {
-			if (sudoku4x4[k][i] == sudoku4x4[0][i] && k != 0) {
-				gamestate = LOST;
-			}
-			if (sudoku4x4[k][i] == sudoku4x4[1][i] && k != 1) {
-				gamestate = LOST;
-			}
-			if (sudoku4x4[k][i] == sudoku4x4[2][i] && k != 2) {
-				gamestate = LOST;
-			}
-			if (sudoku4x4[k][i] == sudoku4x4[3][i] && k != 3) {
-				gamestate = LOST;
+			for (int x = 0; x < 4; x++) {
+				if (sudoku4x4[k][i] == sudoku4x4[x][i] && k != x) {
+					gamestate = LOST;
+				}
 			}
 			if ((k+1) % 4 == 0) {
 				i++;
@@ -126,19 +128,12 @@ int sudoku(int mode)
 		}
 		/* check subregions */
 		for (int i = 0, k = 0; k < 4; i++) {
-			if (subregions[k][i] == subregions[k][0] && i != 0) {
-				gamestate = LOST;
+			for (int x = 0; x < 4; x++) {
+				if (subregions[k][i] == subregions[k][x] && i != x) {
+					gamestate = LOST;
+				}
 			}
-			if (subregions[k][i] == subregions[k][1] && i != 1) {
-				gamestate = LOST;
-			}
-			if (subregions[k][i] == subregions[k][2] && i != 2) {
-				gamestate = LOST;
-			}
-			if (subregions[k][i] == subregions[k][3] && i != 3) {
-				gamestate = LOST;
-			}
-			if ((i+1) % 4 == 0) {
+			if (i+1 == 4) {
 				k++;
 				i = -1;
 			}
@@ -146,11 +141,10 @@ int sudoku(int mode)
 		if (gamestate == WIN && mode < 2) {
 			printf("Nivel %d COMPLETADO\n", level);
 			do {
-				printf("[N]ivel %d o [C]errar\n", level+1);
+				printf("[N]ivel %d o [C]errar\n", ++level);
 				option = getchar();
 			} while (option != 'n' && option != 'N' && option != 'c' && option != 'C');
 			n = randomnumber();
-			level++;
 		}
 		if (gamestate == LOST && mode < 2) {
 			printf("Nivel %d NO COMPLETADO\n", level);
