@@ -34,15 +34,17 @@ int read_wama_file()
 		strcat(dev_path, path);
 		strcpy(path, dev_path);
 	}
-	FILE *file;
-	file = fopen(path, "r");
+	int file = open(path, O_RDONLY);
+	if (file < 0) {
+		return file;
+	}
 	char data[4];
 	int file_size = get_size(path);
 	printf("\n\n");
 	int linecount = 0;
 	char key = 's';
 	for (int i = 0; i < file_size && key != 'n'; i++) {
-		read(file->fd, data, 1);
+		read(file, data, 1);
 		printf("%c", data[0]);
 		if (data[0] == '\n') {
 			linecount++;
@@ -61,6 +63,6 @@ int read_wama_file()
 			getchar();
 		}
 	}
-	fclose(file);
+	close(file);
 	return 0;
 }

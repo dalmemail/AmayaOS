@@ -48,7 +48,7 @@ void setwindow()
 	vga[40] = VGA_CHAR('.', BLACK, GREEN);
 	vga[41] = VGA_CHAR('5', BLACK, GREEN);
 	vga[42] = VGA_CHAR('.', BLACK, GREEN);
-	vga[43] = VGA_CHAR('1', BLACK, GREEN);
+	vga[43] = VGA_CHAR('2', BLACK, GREEN);
 }
 
 void setscreenblue()
