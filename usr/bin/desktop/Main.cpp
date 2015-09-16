@@ -38,7 +38,6 @@ void memoria();
 int main(int argc, char **argv)
 {
   while (1) {
-    char tecla;
     int i;
     u16 *vga;
     MemoryMessage mem;
@@ -82,15 +81,12 @@ int main(int argc, char **argv)
       vga[i] = VGA_CHAR(' ', BROWN, BROWN);
     }
     memoria();
-    do {
-      tecla = getchar();
-    } while (tecla != 'M'&& tecla != 'm');
-    if (tecla == 'M'|| tecla == 'm') {
-      if (menu() == -1) {
-    	char clean[] = {0x1b, 0x5b, 0x48, 0x1b, 0x5b, 0x4a, '\0'};
-    	printf("%s", clean);
-	return 0;
-      }
+    while(getchar() != 'm') {
+    }
+    if (menu() == -1) {
+      char clean[] = {0x1b, 0x5b, 0x48, 0x1b, 0x5b, 0x4a, '\0'};
+      printf("%s", clean);
+      return 0;
     }
   }
 }
