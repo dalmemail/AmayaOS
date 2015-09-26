@@ -235,7 +235,7 @@ int hangman()
 		}
 		for (int i=0; i < strlen(words[n]) && word[i] != '_'; i++) {
 			if (i == strlen(words[n])-1) {
-				error("", "             YOU WIN!", "");
+				error("             YOU", "             WIN", "");
 				intentos=0;
 				n = aleatorio();
 				if (n > 5) {
