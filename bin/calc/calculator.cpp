@@ -18,6 +18,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 #include "calculator.h"
 
 /* clean the screen */
@@ -53,26 +54,31 @@ int calculator(int num1, char operation, int num2)
 }
 
 /*convert temperatures (original from calc v0.5) */
-int temp()
+int av()
 {
 	char value = 's';
 	char input[8];
+	char exponente[8];
 	int resc = 0;
-	printf("Conversor de temperaturas\n");
+	printf("Opciones avanzadas:\n");
 	printf("[1] Celius --> Fahrenheit\n");
 	printf("[2] Fahrenheit --> Celsius\n");
 	printf("[3] Kelvin --> Celsius\n");
 	printf("[4] Kelvin --> Fahrenheit\n");
 	printf("[5] Celsius --> Kelvin\n");
 	printf("[6] Fahrenheit --> Kelvin\n");
+	printf("[7] Raices cuadradas (enteras)\n");
+	printf("[8] Potencias (enteras)\n");
 	printf("[S] Cerrar el conversor\n");
 	value = getchar();
 	clean_calc();
 	if (value == 's' || value == 'S') {
 		return 0;
 	}
-	printf("Valor a convertir: ");
-	gets_s(input, 8);
+	if (value < '7' && value > '0') {
+		printf("Valor a convertir: ");
+		gets_s(input, 8);
+	}
 	clean_calc();
 	switch(value) {
 		case '1':
@@ -102,6 +108,18 @@ int temp()
 			resc = 5 * (atoi(input)-32) / 9;
 			resc = resc + 273;
 			printf("Fahrenheit: %6d Kelvin: %6d\n", atoi(input), resc);
+			break;
+		case '7':
+			printf("Raiz de: ");
+			gets_s(input, 8);
+			printf("%d\n", sqrt(atoi(input)));
+			break;
+		case '8':
+			printf("Base: ");
+			gets_s(input, 8);
+			printf("Exponente: ");
+			gets_s(exponente, 8);
+			printf("%d\n", pow(atoi(input), atoi(exponente)));
 			break;
 	}
 	return 0;

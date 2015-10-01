@@ -29,7 +29,8 @@ void clean_calc();
  */
 int calculator(int num1, char operation, int num2);
 
-/* convert temperatures (kelvin, celsius, fahrenheit) */
-int temp();
+/* convert temperatures (kelvin, celsius, fahrenheit)
+ * and other options */
+int av();
 
 #endif

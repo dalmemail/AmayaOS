@@ -20,14 +20,14 @@
 #include <string.h>
 #include "calculator.h"
 
-#define VERSION "0.7"
+#define VERSION "0.8"
 
 /* main function */
 int main(int argc, char **argv)
 {
 	int ret = EXIT_SUCCESS;
-	if (argc == 2 && (strcmp(argv[1], "--temp")) == 0) {
-		ret = temp();
+	if (argc == 2 && (strcmp(argv[1], "--av")) == 0) {
+		ret = av();
 	}
 	else if (argc == 2 && (strcmp(argv[1], "--version")) == 0) {
 		printf("Version: %s\n", VERSION);
