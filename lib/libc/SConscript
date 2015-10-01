@@ -22,4 +22,5 @@ env.Library('libc', [ Glob('stdio/*.c' ),
 	              Glob('stdlib/*.c'),
 		      Glob('stdlib/*.cpp'),
 	    	      Glob('string/*.c'),
-		      Glob('*.c') ])
+		      Glob('*.c'),
+		      Glob('*.cpp') ])
