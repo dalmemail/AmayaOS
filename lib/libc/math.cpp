@@ -41,18 +41,6 @@ double pow(double base, double potencia)
   	return m;
 }
 
-float pow(float base, float potencia)
-{
-	float m = 1;
-
-	for (int i = 1;i <= potencia; i++)
-	{
-    		m *= base;
-  	}
-  
-  	return m;
-}
-
 int sqrt(int base)
 {
 	int c = 0, mod = 1;
@@ -62,7 +50,7 @@ int sqrt(int base)
 		return 0;
 	}
 	
-	for(int i = 0; i < 50; c += mod, i++)
+	for(int i = 0; i < base; c += mod, i++)
 	{
 		if(c * c > base)
 		{
@@ -83,7 +71,7 @@ double sqrt(double base)
 		return 0;
 	}
 	
-	for(int i = 0; i < 50; c += mod, i++)
+	for(int i = 0; i < base; c += mod, i++)
 	{
 		if(c * c > base)
 		{
@@ -94,27 +82,6 @@ double sqrt(double base)
 	
 	return c;
 	
-}
-
-float sqrt(float base)
-{
-    float c = 0, mod = 1;
-	
-	if(base <= 0)
-	{
-		return 0;
-	}
-	
-	for(int i = 0; i < 50; c += mod, i++)
-	{
-		if(c * c > base)
-		{
-			c -= mod;
-			mod /= 10;	
-		}
-	}
-	
-	return c;
 }
 
 int cbrt(int base)
@@ -159,27 +126,6 @@ double cbrt(double base)
     return c;	
 }
 
-float cbrt(float base)
-{
-    float c = 0, mod = 1;
-  
-    if(base <= 0)
-    {
-    	return 0;
-    }
-  
-    for(int i = 0; i < 50; c += mod, i++)
-    {
-    	if(c * c * c > base)
-        {
-        	c -= mod;
-            mod /= 10;
-        }
-    }
-  
-    return c;	
-}
-
 int hypot(int x, int y)
 {
   int rs;
@@ -196,22 +142,4 @@ double hypot(double x, double y)
   rs = pow(x, 2.0) + pow(y, 2.0);
 
   return rs;
-}
-
-float hypot(float x, float y)
-{
-  float rs;
-
-  rs = pow(x, 2.0) + pow(y, 2.0);
-
-  return rs;
-}
-
-unsigned short cfr = 0xACE1u;
-unsigned bit;
-
-unsigned rand()
-{
-	bit  = ((cfr >> 0) ^ (cfr >> 2) ^ (cfr >> 3) ^ (cfr >> 5) ) & 1;
-	return cfr =  (cfr >> 1) | (bit << 15);
 }

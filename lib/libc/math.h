@@ -18,27 +18,23 @@
 #ifndef AMAYAMATH_H
 #define AMAYAMATH_H
 
+/* You can get more functions at <http://wiki.amayaos.com/index.php/AmayaMath>. */
+
 #define M_PI 3.14159265358979323846 /* PI */
 #define PI   3.14159265             /* PI min */
 
 /* Funciones de potenciación */
 int pow(int base, int potencia);
 double pow(double base, double potencia);
-float pow(float base, float potencia);
 
 int sqrt(int base);
 double sqrt(double base);
-float sqrt(float base);
 
 int cbrt(int base);
 double cbrt(double base);
-float cbrt(float base);
 
 int hypot(int x, int y);
 double hypot(double x, double y);
-float hypot(float x, float y);
 /* Fin de funciones de potenciación */
-
-unsigned rand();
 
 #endif
