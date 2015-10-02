@@ -69,17 +69,12 @@ extern C void itoa(char *buffer, int divisor, int number);
  */
 extern C int atoi(const char *nptr);
 
-/** AmayaOS 2014....
- * @brief Convert a string to an "double".
- *
- * The atoi, atol, and atoll functions convert the initial portion of the string
- * pointed to by nptr to int, long int, and long long int representation,
- * respectively.
- *
- * @param nptr String pointer to convert.
- * @return The atoi, atol, and atoll functions return the converted value.
+/**
+ * @brief Convert a string to a double.
+ * @param input String pointer to convert.
+ * @return Return the converted value.
  */
-extern C int atof(const char *nptr);
+extern C double atof(char *input);
 
 /**
  * @brief Convert a string to a long integer
