@@ -56,12 +56,6 @@ int vsnprintf(char *buffer, unsigned int size, const char *fmt, va_list args)
 		    itoa(buf, 10, va_arg(args, int));
 		    ptr = buf;
 		    goto string;
-	
-		/* Double (AmayaOS */
-	        case 'f':
-		    itoa(buf, 10, va_arg(args, double));
-		    ptr = buf;
-		    goto string;
 
                 /* Long integer. */
 		case 'l':
