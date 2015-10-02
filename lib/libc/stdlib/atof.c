@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Niek Linnenbank, 2014 Dan Rulos....
+ * Copyright (C) 2015 Dan Rulos
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,8 +16,25 @@
  */
 
 #include "stdlib.h"
+#include <string.h>
 
-int atof(const char *nptr) //Making atof based on atoi.....
+double atof(char *input)
 {
-    return (double) strtol(nptr, 0, 0); //we returns a double value.....
+	double n = 0;
+	double div = 10;
+	unsigned int i;
+	for (i = 0; i < strlen(input); i++) {
+		if (input[i] >= '0' && input[i] <= '9') {
+			n *= 10;
+			n += (input[i] - '0');
+		}
+		if (input[i] == '.') {
+			i++;
+			while (i < strlen(input)) {
+				n += ((input[i++] - '0') / div);
+				div *= 10;
+			}
+		}
+	}
+	return n;
 }
