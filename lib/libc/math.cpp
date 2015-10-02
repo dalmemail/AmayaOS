@@ -50,7 +50,7 @@ int sqrt(int base)
 		return 0;
 	}
 	
-	for(int i = 0; i < base; c += mod, i++)
+	for(int i = 0; i < 50; c += mod, i++)
 	{
 		if(c * c > base)
 		{
@@ -71,7 +71,7 @@ double sqrt(double base)
 		return 0;
 	}
 	
-	for(int i = 0; i < base; c += mod, i++)
+	for(int i = 0; i < 50; c += mod, i++)
 	{
 		if(c * c > base)
 		{
