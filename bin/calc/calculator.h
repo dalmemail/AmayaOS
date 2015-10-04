@@ -18,19 +18,30 @@
 #ifndef _CALCULATOR_H
 #define _CALCULATOR_H
 
-/* clean_calc() cleans the screen */
+/**
+ * @brief Convert a double to a string.
+ * @param input Double value to convert.
+ * @param output String pointer to write.
+ * @return Nothing (void).
+ */
+void ftoa(char *output, double input);
+
+/**
+ * @brief Clean the screen.
+ */
 void clean_calc();
 
-/* calculator() does operations
- * +
- * -
- * *
- * / 
+/**
+ * @brief Do operations (+, -, *, /, %).
+ * @param num1 First Number (int).
+ * @param operation Char value to select the type of operation.
+ * @param num2 Second Number (int).
+ * @return Return the operation result.
  */
 int calculator(int num1, char operation, int num2);
 
 /* convert temperatures (kelvin, celsius, fahrenheit)
- * and other options */
+ * and other options like powers and square roots */
 int av();
 
 #endif

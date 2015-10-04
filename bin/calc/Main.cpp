@@ -20,7 +20,7 @@
 #include <string.h>
 #include "calculator.h"
 
-#define VERSION "0.8"
+#define VERSION "0.9"
 
 /* main function */
 int main(int argc, char **argv)

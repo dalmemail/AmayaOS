@@ -21,6 +21,20 @@
 #include <math.h>
 #include "calculator.h"
 
+void ftoa(char *output, double input)
+{
+	char number[8];
+	char pdecc[8];
+	int pint = input;
+	double pdec = (input - pint) * 1000000;
+	itoa(number, 10, pint);
+	strcat(number, ".");
+	pint = pdec;
+	itoa(pdecc, 10, pint);
+	strcat(number, pdecc);
+	strcpy(output, number);
+}
+
 /* clean the screen */
 void clean_calc()
 {
@@ -45,6 +59,9 @@ int calculator(int num1, char operation, int num2)
 		case '/':
 			result = num1 / num2;
 			break;
+		case '%':
+			result = num1 % num2;
+			break;
 		default:
 			printf("error: operador %c desconocido\n", operation);
 			return EXIT_FAILURE;
@@ -67,8 +84,8 @@ int av()
 	printf("[4] Kelvin --> Fahrenheit\n");
 	printf("[5] Celsius --> Kelvin\n");
 	printf("[6] Fahrenheit --> Kelvin\n");
-	printf("[7] Raices cuadradas (enteras)\n");
-	printf("[8] Potencias (enteras)\n");
+	printf("[7] Raices cuadradas\n");
+	printf("[8] Potencias\n");
 	printf("[S] Cerrar el conversor\n");
 	value = getchar();
 	clean_calc();
@@ -80,6 +97,8 @@ int av()
 		gets_s(input, 8);
 	}
 	clean_calc();
+	double res;
+	char result[32];
 	switch(value) {
 		case '1':
 			resc = 9 * atoi(input) / 5 + 32;
@@ -112,14 +131,18 @@ int av()
 		case '7':
 			printf("Raiz de: ");
 			gets_s(input, 8);
-			printf("%d\n", sqrt(atoi(input)));
+			res = sqrt(atof(input));
+			ftoa(result, res);
+			printf("%s\n", result);
 			break;
 		case '8':
 			printf("Base: ");
 			gets_s(input, 8);
 			printf("Exponente: ");
 			gets_s(exponente, 8);
-			printf("%d\n", pow(atoi(input), atoi(exponente)));
+			res = pow(atof(input), atof(exponente));
+			ftoa(result, res);
+			printf("%s\n", result);
 			break;
 	}
 	return 0;
