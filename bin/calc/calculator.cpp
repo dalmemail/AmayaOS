@@ -66,7 +66,6 @@ int calculator(int num1, char operation, int num2)
 			printf("error: operador %c desconocido\n", operation);
 			return EXIT_FAILURE;
 	}
-	printf("%d\n", result);
 	return result;
 }
 

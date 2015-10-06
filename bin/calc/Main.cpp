@@ -20,7 +20,7 @@
 #include <string.h>
 #include "calculator.h"
 
-#define VERSION "0.9"
+#define VERSION "0.9.1"
 
 /* main function */
 int main(int argc, char **argv)
@@ -42,6 +42,7 @@ int main(int argc, char **argv)
 		do {
 			result = calculator(result, argv[i][0], atoi(argv[i+1]));
 		} while((i += 2)+1 < argc);
+		printf("%d\n", result);
 	}
 	return ret;
 }
