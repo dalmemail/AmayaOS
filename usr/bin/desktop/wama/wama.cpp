@@ -48,7 +48,7 @@ void setwindow()
 	vga[40] = VGA_CHAR('.', BLACK, GREEN);
 	vga[41] = VGA_CHAR('5', BLACK, GREEN);
 	vga[42] = VGA_CHAR('.', BLACK, GREEN);
-	vga[43] = VGA_CHAR('2', BLACK, GREEN);
+	vga[43] = VGA_CHAR('3', BLACK, GREEN);
 }
 
 void setscreenblue()
@@ -125,7 +125,7 @@ void error()
 	for (i=821; i < 861; i++) {
 		vga[i] = VGA_CHAR(' ', BLACK, RED);
 	}
-	for (i=901; i < 920; i++) {
+	for (i=901; i < 941; i++) {
 		vga[i] = VGA_CHAR(' ', BLACK, RED);
 	}
 	vga[920] = VGA_CHAR('E', BLACK, RED);
@@ -133,37 +133,29 @@ void error()
 	vga[922] = VGA_CHAR('R', BLACK, RED);
 	vga[923] = VGA_CHAR('O', BLACK, RED);
 	vga[924] = VGA_CHAR('R', BLACK, RED);
-	for (i=925; i < 941; i++) {
+	for (i=981; i < 994; i++) {
 		vga[i] = VGA_CHAR(' ', BLACK, RED);
 	}
-	for (i=981; i < 991; i++) {
-		vga[i] = VGA_CHAR(' ', BLACK, RED);
-	}
-	vga[991] = VGA_CHAR(' ', BLACK, RED);
-	vga[992] = VGA_CHAR(' ', BLACK, RED);
-	vga[993] = VGA_CHAR('A', BLACK, RED);
-	vga[994] = VGA_CHAR('l', BLACK, RED);
-	vga[995] = VGA_CHAR(' ', BLACK, RED);
-	vga[996] = VGA_CHAR('a', BLACK, RED);
-	vga[997] = VGA_CHAR('b', BLACK, RED);
-	vga[998] = VGA_CHAR('r', BLACK, RED);
-	vga[999] = VGA_CHAR('i', BLACK, RED);
-	vga[1000] = VGA_CHAR('r', BLACK, RED);
+	vga[994] = VGA_CHAR('E', BLACK, RED);
+	vga[995] = VGA_CHAR('n', BLACK, RED);
+	vga[996] = VGA_CHAR('t', BLACK, RED);
+	vga[997] = VGA_CHAR('r', BLACK, RED);
+	vga[998] = VGA_CHAR('a', BLACK, RED);
+	vga[999] = VGA_CHAR('d', BLACK, RED);
+	vga[1000] = VGA_CHAR('a', BLACK, RED);
 	vga[1001] = VGA_CHAR(' ', BLACK, RED);
-	vga[1002] = VGA_CHAR('e', BLACK, RED);
-	vga[1003] = VGA_CHAR('l', BLACK, RED);
-	vga[1004] = VGA_CHAR(' ', BLACK, RED);
+	vga[1002] = VGA_CHAR('o', BLACK, RED);
+	vga[1003] = VGA_CHAR(' ', BLACK, RED);
+	vga[1004] = VGA_CHAR('S', BLACK, RED);
 	vga[1005] = VGA_CHAR('a', BLACK, RED);
-	vga[1006] = VGA_CHAR('r', BLACK, RED);
-	vga[1007] = VGA_CHAR('c', BLACK, RED);
-	vga[1008] = VGA_CHAR('h', BLACK, RED);
-	vga[1009] = VGA_CHAR('i', BLACK, RED);
-	vga[1010] = VGA_CHAR('v', BLACK, RED);
-	vga[1011] = VGA_CHAR('o', BLACK, RED);
-	for (i=1012; i < 1021; i++) {
+	vga[1006] = VGA_CHAR('l', BLACK, RED);
+	vga[1007] = VGA_CHAR('i', BLACK, RED);
+	vga[1008] = VGA_CHAR('d', BLACK, RED);
+	vga[1009] = VGA_CHAR('a', BLACK, RED);
+	for (i=1010; i < 1021; i++) {
 		vga[i] = VGA_CHAR(' ', BLACK, RED);
 	}
-	for (i=1061; i < 1076; i++) {
+	for (i=1061; i < 1101; i++) {
 		vga[i] = VGA_CHAR(' ', BLACK, RED);
 	}
 	vga[1076] = VGA_CHAR('A', BLACK, RED);
@@ -176,11 +168,7 @@ void error()
 	vga[1083] = VGA_CHAR('(', BLACK, RED);
 	vga[1084] = VGA_CHAR('A', BLACK, RED);
 	vga[1085] = VGA_CHAR(')', BLACK, RED);
-	for (i=1086; i < 1101; i++) {
-		vga[i] = VGA_CHAR(' ', BLACK, RED);
-	}
-	do {
-	} while (getchar() != 'a');
+	while (getchar() != 'a');
 }
 
 void save()
@@ -314,6 +302,7 @@ int linecounter(char *c)
 	return n_lines;
 }
 
+/* prototipo de get_size() */
 int get_size(char *path);
 
 char *read_file(char *path)
@@ -329,6 +318,7 @@ char *read_file(char *path)
 
 int goto_wama_command(char *path, int line_counter)
 {
+	int size = get_size(path);
 	char nl[5];
 	printf("Numero de linea: ");
 	gets_s(nl, 5);
@@ -363,9 +353,15 @@ int goto_wama_command(char *path, int line_counter)
 	if ((fd = open(path, O_WRONLY)) < 0) {
 		return -1;
 	}
+	int bytes_wrote = 0;
 	for (int i = 0; i < n_lines; i++) {
-		write(fd, lines[i], strlen(lines[i]));
+		write(fd, lines[i], bytes_wrote += strlen(lines[i]));
 		write(fd, "\n", 1);
+	}
+	if (bytes_wrote < size) {
+		while (bytes_wrote++ < size) {
+			write(fd, "\0", 1);
+		}
 	}
 	printf("\n");
 	close(fd);
