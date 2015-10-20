@@ -21,11 +21,6 @@
 #include <files.h>
 #include "sudoku.h"
 
-#define EASY 0
-#define DIFFICULT 1
-#define COMPETITION_EASY 2
-#define COMPETITION_DIFF 3
-
 void clear_window()
 {
 	char str[] = {0x1b, 0x5b, 0x48, 0x1b, 0x5b, 0x4a, '\0'};
@@ -62,52 +57,24 @@ void print_sudoku(int *numbers)
 	printf("\n");
 }
 
-int randomnumber()
+char *read_file(char *path)
 {
 	file *f = new file();
-	f->setpath("/dev/time");
+	f->setpath(path);
 	f->f_open(O_RDONLY);
 	char *ch = f->readAll();
 	f->f_close();
-	return (atoi(ch) % 10);
+	return ch;
 }
 
-int make_sudoku(int pos, int nsudoku, int mode)
+char randomnumber()
 {
-	/* available sudoku */
-	int easy[10][16] {
-		{2,1,0,0,0,3,2,0,0,0,0,4,1,0,0,0},
-		{0,0,0,1,4,0,0,2,2,0,0,4,0,0,2,3},
-		{4,0,0,0,0,0,1,0,0,2,4,0,0,0,2,1},
-		{0,2,1,0,0,0,3,2,0,1,0,0,2,0,0,1},
-		{0,0,0,3,0,4,0,2,0,0,2,1,1,0,0,0},
-		{0,2,0,0,0,0,3,0,0,0,0,4,4,1,2,0},
-		{0,2,0,0,1,0,0,2,3,0,0,4,0,0,1,0},
-		{2,4,0,0,0,0,2,0,4,0,0,1,0,3,0,0},
-		{0,3,0,0,0,1,0,0,3,0,1,0,1,0,2,0},
-		{1,0,0,0,3,0,1,0,0,0,0,4,0,3,2,0},
-	};
-	int difficult[10][16] {
-		{4,0,0,0,0,0,4,0,0,0,0,3,0,2,0,0},
-		{4,0,0,3,0,2,0,0,2,0,4,0,0,0,0,0},
-		{0,2,0,0,0,0,2,0,0,0,0,3,4,0,0,0},
-		{0,4,0,0,0,0,0,2,0,0,0,0,0,0,2,3},
-		{2,0,0,0,0,0,0,3,0,0,0,0,0,4,1,0},
-		{0,0,0,2,3,0,0,0,0,0,1,0,0,1,0,0},
-		{0,0,2,0,0,3,0,0,0,0,0,2,4,0,0,0},
-		{0,0,0,0,1,0,2,0,0,4,0,3,0,0,0,0},
-		{0,2,0,0,0,0,0,4,2,0,0,0,0,0,0,3},
-		{2,4,0,0,0,1,0,0,0,0,0,1,0,0,2,0},
-	};
-	switch (mode) {
-		case EASY:
-		case COMPETITION_EASY:
-			return easy[nsudoku][pos];
-			break;
-		case DIFFICULT:
-		case COMPETITION_DIFF:
-			return difficult[nsudoku][pos];
-			break;
-	}
-	return 0;
+	char *ch = read_file("/dev/time");
+	return ((atoi(ch) % 10)+'0');
+}
+
+int make_sudoku(int pos, char *path)
+{
+	char *ch = read_file(path);
+	return (ch[pos]-'0');
 }

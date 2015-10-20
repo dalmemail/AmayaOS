@@ -21,9 +21,6 @@
 #include "sudoku.h"
 #include "multiplayer.h"
 
-#define COMPETITION_EASY 2
-#define COMPETITION_DIFF 3
-
 int multiplayer_mode()
 {
 	printf("Introduce el numero de jugadores: ");

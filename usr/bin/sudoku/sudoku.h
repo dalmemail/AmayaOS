@@ -15,6 +15,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+
+#define LOST 0
+#define WIN 1
+
+#define EASY 0
+#define DIFFICULT 1
+#define COMPETITION_EASY 2
+#define COMPETITION_DIFF 3
+#define LOAD_SUDOKU 4
+
 /* clear_window() cleans the screen */
 void clear_window();
 
@@ -26,10 +36,9 @@ int getnum();
 /* put sudoku on the screen */
 void print_sudoku(int *numbers);
 
-/* returns a random number */
-int randomnumber();
+/* returns a random number from 0 to 9 */
+char randomnumber();
 
 /* make_sudoku() returns the value of a position (pos) in a sudoku
- * (nsudoku) of a mode (mode) who can be 0 or 1, easy or difficult
  */
-int make_sudoku(int pos, int nsudoku, int mode);
+int make_sudoku(int pos, char *path);

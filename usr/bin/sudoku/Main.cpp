@@ -14,6 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -23,21 +24,19 @@
 #include "sudoku.h"
 #include "multiplayer.h"
 
-#define EASY 0
-#define DIFFICULT 1
-
-#define VERSION "0.5.3"
+#define VERSION "0.5.4"
 
 int main(int argc, char **argv)
 {
 	int c = 1;
-	while (c != 4) {
+	while (c != 5) {
 		clear_window();
 		printf("=== SUDOku v%s ===\n", VERSION);
 		printf("[1] Modo facil [4X4]\n");
 		printf("[2] Modo dificil [4X4]\n");
 		printf("[3] Modo campeonato [MULTIPLAYER]\n");
-		printf("[4] Salir de SUDOku\n");
+		printf("[4] Cargar Sudoku (*.suk)\n");
+		printf("[5] Salir de SUDOku\n");
 		printf("Selecciona una opcion: ");
 		c = getnum();
 		printf("%c\n", c);
@@ -50,6 +49,9 @@ int main(int argc, char **argv)
 				break;
 			case 3:
 				multiplayer_mode();
+				break;
+			case 4:
+				sudoku(LOAD_SUDOKU);
 				break;
 		}
 	}
