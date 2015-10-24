@@ -18,27 +18,34 @@
 #include "sudoku.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "gamemodes.h"
-
-#define LOST 0
-#define WIN 1
-
-#define EASY 0
-#define DIFFICULT 1
-#define COMPETITION_EASY 2
-#define COMPETITION_DIFF 3
 
 int sudoku(int mode)
 {
 	clear_window();
 	int level = 1;
-	/* we get a random number to select a sudoku */
-	int n = randomnumber();
+	/* we get a random number from 0 to 9 as a char value */
+	char n[2] = {randomnumber(), '\0'};
+	char path[256] = "/etc/sudoku/sudoku_";
+	if (mode == LOAD_SUDOKU) {
+		printf("Sudoku File Path: ");
+		gets_s(path, 256);
+	}
+	else {
+		if (mode == 0 || mode == 2) {
+			strcat(path, "easy");
+		}
+		if (mode == 1 || mode == 3) {
+			strcat(path, "difficult");
+		}
+		strcat(path, n);
+	}
 	int numbers[16];
 	int numbers_def[16];
 	/* get sudoku */
 	for (int i = 0; i < 16; i++) {
-		numbers_def[i] = make_sudoku(i, n, mode);
+		numbers_def[i] = make_sudoku(i, path);
 	}
 	for (int i = 0; i < 16; i++) {
 		numbers[i] = numbers_def[i];
@@ -144,7 +151,7 @@ int sudoku(int mode)
 				printf("[N]ivel %d o [C]errar\n", ++level);
 				option = getchar();
 			} while (option != 'n' && option != 'N' && option != 'c' && option != 'C');
-			n = randomnumber();
+			n[0] = randomnumber();
 		}
 		if (gamestate == LOST && mode < 2) {
 			printf("Nivel %d NO COMPLETADO\n", level);
@@ -155,7 +162,7 @@ int sudoku(int mode)
 		}
 		if (option == 'r' || option == 'R' || option == 'n' || option == 'N') {
 			for (int i = 0; i < 16; i++) {
-				numbers[i] = make_sudoku(i, n, mode);
+				numbers[i] = make_sudoku(i, n);
 			}
 		}
 		/* multiplayer mode */
