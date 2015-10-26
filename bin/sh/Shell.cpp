@@ -23,8 +23,33 @@
 #include <dirent.h>
 #include <sys/utsname.h>
 #include <sys/wait.h>
+#include <sys/stat.h>
 #include <unistd.h>
 #include <fcntl.h>
+
+int get_size(char *path)
+{
+	struct stat st;
+	int ssize;
+	if ((stat(path, &st)) < 0) {
+		ssize = -1;
+	}
+	else {
+		ssize = st.st_size;
+	}
+	return ssize;
+}
+
+char *read_file(char *path)
+{
+	int file_size = get_size(path);
+	char *data = new char [file_size];
+	int fd = open(path, O_RDONLY);
+	read(fd, data, file_size);
+	close(fd);
+	/* Devolvemos el contenido del fichero */
+	return data;
+}
 
 int Shell::run()
 {
@@ -43,7 +68,8 @@ int Shell::run()
      * execute("sh init");
      * printf("\r\n");
      */
-
+    int fd = open("/dev/sh_history", O_WRONLY);
+    write(fd, read_file("/dev/sh_history"), get_size("/dev/sh_history"));
     /* Lee los comandos. */    
     while(true) {
         /* Imprime el prompt. */
@@ -56,9 +82,13 @@ int Shell::run()
         if (strlen(cmdStr) == 0)
             continue;
 
+	/* Guarda el comando (/dev/sh_history) */
+	write(fd, cmdStr, strlen(cmdStr));
+	write(fd, "\n", 1);
         /* Ejecuta el comando. */
         execute(cmdStr);
     }
+    close(fd);
     return EXIT_SUCCESS;
 }
 

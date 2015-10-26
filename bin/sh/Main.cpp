@@ -88,10 +88,8 @@ int main(int argc, char **argv)
                 "\r\n"*/);
 
         /* Entramos al modo grafico */
-        int ix=0;
-        for (ix=0; ix < 1; ix++) {
-          sh.execute("sh /home/live/mode2");
-        }
+	touch("/dev/sh_history", S_IRUSR | S_IWUSR);
+	sh.execute("sh /home/live/mode2");
         /* Entra al bucle. */
         return sh.run();
     }
