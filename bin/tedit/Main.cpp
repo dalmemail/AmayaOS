@@ -26,7 +26,7 @@
 int main(int argc, char **argv) /* funcion main() */
 {
 	printf("----------------------------------\n");
-	printf("tedit 0.2 by Francisco Dominguez\n");
+	printf("tedit 0.3 by Francisco Dominguez\n");
 	printf("----------------------------------\n");
 	// creamos los arrays que necesitemos
 	char nombre[128];
@@ -88,15 +88,25 @@ int main(int argc, char **argv) /* funcion main() */
 			printf("w -> abre fichero en modo overwrite, lo que hace es sobreescribir el contenido del fichero, usar con precaucion\n");
 			return 0;
 			break;;
+		default:
+			printf("\nopcion de apertura de fichero invalida");
+			printf("--------------------\n");
+			printf("opciones de apertura de ficheros:\n");
+			printf("a -> abre fichero en modo append, lo que permite incluir lineas a un archivo desde el final de este\n");
+			printf("w -> abre fichero en modo overwrite, lo que hace es sobreescribir el contenido del fichero, usar con precaucion\n");
+			return 0;
+			break;;
+			
     
     }
     printf("Introduzca -Q para salir\r\n");
     printf("------------------------------------\r\n");
     if (option == 'a') {
+	printf("%s", buffer);
 	write(fd, buffer, n_bytes);
     }
     while( 1 ) {
-     gets_s(linea, 128);
+    gets_s(linea, 128);
 		//comprobamos si la nueva linea es "-Q"
         if (linea[0] == '-'&& linea[1] == 'Q') {
 		//cerramos el archivo y el programa
