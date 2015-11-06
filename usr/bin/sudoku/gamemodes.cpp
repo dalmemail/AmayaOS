@@ -46,6 +46,13 @@ int sudoku(int mode)
 	/* get sudoku */
 	for (int i = 0; i < 16; i++) {
 		numbers_def[i] = make_sudoku(i, path);
+		if (numbers_def[i] < 0 || numbers_def[i] > 4) {
+			clear_window();
+			printf("Error: El archivo '%s' es erroneo o corrupto\n", path);
+			printf("Pulsa una tecla para continuar.\n");
+			getchar();
+			return -1;
+		}
 	}
 	for (int i = 0; i < 16; i++) {
 		numbers[i] = numbers_def[i];
@@ -160,9 +167,19 @@ int sudoku(int mode)
 				option = getchar();
 			} while (option != 'r' && option != 'R' && option != 'c' && option != 'C');
 		}
+		if (mode == LOAD_SUDOKU) {
+			if (gamestate == WIN) {
+				printf("Sudoku COMPLETADO\n");
+			}
+			else {
+				printf("Sudoku NO COMPLETADO\n");
+			}
+			printf("[R]eintentar o [C]errar\n");
+			option = getchar();
+		}
 		if (option == 'r' || option == 'R' || option == 'n' || option == 'N') {
 			for (int i = 0; i < 16; i++) {
-				numbers[i] = make_sudoku(i, n);
+				numbers[i] = make_sudoku(i, path);
 			}
 		}
 		/* multiplayer mode */
@@ -172,9 +189,12 @@ int sudoku(int mode)
 		if (mode == COMPETITION_DIFF && gamestate == WIN) {
 			return 3;
 		}
-		if (mode >= COMPETITION_EASY && gamestate == LOST) {
-			return 0;
+		if (mode == COMPETITION_EASY || mode == COMPETITION_DIFF) {
+			if (gamestate == LOST) {
+				return 0;
+			}
 		}
 	}
+
 	return 0;
 }

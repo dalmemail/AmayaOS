@@ -24,7 +24,7 @@
 #include "sudoku.h"
 #include "multiplayer.h"
 
-#define VERSION "0.5.4"
+#define VERSION "0.5.5"
 
 int main(int argc, char **argv)
 {
