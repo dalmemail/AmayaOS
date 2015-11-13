@@ -33,27 +33,23 @@ int get_size(char *path)
 	return ssize;
 }
 
-char *read_file(char *path)
-{
-	int file_size = get_size(path);
-	char *data = new char [file_size];
-	int fd = open(path, O_RDONLY);
-	read(fd, data, file_size);
-	close(fd);
-	/* Devolvemos el contenido del fichero */
-	return data;
-}
-
 int main(int argc, char **argv)
 {
-	char *ch = read_file("/dev/sh_history");
+	int file_size = get_size("/dev/sh_history");
+	char data[file_size];
+	int fd;
+	if ((fd = open("/dev/sh_history", O_RDONLY)) < 0) {
+		printf("Error: /dev/sh_history Not Found\n");
+		return -1;			
+	}
+	read(fd, data, file_size);
+	close(fd);
 	printf("1 ");
-	for (int i = 0, nl = 1; ch[i] != '\0'; i++) {
-		printf("%c", ch[i]);
-		if (ch[i] == '\n') {
+	for (int i = 0, nl = 1; i < file_size; i++) {
+		printf("%c", data[i]);
+		if (data[i] == '\n' && i != (file_size-1)) {
 			printf("%d ", ++nl);
 		}
 	}
-	printf("\b\b");
 	return 0;
 }
