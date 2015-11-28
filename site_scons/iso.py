@@ -71,7 +71,7 @@ target.Append(BUILDERS = { 'ISO' : isoBuilder })
 #
 # Instructs to build an ISO and MD5+SHA1 checksums.
 #
-isoImage     = target.ISO('#boot/AmayaOS-0.07-Stable-x86.iso', ['#boot/boot.isodesc'])
+isoImage     = target.ISO('#boot/AmayaOS-0.08-Stable-x86.iso', ['#boot/boot.isodesc'])
 isoImageMd5  = target.Checksum('#boot/boot.iso.md5',  '#boot/boot.iso')
 isoImageSha1 = target.Checksum('#boot/boot.iso.sha1', '#boot/boot.iso')
 
