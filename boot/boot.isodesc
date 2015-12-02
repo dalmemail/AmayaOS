@@ -4,5 +4,3 @@
 ./boot/boot.img.gz
 ./boot/grub/menu.lst
 ./kernel/kernel
-./boot/eng/boot.img.gz
-./boot/eng/boot.linn.gz
