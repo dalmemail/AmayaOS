@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Niek Linnenbank, 2012 Felipe Cabrera, 2014 Daniel Martin
+ * Copyright (C) 2009 Niek Linnenbank, 2012 Felipe Cabrera, 2015 Dan Rulos
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -169,7 +169,7 @@ void Shell::prompt()
     /* Retrieve current working directory. */
     getcwd(cwd, sizeof(cwd));
     
-    printf(WHITE GREEN "%s@amaya-os:" BLUE "%s" WHITE "$ ",
+    printf(WHITE GREEN "%s@amaya:" BLUE "%s" WHITE "$ ",
            host, cwd);
 }
 
