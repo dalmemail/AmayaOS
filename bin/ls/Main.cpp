@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Niek Linnenbank, 2012 Felipe Cabrera
+ * Copyright (C) 2009 Niek Linnenbank, 2012 Felipe Cabrera, 2015 Dan Rulos
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,6 +24,8 @@
 #include <sys/stat.h>
 #include <TerminalCodes.h>
 
+bool all = false;
+
 int pf(int argc, char **argv, int i, char *u)
 {
     DIR *d;
@@ -42,14 +44,14 @@ int pf(int argc, char **argv, int i, char *u)
 
     /* Intentamos abrir el directorio. */
     if (!(d = opendir(path))) {
-        printf("%s: error al abrir '%s': %s\r\n",
+        printf("%s: error al abrir '%s': %s\n",
                 argv[0], path, strerror(errno));
         return EXIT_FAILURE;
     }
     
     /* Leemos el directorio. */
     while ((dent = readdir(d))) {
-        if(dent->d_name[0]=='.')
+        if(dent->d_name[0]=='.' && !all)
             continue;
         /* Esta es la parte entretenida. A colorear! */
         switch (dent->d_type) {
@@ -81,7 +83,7 @@ int pf(int argc, char **argv, int i, char *u)
         printf("%s ", dent->d_name);
     }
     
-    printf("%s\r\n", WHITE);
+    printf("%s\n", WHITE);
 
     /* Cerramos. */
     closedir(d);
@@ -91,11 +93,25 @@ int pf(int argc, char **argv, int i, char *u)
 
 int main(int argc, char **argv)
 {
-    if(argc < 3)
-        pf(argc, argv, 1, argv[1]);
+    for (int i = 1; i < argc; i++) {
+	if ((strcmp(argv[i], "-a")) == 0 || (strcmp(argv[i], "--all")) == 0) {
+		all = true;
+	}
+    }
+    if(argc < 3) {
+	if (all) {
+		pf(1, argv, 1, argv[1]);
+	}
+	else {
+        	pf(argc, argv, 1, argv[1]);
+	}
+    }
     else {
         for(int i = 1; i < argc; i++) {
-            printf("%s:\r\n",argv[i]);
+	    if ((strcmp(argv[i], "-a")) == 0 || (strcmp(argv[i], "--all")) == 0) {
+		continue;
+	    }
+            printf("%s:\n",argv[i]);
             pf(argc, argv, i, argv[i]);
         }
     }
