@@ -22,7 +22,7 @@
 #include <unistd.h>
 #include <sys/stat.h>
 
-#define VERSION "v0.5.7"
+#define VERSION "v0.5.8"
 
 int f_size(char *path)
 {
@@ -58,17 +58,20 @@ int main(int argc, char **argv)
     /* Obtenemos todos los archivos dados. */
     for (int i = 0; i < argc - 1 ; i++) {
         /* Intentamos mostrar el contenido. */
-        int fsize = f_size(argv[i+1]);
-	char *ch = new char [fsize];
 	int fd;
+	int fsize = f_size(argv[i+1]);
+	if (fsize == 0) {
+		fsize = 1024;
+	}
+	char *ch = new char [fsize];
 	if ((fd = open(argv[i+1], O_RDONLY)) < 0) {
 		printf("%s: error al leer '%s'\n", argv[0], argv[i+1]);
 		result = EXIT_FAILURE;
 	}
 	else {
-		read(fd, ch, fsize);
-		close(fd);
+		result = read(fd, ch, fsize);
 		printf("%s", ch);
+		close(fd);
 	}
 	delete ch;
 
