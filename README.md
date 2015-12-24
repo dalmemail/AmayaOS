@@ -1,4 +1,4 @@
-Amaya OS 0.06
+AmayaOS 0.08
 Copyright (C) 2009 Niek Linnenbank, 2012 Felipe Cabrera, 2014 AmayaOS Team
 
 ## English
@@ -28,7 +28,9 @@ For testing Fnx on a real PC you may burn the boot ISO image in an empty CD/DVD,
 
 *NOTE 1: Is not suitable to use Fnx in a real PC, it hasn't beet tested completely.*
 
-*NOTA 2: AMAYA OS v 0.02/0.05 has been tested in many x86 arquitectures with good results.*
+*NOTE 2: AMAYA OS v 0.02/0.05 has been tested in many x86 arquitectures with good results.*
+
+*NOTE 3: AmayaOS can't be compile in x86_64 computers.*
 
 - - -
 
@@ -64,3 +66,5 @@ Para probar Fnx en una PC real debes quemar la imagen ISO en un CD virgen e inse
 *NOTA 1: No es recomendable usar Fnx en una PC real, ya que no ha sido testeado profundamente en una arquitectura real.*
 
 *NOTA 2: La Versión 0.02/0.05 de AMAYA OS ha sido testada en distintos pcs X86 con buenos resultados.*
+
+*NOTA 3: AmayaOS actualmente no puede ser compilado en arquitecturas de 64 bits.*
