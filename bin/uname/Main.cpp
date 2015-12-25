@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Niek Linnenbank, 2012 Felipe Cabrera, 2014 Daniel Martin
+ * Copyright (C) 2009 Niek Linnenbank, 2012 Felipe Cabrera, 2015 Dan Rulos
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -59,10 +59,6 @@ int main(int argc, char **argv)
             else if (strcmp(argv[i + 1], "-m") == 0||strcmp(argv[i + 1], "--machine") == 0)
                 printf("%s ", info.machine);
 
-            /* OS. */
-            else if (strcmp(argv[i + 1], "-os") == 0||strcmp(argv[i + 1], "--operating-system") == 0)
-                printf("AmayaOS");
-
             /* Everything. */
             else if (strcmp(argv[i + 1], "-a") == 0||strcmp(argv[i + 1], "--all") == 0)
                 printf( "%s %s %s %s %s ",
@@ -74,23 +70,21 @@ int main(int argc, char **argv)
 
             /* Help message. */
             else if (strcmp(argv[i + 1], "--help") == 0) {
-                printf( "uso: %s [OPCION]...\r\n"
-                    "Imprime informacion del sistema.\r\n"
-                    "\r\n"
-                    "-a, --all               imprimir toda la informacion en el siguiente orden.\r\n"
-                    "-s, --kernel-name       imprimir el nombre del sistema.\r\n"
-                    "-n, --nodename          imprimir el host del nodo de la red.\r\n"
-                    "-r, --kernel-release    imprimir la version del nucleo.\r\n"
-                    "-v, --kernel-version    imprimir la version del kernel.\r\n"
-                    "-m, --machine           imprimir el nombre del hardware de la maquina.\r\n"
-                    "-os, --operating-system imprimir el nombre del sistema operativo.\r\n"
-                    "    --help    muestra esta ayuda.\r\n", argv[0]);
+                printf( "uso: %s [OPCION]...\n"
+                    "Imprime informacion del sistema.\n\n"
+                    "-a, --all               imprimir toda la informacion en el siguiente orden.\n"
+                    "-s, --kernel-name       imprimir el nombre del sistema.\n"
+                    "-n, --nodename          imprimir el host del nodo de la red.\n"
+                    "-r, --kernel-release    imprimir la version del nucleo.\n"
+                    "-v, --kernel-version    imprimir la version del kernel.\n"
+                    "-m, --machine           imprimir el nombre del hardware de la maquina.\n"
+                    "    --help    muestra esta ayuda.\n");
                 return EXIT_SUCCESS;
             }
             
             /* Unknown argument. */
             else {
-                printf( "%s: argumento invalido `%s'\r\n",
+                printf( "%s: argumento invalido `%s'\n",
                         argv[0], argv[i + 1]);
                 return EXIT_FAILURE;
             }
@@ -98,7 +92,7 @@ int main(int argc, char **argv)
     }
     
     /* Terminate with a newline. */
-    printf("\r\n");
+    printf("\n");
     
     /* Done. */
     return EXIT_SUCCESS;
