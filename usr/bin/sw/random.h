@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2015 Dan Rulos
+ *      amaya@amayaos.com
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,32 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SEA_WAR_H_INCLUDED 
-#define SEA_WAR_H_INCLUDED
+#ifndef RANDOM_H_INCLUDED 
+#define RANDOM_H_INCLUDED
 
 /**
- * clear_window() cleans the screen *
+ * getRandomNumber() returns a random number make using *
+ * /dev/time and a seeder (seed) *
  */
 
-extern C void clear_window();
-
-/**
- * print_map() puts the map "game_map" on Window *
- */
-
-extern C void print_map();
-
-
-/**
- * put_ship_on_map() puts the ships position on the game map *
- */
-
-extern C void put_ship_on_map();
-
-/**
- * sw() is the main function of the game Sea War *
- * @return EXIT_SUCCESS or EXIT_FAILURE (stdlib.h) */
-
-extern C int sw();
+extern C int getRandomNumber(int seed);
 
 #endif

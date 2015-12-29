@@ -19,11 +19,14 @@
 #include <stdlib.h>
 #include "sw.h"
 #include "sw_colors.h"
+#include "random.h"
 
 #define UNKOWN_WATER 0
-#define WATER 1
-#define UNKOWN_SHIP 2
-#define SHIP 3
+#define WATER_IA 1
+#define WATER 2
+#define UNKOWN_SHIP 3
+#define SHIP_IA 4
+#define SHIP 5
 
 int game_map[2][10][10];
 
@@ -51,10 +54,14 @@ void print_map()
 						printf("?  ");
 						break;
 					case WATER:
-						printf(BLUE "#  \e[m");
+						printf(BLUE);
+					case WATER_IA:
+						printf("#  \e[m");
 						break;
 					case SHIP:
-						printf(RED "X  \e[m");
+						printf(RED);
+					case SHIP_IA:
+						printf("X  \e[m");
 						break;
 				}
 			}
@@ -63,8 +70,19 @@ void print_map()
 	}
 }
 
+void put_ship_on_map()
+{
+	for (int i = 0; i < 10; i++) {
+		for (int x = 0; x < 10; x++) {
+			game_map[1][i][x] = WATER_IA;
+		}
+	}
+	
+}
+
 int sw()
 {
+	put_ship_on_map();
 	print_map();
 	return EXIT_SUCCESS;
 }
