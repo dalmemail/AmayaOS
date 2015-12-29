@@ -163,6 +163,11 @@ int sw()
 			game_map[0][y][x]++;
 			game_map[0][y][x]++;
 		}
+		x = getRandomNumber(10);
+		y = getRandomNumber(x);
+		if (game_map[1][x][y] != WATER && game_map[1][x][y] != SHIP) {
+			game_map[1][x][y]++;
+		}
 		state = CheckGameStatus();
 	}
 	print_map();
