@@ -77,7 +77,37 @@ void put_ship_on_map()
 			game_map[1][i][x] = WATER_IA;
 		}
 	}
-	
+	int pos1 = getRandomNumber(10);
+	pos1++;
+	int pos2 = getRandomNumber(pos1);
+	pos2++;
+	for (int i = 1; i <= 4; i++) {
+		printf("Barco %d\nX: ", i);
+		int x = getnum();
+		printf("%d\nY: ", x);
+		int y = getnum();
+		printf("%d\n", y);
+		game_map[1][y][x] = SHIP_IA;
+		for (int p = 0; p < (i+1); p++) {
+			if (x+p <= 9) {
+				game_map[1][y][x+p] = SHIP_IA;
+			}
+		}
+		x -= pos1;
+		y -= pos2;
+		if (x < 0) {
+			x *= -1;
+		}
+		if (y < 0) {
+			y *= -1;
+		}
+		game_map[0][x][y] = UNKOWN_SHIP;
+		for (int p = 0; p < (i+1); p++) {
+			if (y+p <= 9) {
+				game_map[0][x][y+p] = UNKOWN_SHIP;
+			}
+		}
+	}
 }
 
 int sw()

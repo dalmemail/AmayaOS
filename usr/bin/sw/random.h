@@ -26,4 +26,9 @@
 
 extern C int getRandomNumber(int seed);
 
+/**
+ * getnum() returns a number from standard input *
+ */
+extern C int getnum();
+
 #endif

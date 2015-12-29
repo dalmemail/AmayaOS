@@ -29,3 +29,12 @@ int getRandomNumber(int seed)
 	f->f_close();
 	return (atoi(ch) % seed);
 }
+
+int getnum()
+{
+	static char ch[1024];
+	read(0, ch, 1);
+	int n = atoi(ch);
+    
+	return n;
+}
