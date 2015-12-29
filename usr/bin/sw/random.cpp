@@ -35,6 +35,9 @@ int getnum()
 	static char ch[1024];
 	read(0, ch, 1);
 	int n = atoi(ch);
+	if (ch[0] == 'e') {
+		n = -1;
+	}
     
 	return n;
 }

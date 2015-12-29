@@ -28,6 +28,12 @@
 #define SHIP_IA 4
 #define SHIP 5
 
+#define WIN 0
+#define LOSE 1
+#define PLAYING 2
+#define EXIT_SW 3
+#define EQUAL 4
+
 int game_map[2][10][10];
 
 void clear_window()
@@ -110,9 +116,73 @@ void put_ship_on_map()
 	}
 }
 
+int CheckGameStatus()
+{
+	int current_state = PLAYING;
+	int ship_count = 0;
+	int ship_ia_count = 0;
+	for (int x = 0; x < 10; x++) {
+		for (int y = 0; y < 10; y++) {
+			if (game_map[0][x][y] == UNKOWN_SHIP) {
+				ship_count++;
+			}
+			if (game_map[1][x][y] == SHIP_IA) {
+				ship_ia_count++;
+			}
+		}
+	}
+	if (ship_count == 0) {
+		current_state = WIN;
+	}
+	if (ship_ia_count == 0) {
+		current_state = LOSE;
+	}
+	if (ship_count == ship_ia_count && ship_count == 0) {
+		current_state = EQUAL;
+	}
+	return current_state;
+}
+
 int sw()
 {
+	int result = EXIT_SUCCESS;
 	put_ship_on_map();
+	int x = 0;
+	int y = 0;
+	int state = PLAYING;
+	while (state == PLAYING) {
+		print_map();
+		printf("Pulse 'e' para cerrar Sea War.\nX: ");
+		x = getnum();
+		printf("%d\nY: ", x);
+		y = getnum();
+		if (x < 0 || y < 0) {
+			state = EXIT_SW;
+		}
+		if (game_map[0][y][x] == UNKOWN_WATER || game_map[0][y][x] == UNKOWN_SHIP) {
+			game_map[0][y][x]++;
+			game_map[0][y][x]++;
+		}
+		state = CheckGameStatus();
+	}
 	print_map();
-	return EXIT_SUCCESS;
+	switch (state) {
+		case WIN:
+			printf("La flota enemiga ha sido destruida.\n");
+			break;
+		case LOSE:
+			printf("La flota aliada ha sido destruida.\n");
+			break;
+		case EXIT_SW:
+			printf("Cerrando Sea War.\n");
+			break;
+		case EQUAL:
+			printf("Las dos flotas han sido destruidas. [EMPATE]\n");
+			break;
+		default:
+			printf("Sea War Error.\n");
+			result = EXIT_FAILURE;
+			break;
+	}
+	return result;
 }
