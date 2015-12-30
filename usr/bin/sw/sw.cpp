@@ -93,10 +93,19 @@ void put_ship_on_map()
 		printf("%d\nY: ", x);
 		int y = getnum();
 		printf("%d\n", y);
+		char option;
+		do {
+			printf("Horizontal o Vertical (h/v): ");
+			option = getchar();
+			printf("%c\n", option);
+		} while(option != 'h' && option != 'v');
 		game_map[1][y][x] = SHIP_IA;
 		for (int p = 0; p < (i+1); p++) {
-			if (x+p <= 9) {
+			if (x+p <= 9 && option == 'h') {
 				game_map[1][y][x+p] = SHIP_IA;
+			}
+			if (y+p <= 9 && option == 'v') {
+				game_map[1][y+p][x] = SHIP_IA;
 			}
 		}
 		x -= pos1;
@@ -156,6 +165,7 @@ int sw()
 		x = getnum();
 		printf("%d\nY: ", x);
 		y = getnum();
+		printf("%d\n", y);
 		if (x < 0 || y < 0) {
 			state = EXIT_SW;
 		}
@@ -164,11 +174,22 @@ int sw()
 			game_map[0][y][x]++;
 		}
 		x = getRandomNumber(10);
-		y = getRandomNumber(x);
+		y = getRandomNumber(x+1);
 		if (game_map[1][x][y] != WATER && game_map[1][x][y] != SHIP) {
 			game_map[1][x][y]++;
 		}
-		state = CheckGameStatus();
+		else {
+			for (x = 0, y = 0; game_map[1][y][x] == WATER || game_map[1][y][x] == SHIP; x++) {
+				if (x == 9) {
+					x = 0;
+					y++;
+				}
+			}
+			game_map[1][y][x]++;
+		}
+		if (state != EXIT_SW) {
+			state = CheckGameStatus();
+		}
 	}
 	print_map();
 	switch (state) {

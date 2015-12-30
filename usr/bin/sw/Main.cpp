@@ -21,7 +21,7 @@
 /* sea war game */
 #include "sw.h"
 
-#define VERSION "0.06"
+#define VERSION "0.1"
 
 int main(int argc, char **argv)
 {
