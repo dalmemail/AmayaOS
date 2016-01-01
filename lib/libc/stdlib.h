@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Niek Linnenbank, 2012 Felipe Cabrera, 2014 Daniel Martin
+ * Copyright (C) 2009 Niek Linnenbank, 2012 Felipe Cabrera, 2016 Dan Rulos
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -75,6 +75,13 @@ extern C int atoi(const char *nptr);
  * @return Return the converted value.
  */
 extern C double atof(char *input);
+
+/**
+ * @brief Convert a string to a long int.
+ * @param ptr String pointer to convert.
+ * @return Return the converted value.
+ */
+extern C long atol(const char *ptr);
 
 /**
  * @brief Convert a string to a long integer
