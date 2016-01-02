@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2009 Niek Linnenbank, 2012 Felipe Cabrera, 2014 Daniel Martin
+# Copyright (C) 2009 Niek Linnenbank, 2012 Felipe Cabrera, 2016 Dan Rulos
 # 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -46,7 +46,7 @@ for v in version:
     versionPower -= 8
 
 
-    currentRev = current + "-Stable"
+    currentRev = current + "-pre1"
 
 # Attempt to retrieve the correct compiler version
 try:
@@ -74,7 +74,7 @@ def regenerateHeader():
 	      '#define VERSIONCODE ' + escape(versionCode) + '\n' \
     	      '#define VERSION(a,b,c) (((a) << 16) + ((b) << 8) + (c))\n' \
 	      '#define RELEASE   "' + escape(currentRev) + '"\n' \
-	      '#define COPYRIGHT "Copyright (C) ' + escape(datetime.datetime.today().year) + ' Amaya OS Team\\r\\n\\r\\n" \\\n' \
+	      '#define COPYRIGHT "Copyright (C) ' + escape(datetime.datetime.today().year) + ' AmayaOS Team\\r\\n\\r\\n" \\\n' \
               '\n' \
 	      '#define COMPILER  "' + escape(compiler) + '"\n' \
 	      '#define DATETIME  "' + escape(datetime.datetime.today()) + '"\n' \
