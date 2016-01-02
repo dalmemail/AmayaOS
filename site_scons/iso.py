@@ -45,7 +45,7 @@ def generateISO(target, source, env):
 
     # Create an bootable ISO image.
     os.system("mkisofs -R -b boot/grub/stage2_eltorito -no-emul-boot " +
-	      "        -boot-load-size 4 -boot-info-table -V 'Amaya-OS " + version.currentRev + "'" +
+	      "        -boot-load-size 4 -boot-info-table -V 'AmayaOS " + version.currentRev + "'" +
 	      "        -o " + str(target[0]) + " " + temp)
 
     # Done.
