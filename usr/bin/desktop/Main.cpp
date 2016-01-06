@@ -35,9 +35,18 @@
 int menu();
 void memoria();
 
+unsigned int color = 0;
+
 int main(int argc, char **argv)
 {
   while (1) {
+    color++;
+    if (color > 15) {
+	color = 1;
+    }
+    if (color == GREEN || color == BROWN) {
+	color++;
+    }
     int i;
     u16 *vga;
     MemoryMessage mem;
@@ -67,7 +76,7 @@ int main(int argc, char **argv)
       vga[i] = VGA_CHAR(' ', GREEN, GREEN);
     }
     for (i=80; i < 1920; i++) {
-      vga[i] = VGA_CHAR(' ', WHITE, WHITE);
+      vga[i] = VGA_CHAR(' ', color, color);
     }
     vga[1920] = VGA_CHAR(' ', BROWN, BROWN);
     vga[1921] = VGA_CHAR('M', BLUE, BROWN);
@@ -123,7 +132,7 @@ int menu()
       vga[i] = VGA_CHAR(' ', GREEN, GREEN);
     }
     for (i=80; i < 1680; i++) {
-      vga[i] = VGA_CHAR(' ', WHITE, WHITE);
+      vga[i] = VGA_CHAR(' ', color, color);
     }
     vga[1520] = VGA_CHAR('A', BLUE, BROWN);
     vga[1521] = VGA_CHAR('m', BLUE, BROWN);
@@ -162,7 +171,7 @@ int menu()
     vga[1690] = VGA_CHAR(')', BLUE, BROWN);
     vga[1691] = VGA_CHAR(' ', BLUE, BROWN);
     for (i=1692; i < 1760; i++) {
-      vga[i] = VGA_CHAR(' ', WHITE, WHITE);
+      vga[i] = VGA_CHAR(' ', color, color);
     }
     vga[1760] = VGA_CHAR('R', BLUE, BROWN);
     vga[1761] = VGA_CHAR('e', BLUE, BROWN);
@@ -177,7 +186,7 @@ int menu()
     vga[1770] = VGA_CHAR('R', BLUE, BROWN);
     vga[1771] = VGA_CHAR(')', BLUE, BROWN);
     for (i=1772; i < 1840; i++) {
-      vga[i] = VGA_CHAR(' ', WHITE, WHITE);
+      vga[i] = VGA_CHAR(' ', color, color);
     }
     vga[1840] = VGA_CHAR('S', BLUE, BROWN);
     vga[1841] = VGA_CHAR('h', BLUE, BROWN);
