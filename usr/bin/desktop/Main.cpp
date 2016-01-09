@@ -101,7 +101,6 @@ int main(int argc, char **argv)
 int menu()
 {
     char tecla;
-    int i;
     u16 *vga;
     MemoryMessage mem;
 
@@ -116,22 +115,6 @@ int menu()
     /* Point to the VGA mapping. */
     vga = (u16 *) mem.virtualAddress;
 
-    for (i=0; i < 36; i++) {
-      vga[i] = VGA_CHAR(' ', GREEN, GREEN);
-    }
-    vga[36] = VGA_CHAR('A', BLACK, GREEN);
-    vga[37] = VGA_CHAR('m', BLACK, GREEN);
-    vga[38] = VGA_CHAR('a', BLACK, GREEN);
-    vga[39] = VGA_CHAR('y', BLACK, GREEN);
-    vga[40] = VGA_CHAR('a', BLACK, GREEN);
-    vga[41] = VGA_CHAR('O', BLACK, GREEN);
-    vga[42] = VGA_CHAR('S', BLACK, GREEN);
-    for (i=43; i < 80; i++) {
-      vga[i] = VGA_CHAR(' ', GREEN, GREEN);
-    }
-    for (i=80; i < 1840; i++) {
-      vga[i] = VGA_CHAR(' ', color, color);
-    }
     vga[1520] = VGA_CHAR('A', BLUE, BROWN);
     vga[1521] = VGA_CHAR('m', BLUE, BROWN);
     vga[1522] = VGA_CHAR('a', BLUE, BROWN);
@@ -192,7 +175,6 @@ int menu()
     vga[1849] = VGA_CHAR(' ', BLUE, BROWN);
     vga[1850] = VGA_CHAR(' ', BLUE, BROWN);
     vga[1851] = VGA_CHAR(' ', BLUE, BROWN);
-    memoria();
     do {
       tecla = getchar();
     } while (tecla != 'R'&& tecla != 'r'&& tecla != 'S'&& tecla != 's'&& 'M'&& tecla != 'm'&& tecla != 'W'&& tecla != 'w'
