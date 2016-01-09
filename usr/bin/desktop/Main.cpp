@@ -24,8 +24,6 @@
 #include <stdlib.h>
 #include <API/PrivExec.h>
 #include "wama/wamas.h"
-//#include "pong/pong.cpp"
-//#include "commander/commander.cpp"
 #include "AmaCALC/AmaCALC.cpp"
 #include "hangman/hangman.cpp"
 #include <MemoryMessage.h>
@@ -131,7 +129,7 @@ int menu()
     for (i=43; i < 80; i++) {
       vga[i] = VGA_CHAR(' ', GREEN, GREEN);
     }
-    for (i=80; i < 1680; i++) {
+    for (i=80; i < 1840; i++) {
       vga[i] = VGA_CHAR(' ', color, color);
     }
     vga[1520] = VGA_CHAR('A', BLUE, BROWN);
@@ -170,9 +168,6 @@ int menu()
     vga[1689] = VGA_CHAR('W', BLUE, BROWN);
     vga[1690] = VGA_CHAR(')', BLUE, BROWN);
     vga[1691] = VGA_CHAR(' ', BLUE, BROWN);
-    for (i=1692; i < 1760; i++) {
-      vga[i] = VGA_CHAR(' ', color, color);
-    }
     vga[1760] = VGA_CHAR('R', BLUE, BROWN);
     vga[1761] = VGA_CHAR('e', BLUE, BROWN);
     vga[1762] = VGA_CHAR('i', BLUE, BROWN);
@@ -185,9 +180,6 @@ int menu()
     vga[1769] = VGA_CHAR('(', BLUE, BROWN);
     vga[1770] = VGA_CHAR('R', BLUE, BROWN);
     vga[1771] = VGA_CHAR(')', BLUE, BROWN);
-    for (i=1772; i < 1840; i++) {
-      vga[i] = VGA_CHAR(' ', color, color);
-    }
     vga[1840] = VGA_CHAR('S', BLUE, BROWN);
     vga[1841] = VGA_CHAR('h', BLUE, BROWN);
     vga[1842] = VGA_CHAR('e', BLUE, BROWN);
@@ -217,11 +209,6 @@ int menu()
     if (tecla == 'W'|| tecla == 'w') {
       wama();
     }
-/*
-    if (tecla == 'P'|| tecla == 'p') {
-      game();
-    }
-*/
     if (tecla == 'H'|| tecla == 'h') {
       hangman();
     }
