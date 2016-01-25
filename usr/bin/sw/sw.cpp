@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Dan Rulos
+ * Copyright (C) 2016 Dan Rulos
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,6 +33,9 @@
 #define PLAYING 2
 #define EXIT_SW 3
 #define EQUAL 4
+
+#define ONE_PLAYER 0
+#define MULTI_PLAYER 1
 
 int game_map[2][10][10];
 
@@ -76,50 +79,71 @@ void print_map()
 	}
 }
 
-void put_ship_on_map()
+void put_ship_on_map(int mode)
 {
-	for (int i = 0; i < 10; i++) {
-		for (int x = 0; x < 10; x++) {
-			game_map[1][i][x] = WATER_IA;
+	int pos1, pos2;
+	if (mode == ONE_PLAYER) {
+		for (int i = 0; i < 10; i++) {
+			for (int x = 0; x < 10; x++) {
+				game_map[1][i][x] = WATER_IA;
+			}
 		}
+		pos1 = getRandomNumber(10);
+		pos1++;
+		pos2 = getRandomNumber(pos1);
+		pos2++;
 	}
-	int pos1 = getRandomNumber(10);
-	pos1++;
-	int pos2 = getRandomNumber(pos1);
-	pos2++;
-	for (int i = 1; i <= 4; i++) {
-		printf("Barco %d\nX: ", i);
-		int x = getnum();
-		printf("%d\nY: ", x);
-		int y = getnum();
-		printf("%d\n", y);
-		char option;
-		do {
-			printf("Horizontal o Vertical (h/v): ");
-			option = getchar();
-			printf("%c\n", option);
-		} while(option != 'h' && option != 'v');
-		game_map[1][y][x] = SHIP_IA;
-		for (int p = 0; p < (i+1); p++) {
-			if (x+p <= 9 && option == 'h') {
-				game_map[1][y][x+p] = SHIP_IA;
+	for (int z = 0; z <= 1; z++) {
+		clear_window();
+		if (mode == ONE_PLAYER && z == 0) {
+			continue;
+		}
+		for (int i = 1; i <= 4; i++) {
+			printf("Barco %d\nX: ", i);
+			int x = getnum();
+			printf("%d\nY: ", x);
+			int y = getnum();
+			printf("%d\n", y);
+			char option;
+			do {
+				printf("Horizontal o Vertical (h/v): ");
+				option = getchar();
+				printf("%c\n", option);
+			} while(option != 'h' && option != 'v');
+			game_map[z][y][x] = SHIP_IA;
+			if (mode == ONE_PLAYER) {
+				for (int p = 0; p < (i+1); p++) {
+					if (x+p <= 9 && option == 'h') {
+						game_map[z][y][x+p] = SHIP_IA;
+					}
+					if (y+p <= 9 && option == 'v') {
+						game_map[z][y+p][x] = SHIP_IA;
+					}
+				}
+				x -= pos1;
+				y -= pos2;
+				if (x < 0) {
+					x *= -1;
+				}
+				if (y < 0) {
+					y *= -1;
+				}
+				game_map[0][x][y] = UNKOWN_SHIP;
+				for (int p = 0; p < (i+1); p++) {
+					if (y+p <= 9) {
+						game_map[0][x][y+p] = UNKOWN_SHIP;
+					}
+				}
 			}
-			if (y+p <= 9 && option == 'v') {
-				game_map[1][y+p][x] = SHIP_IA;
-			}
-		}
-		x -= pos1;
-		y -= pos2;
-		if (x < 0) {
-			x *= -1;
-		}
-		if (y < 0) {
-			y *= -1;
-		}
-		game_map[0][x][y] = UNKOWN_SHIP;
-		for (int p = 0; p < (i+1); p++) {
-			if (y+p <= 9) {
-				game_map[0][x][y+p] = UNKOWN_SHIP;
+			else if (mode == MULTI_PLAYER) {
+				for (int p = 0; p < (i+1); p++) {
+					if (x+p <= 9 && option == 'h') {
+						game_map[z][y][x+p] = UNKOWN_SHIP;
+					}
+					if (y+p <= 9 && option == 'v') {
+						game_map[z][y+p][x] = UNKOWN_SHIP;
+					}
+				}
 			}
 		}
 	}
@@ -135,7 +159,7 @@ int CheckGameStatus()
 			if (game_map[0][x][y] == UNKOWN_SHIP) {
 				ship_count++;
 			}
-			if (game_map[1][x][y] == SHIP_IA) {
+			if (game_map[1][x][y] == SHIP_IA || game_map[1][x][y] == UNKOWN_SHIP) {
 				ship_ia_count++;
 			}
 		}
@@ -154,8 +178,25 @@ int CheckGameStatus()
 
 int sw()
 {
+	int mode = ONE_PLAYER;
+	char option;
+	clear_window();
+	printf("=== MODO ===\n");
+	printf("1. Un Jugador\n");
+	printf("2. Dos Jugadores\n");
+	do {
+		option = getchar();
+	} while(option != '1' && option != '2');
+	switch (option) {
+		case '2':
+			mode = MULTI_PLAYER;
+			break;
+		default:
+			mode = ONE_PLAYER;
+	}
+	clear_window();
 	int result = EXIT_SUCCESS;
-	put_ship_on_map();
+	put_ship_on_map(mode);
 	int x = 0;
 	int y = 0;
 	int state = PLAYING;
@@ -173,19 +214,35 @@ int sw()
 			game_map[0][y][x]++;
 			game_map[0][y][x]++;
 		}
-		x = getRandomNumber(10);
-		y = getRandomNumber(x+1);
-		if (game_map[1][x][y] != WATER && game_map[1][x][y] != SHIP) {
-			game_map[1][x][y]++;
-		}
-		else {
-			for (x = 0, y = 0; game_map[1][y][x] == WATER || game_map[1][y][x] == SHIP; x++) {
-				if (x == 9) {
-					x = 0;
-					y++;
-				}
+		if (mode == ONE_PLAYER) {
+			x = getRandomNumber(10);
+			y = getRandomNumber(x+1);
+			if (game_map[1][x][y] != WATER && game_map[1][x][y] != SHIP) {
+				game_map[1][x][y]++;
 			}
-			game_map[1][y][x]++;
+			else {
+				for (x = 0, y = 0; game_map[1][y][x] == WATER || game_map[1][y][x] == SHIP; x++) {
+					if (x == 9) {
+						x = 0;
+						y++;
+					}
+				}
+				game_map[1][y][x]++;
+			}
+		}
+		else if (mode == MULTI_PLAYER) {
+			printf("Player 2\nX: ");
+			x = getnum();
+			printf("%d\nY: ", x);
+			y = getnum();
+			printf("%d\n", y);
+			if (x < 0 || y < 0) {
+				state = EXIT_SW;
+			}
+			if (game_map[1][y][x] == UNKOWN_WATER || game_map[1][y][x] == UNKOWN_SHIP) {
+				game_map[1][y][x]++;
+				game_map[1][y][x]++;
+			}
 		}
 		if (state != EXIT_SW) {
 			state = CheckGameStatus();

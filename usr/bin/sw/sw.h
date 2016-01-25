@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Dan Rulos
+ * Copyright (C) 2016 Dan Rulos
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@ extern C void print_map();
  * put_ship_on_map() puts the ships position on the game map *
  */
 
-extern C void put_ship_on_map();
+extern C void put_ship_on_map(int mode);
 
 /**
  * sw() is the main function of the game Sea War *
