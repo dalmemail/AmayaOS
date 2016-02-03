@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Alvaro Stagg [alvarostagg@openmailbox.org]
+ * Copyright (C) 2015 Alvaro Stagg [alvarostagg@openmailbox.org], 2016 Dan Rulos
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -111,14 +111,18 @@ double sqrt(double base)
 		return 0;
 	}
 
-	for(int i = 0; i < (50+base); c += mod, i++)
-	{
+	int i = 0;
+	do {
+		c += mod;
 		if(c * c > base)
 		{
 			c -= mod;
 			mod /= 10;
 		}
-	}
+		if (mod <= 0.000001) {
+			i++;
+		}
+	} while (c * c != base && i <= 10);
 
 	return c;
 }
