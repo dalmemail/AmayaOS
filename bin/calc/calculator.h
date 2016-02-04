@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Dan Rulos.
+ * Copyright (C) 2016 Dan Rulos.
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,16 +20,11 @@
 
 /**
  * @brief Convert a double to a string.
+ * @param r
  * @param input Double value to convert.
- * @param output String pointer to write.
  * @return Nothing (void).
  */
-void ftoa(char *output, double input);
-
-/**
- * @brief Clean the screen.
- */
-void clean_calc();
+void ftoa(char r[16], double input);
 
 /**
  * @brief Do operations (+, -, *, /, %).
@@ -39,9 +34,5 @@ void clean_calc();
  * @return Return the operation result.
  */
 int calculator(int num1, char operation, int num2);
-
-/* convert temperatures (kelvin, celsius, fahrenheit)
- * and other options like powers and square roots */
-int av();
 
 #endif

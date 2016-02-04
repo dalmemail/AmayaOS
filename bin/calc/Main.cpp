@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Dan Rulos.
+ * Copyright (C) 2016 Dan Rulos.
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,27 +18,54 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 #include "calculator.h"
 
-#define VERSION "0.9.1"
+#define VERSION "0.9.2"
 
 /* main function */
 int main(int argc, char **argv)
 {
+	int i;
+	double decimal_n;
+	char decimal_array[16];
 	int ret = EXIT_SUCCESS;
-	if (argc == 2 && (strcmp(argv[1], "--av")) == 0) {
-		ret = av();
-	}
-	else if (argc == 2 && (strcmp(argv[1], "--version")) == 0) {
+	if (argc == 2 && (strcmp(argv[1], "--version")) == 0) {
 		printf("Version: %s\n", VERSION);
 	}
+	else if (argc >= 3 && (strcmp(argv[1], "--squareroot")) == 0) {
+		for (i = 2; i < argc; i++) {
+			decimal_n = atof(argv[i]);
+			ftoa(decimal_array, sqrt(decimal_n));
+			printf("%s\n", decimal_array);
+		}
+	}
+	else if (argc == 4 && (strcmp(argv[1], "--power")) == 0) {
+		decimal_n = 1.0;
+		int exponente = atoi(argv[3]);
+		if (exponente > 0) {
+			for (i = 1; i <= exponente; i++) {
+				decimal_n *= atof(argv[2]);
+			}
+		}
+		ftoa(decimal_array, decimal_n);
+		if (decimal_array[0] == '-' && atof(argv[2]) > 0.0) {
+			printf("%s: error de calculo\n", argv[0]);
+		}
+		else {
+			printf("%s\n", decimal_array);
+		}
+	}
 	else if (argc < 4) {
-		printf("uso: %s num1 operator1 num2 operator2 num3 ...\n", argv[0]);
+		printf("%s v%s Ayuda\n", argv[0], VERSION);
+		printf("Operaciones Simples: %s num1 operator1 num2 operator2 num3 ...\n", argv[0]);
+		printf("Raices Cuadradas: %s --squareroot num1 num2 ...\n", argv[0]);
+		printf("Potencias: %s --power base exponente\n", argv[0]);
 		ret = EXIT_FAILURE;
 	}
 	else if (argc >= 4) {
 		int result = atoi(argv[1]);
-		int i = 2;
+		i = 2;
 		do {
 			result = calculator(result, argv[i][0], atoi(argv[i+1]));
 		} while((i += 2)+1 < argc);

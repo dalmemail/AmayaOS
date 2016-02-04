@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Dan Rulos.
+ * Copyright (C) 2016 Dan Rulos.
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,25 +21,28 @@
 #include <math.h>
 #include "calculator.h"
 
-void ftoa(char *output, double input)
+void ftoa(char r[16], double input)
 {
-	char number[8];
-	char pdecc[8];
+	char number[16];
+	char pdecc[16];
 	int pint = input;
 	double pdec = (input - pint) * 1000000;
+	double dec_part = input - pint;
 	itoa(number, 10, pint);
 	strcat(number, ".");
+	int times = 0;
+	double mod = 0.1;
+	while (mod > dec_part && mod > 0.000001) {
+		times++;
+		mod /= 10;
+	}
+	for (int i = 0; i < times; i++) {
+		strcat(number, "0");
+	}
 	pint = pdec;
 	itoa(pdecc, 10, pint);
 	strcat(number, pdecc);
-	strcpy(output, number);
-}
-
-/* clean the screen */
-void clean_calc()
-{
-	char str[] = {0x1b, 0x5b, 0x48, 0x1b, 0x5b, 0x4a, '\0'};
-	printf("%s", str);
+	strcpy(r, number);
 }
 
 /* do operations */
@@ -67,82 +70,4 @@ int calculator(int num1, char operation, int num2)
 			return EXIT_FAILURE;
 	}
 	return result;
-}
-
-/*convert temperatures (original from calc v0.5) */
-int av()
-{
-	char value = 's';
-	char input[8];
-	char exponente[8];
-	int resc = 0;
-	printf("Opciones avanzadas:\n");
-	printf("[1] Celius --> Fahrenheit\n");
-	printf("[2] Fahrenheit --> Celsius\n");
-	printf("[3] Kelvin --> Celsius\n");
-	printf("[4] Kelvin --> Fahrenheit\n");
-	printf("[5] Celsius --> Kelvin\n");
-	printf("[6] Fahrenheit --> Kelvin\n");
-	printf("[7] Raices cuadradas\n");
-	printf("[8] Potencias\n");
-	printf("[S] Cerrar el conversor\n");
-	value = getchar();
-	clean_calc();
-	if (value == 's' || value == 'S') {
-		return 0;
-	}
-	if (value < '7' && value > '0') {
-		printf("Valor a convertir: ");
-		gets_s(input, 8);
-	}
-	clean_calc();
-	double res;
-	char result[32];
-	switch(value) {
-		case '1':
-			resc = 9 * atoi(input) / 5 + 32;
-			printf("Celsius: %6d Fahrenheit: %6d\n", atoi(input), resc);
-			break;
-		case '2':
-			resc = 5 * (atoi(input)-32) / 9;
-			printf("Fahrenheit: %6d Celsius: %6d\n", atoi(input), resc);
-			break;
-		case '3':
-			resc = atoi(input) - 273;
-			printf("Kelvin: %6d Celsius: %6d\n", atoi(input), resc);
-			break;
-		case '4':
-			/* primero convertimos a celsius */
-			resc = atoi(input) - 273;
-			resc = 9 * resc / 5 + 32;
-			printf("Kelvin: %6d Fahrenheit: %6d\n", atoi(input), resc);
-			break;
-		case '5':
-			resc = atoi(input) + 273;
-			printf("Celsius: %6d Kelvin: %6d\n", atoi(input), resc);
-			break;
-		case '6':
-			/* primero convertimos a celsius */
-			resc = 5 * (atoi(input)-32) / 9;
-			resc = resc + 273;
-			printf("Fahrenheit: %6d Kelvin: %6d\n", atoi(input), resc);
-			break;
-		case '7':
-			printf("Raiz de: ");
-			gets_s(input, 8);
-			res = sqrt(atof(input));
-			ftoa(result, res);
-			printf("%s\n", result);
-			break;
-		case '8':
-			printf("Base: ");
-			gets_s(input, 8);
-			printf("Exponente: ");
-			gets_s(exponente, 8);
-			res = pow(atof(input), atof(exponente));
-			ftoa(result, res);
-			printf("%s\n", result);
-			break;
-	}
-	return 0;
 }
