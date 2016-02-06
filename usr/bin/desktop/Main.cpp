@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Dan Rulos
+ * Copyright (C) 2016 Dan Rulos
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -91,9 +91,14 @@ int main(int argc, char **argv)
     while(getchar() != 'm') {
     }
     if (menu() == -1) {
-      char clean[] = {0x1b, 0x5b, 0x48, 0x1b, 0x5b, 0x4a, '\0'};
-      printf("%s", clean);
-      return 0;
+	char clean[] = {0x1b, 0x5b, 0x48, 0x1b, 0x5b, 0x4a, '\0'};
+	printf("%s", clean);
+	int file = open("/home/live/shell_welcome", O_RDONLY);
+	char shell_welcome[300];
+	read(file, shell_welcome, 300);
+	close(file);
+	printf("%s\nEntering AmayaOS Shell. Type 'help' for a list of commands.\n\n", shell_welcome);
+	return 0;
     }
   }
 }
