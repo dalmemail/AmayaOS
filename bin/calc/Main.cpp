@@ -21,7 +21,7 @@
 #include <math.h>
 #include "calculator.h"
 
-#define VERSION "0.9.2"
+#define VERSION "0.9.3"
 
 /* main function */
 int main(int argc, char **argv)
@@ -35,9 +35,14 @@ int main(int argc, char **argv)
 	}
 	else if (argc >= 3 && (strcmp(argv[1], "--squareroot")) == 0) {
 		for (i = 2; i < argc; i++) {
-			decimal_n = atof(argv[i]);
-			ftoa(decimal_array, sqrt(decimal_n));
-			printf("%s\n", decimal_array);
+			if (argv[i][0] == '-') {
+				printf("Error: %s no tiene raices conocidas.\n", argv[i]);
+			}
+			else {
+				decimal_n = atof(argv[i]);
+				ftoa(decimal_array, sqrt(decimal_n));
+				printf("%s\n", decimal_array);
+			}
 		}
 	}
 	else if (argc == 4 && (strcmp(argv[1], "--power")) == 0) {
