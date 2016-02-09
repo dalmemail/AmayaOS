@@ -48,7 +48,7 @@ void ftoa(char r[16], double input)
 /* do operations */
 int calculator(int num1, char operation, int num2)
 {
-	int result;
+	int result=0;
 	switch (operation) {
 		case '+':
 			result = num1 + num2;
@@ -60,10 +60,14 @@ int calculator(int num1, char operation, int num2)
 			result = num1 * num2;
 			break;
 		case '/':
-			result = num1 / num2;
+			if (num2 != 0) {
+				result = num1 / num2;
+			}
 			break;
 		case '%':
-			result = num1 % num2;
+			if (num2 != 0) {
+				result = num1 % num2;
+			}
 			break;
 		default:
 			printf("error: operador %c desconocido\n", operation);
