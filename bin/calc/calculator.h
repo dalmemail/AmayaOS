@@ -28,11 +28,11 @@ void ftoa(char r[16], double input);
 
 /**
  * @brief Do operations (+, -, *, /, %).
- * @param num1 First Number (int).
+ * @param num1 First Number (double).
  * @param operation Char value to select the type of operation.
- * @param num2 Second Number (int).
+ * @param num2 Second Number (double).
  * @return Return the operation result.
  */
-int calculator(int num1, char operation, int num2);
+double calculator(double num1, char operation, double num2);
 
 #endif

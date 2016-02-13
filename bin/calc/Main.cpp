@@ -21,7 +21,7 @@
 #include <math.h>
 #include "calculator.h"
 
-#define VERSION "0.9.3"
+#define VERSION "0.9.4"
 
 /* main function */
 int main(int argc, char **argv)
@@ -69,12 +69,13 @@ int main(int argc, char **argv)
 		ret = EXIT_FAILURE;
 	}
 	else if (argc >= 4) {
-		int result = atoi(argv[1]);
+		double result = atof(argv[1]);
 		i = 2;
 		do {
-			result = calculator(result, argv[i][0], atoi(argv[i+1]));
+			result = calculator(result, argv[i][0], atof(argv[i+1]));
 		} while((i += 2)+1 < argc);
-		printf("%d\n", result);
+		ftoa(decimal_array,result);
+		printf("%s\n", decimal_array);
 	}
 	return ret;
 }
