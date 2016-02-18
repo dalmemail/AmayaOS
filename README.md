@@ -28,7 +28,7 @@ You can test this operating system with a virtual machine (Using VirtualBox or V
 For testing Fnx on a real PC you may burn the boot ISO image in an empty CD/DVD, and reboot. You must set up your boot from CD/DVD device in the BIOS to use AmayOS
 
 
-*NOTE 1: Using FNX on a physical PC isn't a bright idea, it hasn't been fully tested.*
+*NOTE 1: Using FNX on a physical PC isn't a bright idea, as it is unlikely to fully work.*
 
 *NOTE 2: AMAYA OS v 0.02/0.05 has been tested in many x86 arquitectures with good results.*
 
