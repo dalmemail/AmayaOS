@@ -4,19 +4,20 @@ Copyright (C) 2009 Niek Linnenbank, 2012 Felipe Cabrera, 2014 AmayaOS Team
 ## English
 ### How to use AMAYA-OS
 1. Compilation:
- * To compile Fnx, you may entry on the source folder from a console an type:
+ * To compile FNX, enter the folder containing the source code in a terminal and enter the below to compile the OS.
  
    `$ scons`
- * To compile it and make an ISO image, you may type:
+ * To compile it and make an ISO image type:
  
    `$ scons iso`
- * SCons detects all changes and it ignores all unchanged files, but in some cases you'll need to compile from scratch. In this cases you may type:
+ * SCons detects all changes and it ignores all unchanged files, but in some cases you'll need to compile from scratch. If this happens type:
  
    `$ sh ./clean`
 2. Test AMAYA:
-To test this operating system, you can do it with a virtual machine (such VirtualBox and VMWare), an emulator (QEMU and BOCHS) or in a real machine.
 
- * To test with QEMU you may open your console, enter to source folder and type:
+You can test this operating system with a virtual machine (Using VirtualBox or VMware), an emulator (Examples being QEMU and BOCHS) or you can try running it on physical hardware.
+
+ * To test with QEMU open the folder where you compiled AmayOS in a terminal and enter:
 
    `$ qemu -usb -cdrom boot/boot.iso`
    
@@ -24,13 +25,14 @@ To test this operating system, you can do it with a virtual machine (such Virtua
 
    `$ qemu -curses -usb -cdrom boot/boot.iso`
    
-For testing Fnx on a real PC you may burn the boot ISO image in an empty CD/DVD, and reboot. You must set up your boot from CD/DVD device in the BIOS in case you don't have
+For testing Fnx on a real PC you may burn the boot ISO image in an empty CD/DVD, and reboot. You must set up your boot from CD/DVD device in the BIOS to use AmayOS
 
-*NOTE 1: Is not suitable to use Fnx in a real PC, it hasn't beet tested completely.*
+
+*NOTE 1: Using FNX on a physical PC isn't a bright idea, as it is unlikely to fully work.*
 
 *NOTE 2: AMAYA OS v 0.02/0.05 has been tested in many x86 arquitectures with good results.*
 
-*NOTE 3: AmayaOS can't be compile in x86_64 computers.*
+*NOTE 3: AmayaOS can't be compiled on x86_64 computers.*
 
 - - -
 
