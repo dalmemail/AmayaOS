@@ -21,7 +21,7 @@
 #include <math.h>
 #include "calculator.h"
 
-#define VERSION "0.9.4"
+#define VERSION "0.9.5"
 
 /* main function */
 int main(int argc, char **argv)
@@ -48,10 +48,18 @@ int main(int argc, char **argv)
 	else if (argc == 4 && (strcmp(argv[1], "--power")) == 0) {
 		decimal_n = 1.0;
 		int exponente = atoi(argv[3]);
+		bool negative = false;
+		if (exponente < 0) {
+			exponente *= -1;
+			negative = true;
+		}
 		if (exponente > 0) {
 			for (i = 1; i <= exponente; i++) {
 				decimal_n *= atof(argv[2]);
 			}
+		}
+		if (negative) {
+			decimal_n = 1 / decimal_n;
 		}
 		ftoa(decimal_array, decimal_n);
 		if (decimal_array[0] == '-' && atof(argv[2]) > 0.0) {
