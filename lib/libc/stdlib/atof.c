@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Dan Rulos
+ * Copyright (C) 2016 Dan Rulos
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,6 +35,9 @@ double atof(char *input)
 				div *= 10;
 			}
 		}
+	}
+	if (input[0] == '-') {
+		n *= -1;
 	}
 	return n;
 }
