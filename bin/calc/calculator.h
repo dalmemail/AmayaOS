@@ -35,4 +35,6 @@ void ftoa(char r[16], double input);
  */
 double calculator(double num1, char operation, double num2);
 
+double root(double base, int superindice);
+
 #endif

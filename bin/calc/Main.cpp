@@ -18,15 +18,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <math.h>
 #include "calculator.h"
 
-#define VERSION "0.9.5"
+#define VERSION "0.9.6"
 
 /* main function */
 int main(int argc, char **argv)
 {
-	int i;
+	int i = 0;
 	double decimal_n;
 	char decimal_array[16];
 	int ret = EXIT_SUCCESS;
@@ -40,10 +39,29 @@ int main(int argc, char **argv)
 			}
 			else {
 				decimal_n = atof(argv[i]);
-				ftoa(decimal_array, sqrt(decimal_n));
+				ftoa(decimal_array, root(decimal_n, 2));
 				printf("%s\n", decimal_array);
 			}
 		}
+	}
+	else if (argc == 4 && (strcmp(argv[1], "--root")) == 0) {
+			if (argv[3][0] == '-' && atoi(argv[2]) % 2 == 0) {
+				printf("Math Error\n");
+			}
+			else if (atoi(argv[2]) == 0) {
+				printf("Math Error\n");
+			}
+			else {
+				decimal_n = atof(argv[3]);
+				if (atoi(argv[2]) < 0) {
+					int n = -atoi(argv[2]);
+					ftoa(decimal_array, 1 / root(decimal_n, n));
+				}
+				else {
+					ftoa(decimal_array, root(decimal_n, atoi(argv[2])));
+				}
+				printf("%s\n", decimal_array);
+			}
 	}
 	else if (argc == 4 && (strcmp(argv[1], "--power")) == 0) {
 		decimal_n = 1.0;
@@ -73,6 +91,7 @@ int main(int argc, char **argv)
 		printf("%s v%s Ayuda\n", argv[0], VERSION);
 		printf("Operaciones Simples: %s num1 operator1 num2 operator2 num3 ...\n", argv[0]);
 		printf("Raices Cuadradas: %s --squareroot num1 num2 ...\n", argv[0]);
+		printf("Raices: %s --root superindice base\n", argv[0]);
 		printf("Potencias: %s --power base exponente\n", argv[0]);
 		ret = EXIT_FAILURE;
 	}
