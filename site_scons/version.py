@@ -46,7 +46,7 @@ for v in version:
     versionPower -= 8
 
 
-    currentRev = current + "-pre3"
+    currentRev = current + "-Stable"
 
 # Attempt to retrieve the correct compiler version
 try:
