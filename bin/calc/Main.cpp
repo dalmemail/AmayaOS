@@ -20,7 +20,7 @@
 #include <string.h>
 #include "calculator.h"
 
-#define VERSION "0.9.6"
+#define VERSION "0.9.6.1"
 
 /* main function */
 int main(int argc, char **argv)
@@ -82,6 +82,9 @@ int main(int argc, char **argv)
 		ftoa(decimal_array, decimal_n);
 		if (decimal_array[0] == '-' && atof(argv[2]) > 0.0) {
 			printf("%s: error de calculo\n", argv[0]);
+		}
+		else if (exponente == 0 && atof(argv[2]) == 0) {
+			printf("Math Error\n");
 		}
 		else {
 			printf("%s\n", decimal_array);
