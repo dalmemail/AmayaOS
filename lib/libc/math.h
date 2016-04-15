@@ -65,9 +65,9 @@ long double sin(long double x);
  fin trigonometría */
 
 /* Logaritmos */
-double log(double x);
+/*double log(double x);
 float log(float x);
-long double log(long double x);
+long double log(long double x);*/
 
 double log10(double x);
 float log10(float x);
