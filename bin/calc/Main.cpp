@@ -20,7 +20,7 @@
 #include <string.h>
 #include "calculator.h"
 
-#define VERSION "0.9.6.1"
+#define VERSION "0.9.7"
 
 /* main function */
 int main(int argc, char **argv)
@@ -90,13 +90,17 @@ int main(int argc, char **argv)
 			printf("%s\n", decimal_array);
 		}
 	}
-	else if (argc < 4) {
+	else if (argc == 2 && (strcmp(argv[1], "--help")) == 0) {
 		printf("%s v%s Ayuda\n", argv[0], VERSION);
 		printf("Operaciones Simples: %s num1 operator1 num2 operator2 num3 ...\n", argv[0]);
 		printf("Raices Cuadradas: %s --squareroot num1 num2 ...\n", argv[0]);
 		printf("Raices: %s --root superindice base\n", argv[0]);
 		printf("Potencias: %s --power base exponente\n", argv[0]);
 		ret = EXIT_FAILURE;
+	}
+	else if (argc < 4) {
+		printf("%s: No existe un argumento o es incorrecto.\n", argv[0]);
+		printf("Pruebe `%s --help' para mas informacion.\n", argv[0]);
 	}
 	else if (argc >= 4) {
 		double result = atof(argv[1]);
