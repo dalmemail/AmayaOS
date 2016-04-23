@@ -20,7 +20,7 @@
 #include <string.h>
 #include "calculator.h"
 
-#define VERSION "0.9.7"
+#define VERSION "0.9.8"
 
 /* main function */
 int main(int argc, char **argv)
@@ -65,26 +65,58 @@ int main(int argc, char **argv)
 	}
 	else if (argc == 4 && (strcmp(argv[1], "--power")) == 0) {
 		decimal_n = 1.0;
-		int exponente = atoi(argv[3]);
-		bool negative = false;
-		if (exponente < 0) {
-			exponente *= -1;
-			negative = true;
-		}
-		if (exponente > 0) {
+		double exponente_dec = atof(argv[3]);
+		if (exponente_dec == (int) exponente_dec) {
+			int exponente = (int) exponente_dec;
+			bool negative = false;
+			if (exponente < 0) {
+				exponente *= -1;
+				negative = true;
+			}
 			for (i = 1; i <= exponente; i++) {
 				decimal_n *= atof(argv[2]);
 			}
+			if (negative) {
+				decimal_n = 1 / decimal_n;
+			}
 		}
-		if (negative) {
-			decimal_n = 1 / decimal_n;
+		else {
+			bool negative = false;
+			if (exponente_dec < 0) {
+				exponente_dec *= -1;
+				negative = true;
+			}
+			double numerator_dec = exponente_dec;
+			int denominator = 1;
+			ftoa(decimal_array, exponente_dec);
+			int start_pos = 0;
+			int final_pos = 0;
+			while (decimal_array[i] != '.') {
+				i++;
+			}
+			start_pos = i;
+			for (unsigned int x = i; x < strlen(decimal_array); x++) {
+				if (decimal_array[x] != '0') {
+					final_pos = x;
+				}
+			}
+			for (i = 0; i < (final_pos-start_pos); i++) {
+				numerator_dec *= 10;
+				denominator *= 10;
+			}
+			int numerator = (int) numerator_dec;
+			decimal_n = root(atof(argv[2]), denominator);
+			double base = decimal_n;
+			for (i = 1; i < numerator; i++) {
+				decimal_n *= base;
+			}
+			if (negative) {
+				decimal_n = 1 / decimal_n;
+			}
 		}
 		ftoa(decimal_array, decimal_n);
 		if (decimal_array[0] == '-' && atof(argv[2]) > 0.0) {
 			printf("%s: error de calculo\n", argv[0]);
-		}
-		else if (exponente == 0 && atof(argv[2]) == 0) {
-			printf("Math Error\n");
 		}
 		else {
 			printf("%s\n", decimal_array);
