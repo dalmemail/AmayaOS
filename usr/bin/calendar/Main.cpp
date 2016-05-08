@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Dan Rulos, 2015 Francisco Domínguez
+ * Copyright (C) 2016 Dan Rulos, 2015 Francisco Domínguez
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,7 +18,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define VERSION "1.2"
+#define VERSION "1.3"
 
 #define GOOD_DATE 0
 #define BAD_DATE -1
@@ -57,11 +57,17 @@ int checkdate(int day, int month, int year)
 int leapdays(int year, int month, int day)
 {
 	int days = 0;
-	for (int i = 1582; i < year; i++) {
+	for (int i = 1582; i <= year; i++) {
 		if (i % 4 == 0&& i % 100 != 0) {
+			if (i == year && month < 3) {
+				days--;
+			}
 			days++;
 		}
 		if (i % 100 == 0&& i % 400 == 0) {
+			if (i == year && month < 3) {
+				days--;
+			}
 			days++;
 		}
 	}
