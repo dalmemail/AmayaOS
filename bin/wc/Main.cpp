@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Dan Rulos
+ * Copyright (C) 2016 Dan Rulos
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,7 +43,7 @@ int f_size(char *path)
 int main(int argc, char **argv)
 {
 	int fd;
-	int c,l,w = NO;
+	int c = NO, l = NO,w = NO;
 	if (argc < 2) {
 		printf("Uso: %s FILE1 FILE2...\n", argv[0]);
 		return EXIT_FAILURE;
