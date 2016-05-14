@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Niek Linnenbank, 2015 Dan Rulos, 2016 Alvaro Stagg [alvarostagg@openmailbox.org]
+ * Copyright (C) 2009 Niek Linnenbank, 2016 Dan Rulos, 2016 Alvaro Stagg [alvarostagg@openmailbox.org]
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,7 +21,7 @@
 #include <unistd.h>
 #include <sys/stat.h>
 
-#define VERSION "v0.5.9"
+#define VERSION "v0.6"
 
 static int hflag, vflag, ret = 0;
 static int flags[8];
@@ -29,8 +29,9 @@ static int flags[8];
 static void usage(void);
 static void version(void);
 static void cat(char *argv[], int argc, int flags[8]);
-static void read(const char *fileName, int flags[8]);
+static void read_file(const char *fileName, int flags[8]);
 static const char *fileName;
+int lines = 0;
 
 int get_file_size(const char *fileName);
 
@@ -114,41 +115,28 @@ static void cat(char *argv[], int argc, int flags[8])
 
 	for (int i = 1; i < argc; i++)
 	{
-		if ((fd = open(argv[i], O_RDONLY)) < 0)
-			continue;
-		else
-		{
+		if ((fd = open(argv[i], O_RDONLY)) >= 0) {
 			fileName = argv[i];
-			break;
+			read_file(fileName, flags);
+			close(fd);
 		}
-	}
-
-	if (fd < 0)
-	{
-		printf("%s: No existe el fichero o el directorio.\n", argv[0]);
-		ret = 1;
-	}
-	else
-	{
-		read(fileName, flags);
-		close(fd);
 	}
 }
 
-static void read(const char *fileName, int flags[8])
+static void read_file(const char *fileName, int flags[8])
 {
-	FILE *fp = fopen(fileName, "r");
-	int lines = 0;
 
-	if (fp == NULL)
+	int fd;
+	if ((fd = open(fileName, O_RDONLY)) < 0)
 	{
 		printf("cat: %s: No existe el fichero o el directorio.\n", fileName);
 		ret = 1;
 	}
 	else
 	{
-		char cnt[get_file_size(fileName)];
-		int n_bytes = fread(cnt, 1, sizeof(cnt), fp);
+		int file_size = get_file_size(fileName);
+		char *cnt = new char[file_size];
+		read(fd, cnt, file_size);
 
 		if (flags[0] == 1 || (flags[3] == 1 && cnt[0] != '\n'))
 		{
@@ -156,9 +144,9 @@ static void read(const char *fileName, int flags[8])
 			printf("     %d  ", lines);
 		}
 
-		unsigned int i = 0;
+		int i = 0;
 
-		for (i = 0; i < n_bytes - 1; i++)
+		for (i = 0; i < file_size - 1; i++)
 		{
 			printf("%c", cnt[i]);
 
@@ -203,6 +191,7 @@ static void read(const char *fileName, int flags[8])
 
 		/* Imprime el último caracter perdido */
 		printf("%c\n", cnt[i]);
+		delete cnt;
 	}
 }
 
