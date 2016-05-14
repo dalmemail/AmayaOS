@@ -84,7 +84,7 @@ int main(int argc, char **argv)
 
 static void version(void)
 {
-	printf("sleep (AmayaOS CoreUtils) 0.5.9\n"
+	printf("sleep (AmayaOS CoreUtils) 0.6\n"
 	"Copyright (C) 2016 AmayaOS, Inc.\n"
 	"Licencia GPLv3+: GPL de GNU version 3 o posterior\n"
 	"<http://gnu.org/licenses/gpl.html>.\n"
