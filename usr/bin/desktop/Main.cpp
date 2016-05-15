@@ -24,7 +24,7 @@
 #include <stdlib.h>
 #include <API/PrivExec.h>
 #include "wama/wamas.h"
-#include "AmaCALC/AmaCALC.cpp"
+//#include "AmaCALC/AmaCALC.cpp"
 #include "hangman/hangman.cpp"
 #include <MemoryMessage.h>
 #include <Config.h>
@@ -120,7 +120,7 @@ int menu()
     /* Point to the VGA mapping. */
     vga = (u16 *) mem.virtualAddress;
 
-    vga[1520] = VGA_CHAR('A', BLUE, BROWN);
+/*    vga[1520] = VGA_CHAR('A', BLUE, BROWN);
     vga[1521] = VGA_CHAR('m', BLUE, BROWN);
     vga[1522] = VGA_CHAR('a', BLUE, BROWN);
     vga[1523] = VGA_CHAR('C', BLUE, BROWN);
@@ -131,7 +131,7 @@ int menu()
     vga[1528] = VGA_CHAR('(', BLUE, BROWN);
     vga[1529] = VGA_CHAR('A', BLUE, BROWN);
     vga[1530] = VGA_CHAR(')', BLUE, BROWN);
-    vga[1531] = VGA_CHAR(' ', BLUE, BROWN);
+    vga[1531] = VGA_CHAR(' ', BLUE, BROWN);*/
     vga[1600] = VGA_CHAR('H', BLUE, BROWN);
     vga[1601] = VGA_CHAR('a', BLUE, BROWN);
     vga[1602] = VGA_CHAR('n', BLUE, BROWN);
@@ -183,7 +183,7 @@ int menu()
     do {
       tecla = getchar();
     } while (tecla != 'R'&& tecla != 'r'&& tecla != 'S'&& tecla != 's'&& 'M'&& tecla != 'm'&& tecla != 'W'&& tecla != 'w'
-             &&tecla != 'H'&& tecla != 'h' &&tecla != 'A'&& tecla != 'a');
+             &&tecla != 'H'&& tecla != 'h'/* &&tecla != 'A'&& tecla != 'a'*/);
     if (tecla == 'M'|| tecla == 'm') {
       return 0;
     }
@@ -199,9 +199,9 @@ int menu()
     if (tecla == 'H'|| tecla == 'h') {
       hangman();
     }
-    if (tecla == 'A'|| tecla == 'a') {
+/*    if (tecla == 'A'|| tecla == 'a') {
       ama_calc();
-    }
+    }*/
 
     return 0;
 }
