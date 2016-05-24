@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Dan Rulos [amaya@amayaos.com]
+ * Copyright (C) 2016 Dan Rulos [amaya@amayaos.com]
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,9 @@
 #ifndef WAMA_H
 #define WAMA_H
 
+#define READ_MODE 0
+#define WRITE_MODE 1
+
 void setwindow();
 
 void setscreenblue();
@@ -32,14 +35,14 @@ void save();
 
 int checkWamaCommand(char *line);
 
-void subwindow(int n_lines);
-
 int linecounter(char *c);
 
 char *read_file(char *path);
 
-int goto_wama_command(char *path, int line_counter);
-
 int get_size(char *path);
+
+char *edit_lines(char *str, size_t size, char *line_to_edit);
+
+int line_navigator(char *path, int mode);
 
 #endif

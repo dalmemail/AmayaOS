@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Dan Rulos [amaya@amayaos.com]
+ * Copyright (C) 2016 Dan Rulos [amaya@amayaos.com]
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -46,9 +46,7 @@ void setwindow()
 	vga[37] = VGA_CHAR('A', BLACK, GREEN);
 	vga[39] = VGA_CHAR('0', BLACK, GREEN);
 	vga[40] = VGA_CHAR('.', BLACK, GREEN);
-	vga[41] = VGA_CHAR('5', BLACK, GREEN);
-	vga[42] = VGA_CHAR('.', BLACK, GREEN);
-	vga[43] = VGA_CHAR('3', BLACK, GREEN);
+	vga[41] = VGA_CHAR('6', BLACK, GREEN);
 }
 
 void setscreenblue()
@@ -251,50 +249,21 @@ void save()
 
 int checkWamaCommand(char *line)
 {
-	if ((strcmp(line, "exit")) == 0) {
-		return 2;
+	int ret = 0;
+	if ((strcmp(line, "$exit")) == 0) {
+		ret = 2;
 	}
-	if ((strcmp(line, "goto")) == 0) {
-		return 1;
+	else if ((strcmp(line, "$nav")) == 0) {
+		ret = 1;
 	}
-	return 0;
-}
-
-void subwindow(int n_lines)
-{
-	int i;
-	/* Request VGA memory. */
-	mem.action    = CreatePrivate;
-	mem.bytes     = PAGESIZE;
-	mem.virtualAddress  = ZERO;
-	mem.physicalAddress = VGA_PADDR;
-	mem.protection      = PAGE_RW | PAGE_PINNED;
-	mem.ipc(MEMSRV_PID, SendReceive, sizeof(mem));
-
-	/* Point to the VGA mapping. */
-	vga = (u16 *) mem.virtualAddress;
-	char lines[3];
-	itoa(lines, 10, n_lines);
-	for (i = 80; i < 160; i++) {
-		vga[i] = VGA_CHAR(' ', BROWN, BROWN);
-	}
-	unsigned int v=0;
-	char *string = "Salir: exit   Editar linea: goto             lineas escritas";
-	for (i = 82; v < strlen(string); i++) {
-		vga[i] = VGA_CHAR(string[v], BLACK, BROWN);
-		v++;
-	}
-	v=0;
-	for (i = 123; v < 3 && lines[v] != '\0'; i++) {
-		vga[i] = VGA_CHAR(lines[v], BLACK, BROWN);
-		v++;
-	}
+	return ret;
 }
 
 int linecounter(char *c)
 {
 	int n_lines = 0;
-	for (unsigned int i = 0; i < strlen(c); i++) {
+	int c_len = strlen(c);
+	for (int i = 0; i < c_len; i++) {
 		if (c[i] == '\n') {
 			n_lines++;
 		}
@@ -316,58 +285,6 @@ char *read_file(char *path)
 	return data;
 }
 
-int goto_wama_command(char *path, int line_counter)
-{
-	int size = get_size(path);
-	char nl[5];
-	printf("Numero de linea: ");
-	gets_s(nl, 5);
-	int nline = atoi(nl);
-	/* nline can't be > line_counter */
-	if (line_counter == 1 || nline > line_counter) {
-		return -1;
-	}
-	printf("\n %d ", nline);
-	char *data = read_file(path);
-	int n_lines = linecounter(data);
-	char lines[n_lines][128];
-	char edit_line[128];
-	int i_point = 0;
-	int f_point = 0;
-	int fd;
-	for (int i = 0; i < n_lines; i++) {
-		i_point = f_point;
-		while (data[f_point] != '\n') {
-			f_point++;
-		}
-		for (int k = 0; (i_point+k) < f_point; k++) {
-			lines[i][k] = data[(i_point+k)];
-			if (i_point+k+1 == f_point) {
-				lines[i][k+1] = '\0';
-			}
-		}
-		f_point++;
-	}
-	gets_s(edit_line, 128);
-	strcpy(lines[(nline-1)], edit_line);
-	if ((fd = open(path, O_WRONLY)) < 0) {
-		return -1;
-	}
-	int bytes_wrote = 0;
-	for (int i = 0; i < n_lines; i++) {
-		write(fd, lines[i], bytes_wrote += strlen(lines[i]));
-		write(fd, "\n", 1);
-	}
-	if (bytes_wrote < size) {
-		while (bytes_wrote++ < size) {
-			write(fd, "\0", 1);
-		}
-	}
-	printf("\n");
-	close(fd);
-	return 0;
-}
-
 int get_size(char *path)
 {
 	struct stat st;
@@ -379,4 +296,170 @@ int get_size(char *path)
 		ssize = st.st_size;
 	}
 	return ssize;
+}
+
+char *edit_lines(char *str, size_t size, char *line_to_edit)
+{
+    char line[1024 + size];
+    Size total = 0;
+    Size point = 0;
+    strcpy(line, line_to_edit);
+
+    printf("%s", line_to_edit);
+    total = point = strlen(line_to_edit);
+
+    /* Leemos una linea. */
+    while (total < sizeof(line)) {
+        /* Leemos un caracter. */
+        read(0, line + point, 1);
+
+        /* Procesamos el caracter. */
+        switch (line[point]) {
+            case '\r':
+            case '\n':
+                putchar('\n');
+                line[total] = ZERO;
+                strlcpy(str, line, size);
+                return str;
+
+            case '\b':
+                if (total > 0) {
+                    line[--total] = ZERO;
+                    point--;
+                    printf("\b \b");
+                }
+                break;
+                
+            case '\a':
+                /*
+                if (point > 0) {
+                    printf("\b");
+                    point--;
+                }
+                */
+                break;
+            default:
+                printf("%c", line[point]);
+                point++;
+                total++;
+                break;
+        }
+    }
+    
+    line[total] = ZERO;
+    
+    return line_to_edit;
+}
+
+int line_navigator(char *path, int mode)
+{
+	int ret = 0;
+	char *data = read_file(path);
+	int n_lines = linecounter(data);
+	int act_line = 1;
+	char **lines;
+	lines = new char *[n_lines];
+	lines[0] = &data[0];
+	int data_len = strlen(data);
+	if (data_len > 0) {
+		for (int i = 1, x = 0; data[x] != '\0'; x++) {
+			if (data[x] == '\n') {
+				data[x] = '\0';
+				if (i < n_lines) {
+					lines[i] = &data[x+1];
+				}
+				i++;
+			}
+		}
+		if (n_lines > 1) {
+			char char_read[2];
+			do {
+				clean_screen();
+				printf("\n");
+				setwindow();
+				int start_line = 0;
+				if (n_lines >= 20 && act_line >= 20) {
+					start_line = (act_line - 20);
+				}
+				for (int i = start_line; i < (start_line+20) && i < n_lines; i++) {
+					printf("\n");
+					if (i == (act_line-1)) {
+						printf("#");
+					}
+					else {
+						printf(" ");
+					}
+					printf("%d %s", (i+1), lines[i]);
+				}
+				read(0, char_read, 1);
+				if (char_read[0] == 'w' && act_line < n_lines) {
+					act_line++;
+				}
+				if (char_read[0] == 's' && act_line > 1) {
+					act_line--;
+				}
+			} while(char_read[0] != '\n' && char_read[0] != 'x' && char_read[0] != 'r');
+			clean_screen();
+			printf("\n\n");
+			setwindow();
+			if (char_read[0] == '\n' && mode == WRITE_MODE) {
+				char edit_line[128];
+				printf(" %d ", act_line);
+				edit_lines(edit_line, 128, lines[(act_line-1)]);
+				lines[act_line-1] = &edit_line[0];
+				int fd;
+				if ((fd = open(path, O_WRONLY)) < 0) {
+					ret = -1;
+				}
+				else {
+					int bytes_wrote = 0;
+					for (int i = 0; i < n_lines; i++) {
+						int strlen_ = strlen(lines[i]);
+						write(fd, lines[i], strlen_);
+						bytes_wrote += strlen_;
+						write(fd, "\n", 1);
+					}
+					int size = get_size(path);
+					if (bytes_wrote < size) {
+						while (bytes_wrote++ < size) {
+							write(fd, "\0", 1);
+						}
+					}
+				}
+			}
+			if (char_read[0] == 'r' && mode == WRITE_MODE) {
+				clean_screen();
+				printf("Pulse 's' para borrar la linea %d\n", act_line);
+				if (getchar() == 's') {
+					int fd;
+					if ((fd = open(path, O_WRONLY)) < 0) {
+						ret = -1;
+					}
+					else {
+						int bytes_wrote = 0;
+						for (int i = 0; i < n_lines; i++) {
+							if (i != (act_line-1)) {
+								int strlen_ = strlen(lines[i]);
+								write(fd, lines[i], strlen_);
+								bytes_wrote += strlen_;
+								write(fd, "\n", 1);
+							}
+						}
+						int size = get_size(path);
+						if (bytes_wrote < size) {
+							while (bytes_wrote++ < size) {
+								write(fd, "\0", 1);
+							}
+						}
+					}
+				}
+				clean_screen();
+				printf("\n\n");
+				setwindow();
+			}
+		}
+	}
+	delete lines;
+	delete data;
+	return ret;
 }

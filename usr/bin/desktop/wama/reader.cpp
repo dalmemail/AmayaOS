@@ -24,45 +24,21 @@
  
 int read_wama_file()
 {
+	int ret = 0;
 	char path[128];
 	clean_screen();
 	printf("Ruta del archivo: ");
 	gets_s(path, 128);
-	clean_screen();
 	if (path[0] != '/') {
 		char dev_path[128] = "/dev/";
 		strcat(dev_path, path);
 		strcpy(path, dev_path);
 	}
-	int file = open(path, O_RDONLY);
-	if (file < 0) {
-		return file;
+	if ((open(path, O_RDONLY)) < 0) {
+		ret = -1;
 	}
-	char data[4];
-	int file_size = get_size(path);
-	printf("\n\n");
-	int linecount = 0;
-	char key = 's';
-	for (int i = 0; i < file_size && key != 'n'; i++) {
-		read(file, data, 1);
-		printf("%c", data[0]);
-		if (data[0] == '\n') {
-			linecount++;
-		}
-		if (linecount == 20) {
-			linecount = 0;
-			do {
-				printf("\nContinue? [S/N]\n");
-				setwindow();
-				key = getchar();
-			} while (key != 's' && key != 'n');
-		}
-		if (i+1 == file_size) {
-			printf("\nPRESS ANY KEY TO EXIT\n");
-			setwindow();
-			getchar();
-		}
+	else {
+		ret = line_navigator(path, READ_MODE);
 	}
-	close(file);
-	return 0;
+	return ret;
 }

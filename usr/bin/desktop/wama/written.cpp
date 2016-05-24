@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Dan Rulos [amaya@amayaos.com]
+ * Copyright (C) 2016 Dan Rulos [amaya@amayaos.com]
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -57,31 +57,30 @@ int wama_file(int mode)
 		line_count++;
 	}
 	printf("\n\n\n %d ", line_count);
-	char *data;
 	while ( 1 ) {
 		setwindow();
-		subwindow(line_count);
 		gets_s(line, 128);
 		switch (checkWamaCommand(line)) {
 			case 0:
 				write(fd, line, strlen(line));
 				write(fd, "\n", 1);
 				break;
+			case 2:
+				close(fd);
+				return 0;
+				break;
 			case 1:
 				close(fd);
-				if (goto_wama_command(path, line_count) < 0) {
+				if ((line_navigator(path, WRITE_MODE)) < 0) {
 					return -1;
 				}
-				data = read_file(path);
+				line_count--;
+				char *data = read_file(path);
 				if ((fd = open(path, O_WRONLY)) < 0) {
 					return -1;
 				}
 				write(fd, data, strlen(data));
-				line_count--;
-				break;
-			case 2:
-				close(fd);
-				return 0;
+				delete data;
 				break;
 		}
 		line_count++;
