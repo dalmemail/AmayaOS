@@ -45,4 +45,6 @@ char *edit_lines(char *str, size_t size, char *line_to_edit);
 
 int line_navigator(char *path, int mode);
 
+int SearchInFile(char *string, char *c, int n_bytes, int act_line);
+
 #endif

@@ -40,13 +40,14 @@ void setwindow()
 	for (int i = 0; i < 80; i++) {
 		vga[i] = VGA_CHAR(' ', GREEN, GREEN);
 	}
-	vga[34] = VGA_CHAR('W', BLACK, GREEN);
-	vga[35] = VGA_CHAR('A', BLACK, GREEN);
-	vga[36] = VGA_CHAR('M', BLACK, GREEN);
-	vga[37] = VGA_CHAR('A', BLACK, GREEN);
-	vga[39] = VGA_CHAR('0', BLACK, GREEN);
-	vga[40] = VGA_CHAR('.', BLACK, GREEN);
-	vga[41] = VGA_CHAR('6', BLACK, GREEN);
+	vga[33] = VGA_CHAR('W', BLACK, GREEN);
+	vga[34] = VGA_CHAR('A', BLACK, GREEN);
+	vga[35] = VGA_CHAR('M', BLACK, GREEN);
+	vga[36] = VGA_CHAR('A', BLACK, GREEN);
+	vga[38] = VGA_CHAR('0', BLACK, GREEN);
+	vga[39] = VGA_CHAR('.', BLACK, GREEN);
+	vga[40] = VGA_CHAR('6', BLACK, GREEN);
+	vga[41] = VGA_CHAR('1', BLACK, GREEN);
 }
 
 void setscreenblue()
@@ -361,6 +362,8 @@ int line_navigator(char *path, int mode)
 	lines = new char *[n_lines];
 	lines[0] = &data[0];
 	int data_len = strlen(data);
+	char to_find[128];
+	to_find[0] = '\0';
 	if (data_len > 0) {
 		for (int i = 1, x = 0; data[x] != '\0'; x++) {
 			if (data[x] == '\n') {
@@ -371,7 +374,7 @@ int line_navigator(char *path, int mode)
 				i++;
 			}
 		}
-		if (n_lines > 1) {
+		if (n_lines > 0) {
 			char char_read[2];
 			do {
 				clean_screen();
@@ -397,6 +400,27 @@ int line_navigator(char *path, int mode)
 				}
 				if (char_read[0] == 's' && act_line > 1) {
 					act_line--;
+				}
+				if (char_read[0] == 'm') {
+					char line[8];
+					clean_screen();
+					printf("Mover a: ");
+					gets_s(line, 8);
+					int line_to_move = atoi(line);
+					if (line_to_move > 0 && line_to_move < n_lines) {
+						act_line = line_to_move;
+					}
+				}
+				if (char_read[0] == 'f') {
+					clean_screen();
+					printf("Buscar: ");
+					edit_lines(to_find, 128, to_find);
+					if (strlen(to_find) > 0) {
+						int line_found = SearchInFile(to_find, data, data_len, act_line);
+						if (line_found >= 0) {
+							act_line = line_found;
+						}
+					}
 				}
 			} while(char_read[0] != '\n' && char_read[0] != 'x' && char_read[0] != 'r');
 			clean_screen();
@@ -462,4 +486,29 @@ int line_navigator(char *path, int mode)
 	delete lines;
 	delete data;
 	return ret;
+}
+
+int SearchInFile(char *string, char *c, int n_bytes, int act_line)
+{
+	int lines = 0;
+	bool exists = false;
+	for (int i = 0; i < n_bytes; i++) {
+		lines++;
+		for (unsigned int x = 0; c[i] != '\0' && i < n_bytes; i++) {
+			if (string[x] == c[i] && !exists) {
+				x++;
+				if (x == strlen(string)) {
+					exists = true;
+				}
+			}
+			else if (!exists) {
+				x = 0;
+			}
+		}
+		if (exists && lines > act_line) {
+			return lines;
+		}
+		exists = false;
+	}
+	return -1;
 }
