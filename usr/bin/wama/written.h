@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Dan Rulos [amaya@amayaos.com]
+ * Copyright (C) 2016 Dan Rulos [amaya@amayaos.com]
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,6 +19,6 @@
 #define WRITTEN_H
 
 /* returns -1 in error case */
-int wama_file(int mode);
+int wama_file(int mode, char *path);
 
 #endif

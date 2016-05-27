@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Dan Rulos [amaya@amayaos.com]
+ * Copyright (C) 2016 Dan Rulos [amaya@amayaos.com]
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,22 +19,20 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <errno.h>
 #include "wama.h"
 #include "reader.h"
  
-int read_wama_file()
+int read_wama_file(char *path)
 {
 	int ret = 0;
-	char path[128];
-	clean_screen();
-	printf("Ruta del archivo: ");
-	gets_s(path, 128);
 	if (path[0] != '/') {
 		char dev_path[128] = "/dev/";
 		strcat(dev_path, path);
 		strcpy(path, dev_path);
 	}
 	if ((open(path, O_RDONLY)) < 0) {
+		printf("Error abriendo '%s':%s.\n", path, strerror(errno));
 		ret = -1;
 	}
 	else {

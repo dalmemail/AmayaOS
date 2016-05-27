@@ -19,6 +19,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
+#include <errno.h>
 #include "wama.h"
 #include "written.h"
 
@@ -28,12 +29,8 @@
 /* mode 0 new file
  * mode 1 edit file
  */
-int wama_file(int mode)
+int wama_file(int mode, char *path)
 {
-	char path[128];
-	clean_screen();
-	printf("Ruta del archivo: ");
-	gets_s(path, 128);
 	clean_screen();
 	if (path[0] != '/') {
 		char dev_path[128] = "/dev/";
@@ -41,13 +38,17 @@ int wama_file(int mode)
 		strcpy(path, dev_path);
 	}
 	/* creamos el archivo 'path' */
-	if ((touch(path, S_IRUSR | S_IWUSR)) < 0 && mode == NEW_FILE_MODE) {
-		return -1;
+	if (mode == NEW_FILE_MODE) {
+		if ((touch(path, S_IRUSR | S_IWUSR)) < 0) {
+			printf("Error creando '%s':%s.\n", path, strerror(errno));
+			return -1;
+		}
 	}
 	int line_count = 1;
 	char line[128];
 	int fd;
 	if ((fd = open(path, O_WRONLY)) < 0) {
+		printf("Error abriendo '%s':%s.\n", path, strerror(errno));
 		return -1;
 	}
 	if (mode == EDIT_FILE_MODE) {
@@ -56,9 +57,8 @@ int wama_file(int mode)
 		line_count = linecounter(ch);
 		line_count++;
 	}
-	printf("\n\n\n %d ", line_count);
+	printf(" %d ", line_count);
 	while ( 1 ) {
-		setwindow();
 		gets_s(line, 128);
 		switch (checkWamaCommand(line)) {
 			case 0:

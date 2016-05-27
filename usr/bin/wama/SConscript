@@ -15,4 +15,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-SConscript(dirs = [ 'desktop', 'memstat', 'sudoku', 'calendar', 'minesweeper', 'avim', 'history', 'sw', 'wama' ])
+from build import *
+
+env = Prepare(target, [ 'libcrt', 'liballoc', 'libposix', 'libexec', 'libc', 'libsys', 'libteken' ],
+              [ 'memory', 'terminal', 'filesystem', 'process' ])
+env.Program('wama',  [ 'wamas.cpp', 'wama.cpp', 'written.cpp', 'reader.cpp' ], LIBS = env['LIBS'], LIBPATH = env['LIBPATH'])

@@ -21,17 +21,7 @@
 #define READ_MODE 0
 #define WRITE_MODE 1
 
-void setwindow();
-
-void setscreenblue();
-
-void setoption();
-
 void clean_screen();
-
-void error();
-
-void save();
 
 int checkWamaCommand(char *line);
 
