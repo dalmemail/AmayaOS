@@ -23,8 +23,9 @@
 #include <MemoryMessage.h>
 #include <stdlib.h>
 #include <API/PrivExec.h>
-#include "wama/wamas.h"
+//#include "wama/wamas.h"
 //#include "AmaCALC/AmaCALC.cpp"
+#include <sys/wait.h>
 #include "hangman/hangman.cpp"
 #include <MemoryMessage.h>
 #include <Config.h>
@@ -144,18 +145,18 @@ int menu()
     vga[1609] = VGA_CHAR('H', BLUE, BROWN);
     vga[1610] = VGA_CHAR(')', BLUE, BROWN);
     vga[1611] = VGA_CHAR(' ', BLUE, BROWN);
-    vga[1680] = VGA_CHAR('W', BLUE, BROWN);
-    vga[1681] = VGA_CHAR('a', BLUE, BROWN);
-    vga[1682] = VGA_CHAR('m', BLUE, BROWN);
-    vga[1683] = VGA_CHAR('a', BLUE, BROWN);
-    vga[1684] = VGA_CHAR('/', BLUE, BROWN);
-    vga[1685] = VGA_CHAR('W', BLUE, BROWN);
-    vga[1686] = VGA_CHAR('A', BLUE, BROWN);
-    vga[1687] = VGA_CHAR('+', BLUE, BROWN);
-    vga[1688] = VGA_CHAR('(', BLUE, BROWN);
-    vga[1689] = VGA_CHAR('W', BLUE, BROWN);
-    vga[1690] = VGA_CHAR(')', BLUE, BROWN);
-    vga[1691] = VGA_CHAR(' ', BLUE, BROWN);
+    vga[1680] = VGA_CHAR('B', BLUE, BROWN);
+    vga[1681] = VGA_CHAR('u', BLUE, BROWN);
+    vga[1682] = VGA_CHAR('s', BLUE, BROWN);
+    vga[1683] = VGA_CHAR('c', BLUE, BROWN);
+    vga[1684] = VGA_CHAR('a', BLUE, BROWN);
+    vga[1685] = VGA_CHAR('m', BLUE, BROWN);
+    vga[1686] = VGA_CHAR('i', BLUE, BROWN);
+    vga[1687] = VGA_CHAR('n', BLUE, BROWN);
+    vga[1688] = VGA_CHAR('a', BLUE, BROWN);
+    vga[1689] = VGA_CHAR('(', BLUE, BROWN);
+    vga[1690] = VGA_CHAR('B', BLUE, BROWN);
+    vga[1691] = VGA_CHAR(')', BLUE, BROWN);
     vga[1760] = VGA_CHAR('R', BLUE, BROWN);
     vga[1761] = VGA_CHAR('e', BLUE, BROWN);
     vga[1762] = VGA_CHAR('i', BLUE, BROWN);
@@ -182,7 +183,7 @@ int menu()
     vga[1851] = VGA_CHAR(' ', BLUE, BROWN);
     do {
       tecla = getchar();
-    } while (tecla != 'R'&& tecla != 'r'&& tecla != 'S'&& tecla != 's'&& 'M'&& tecla != 'm'&& tecla != 'W'&& tecla != 'w'
+    } while (tecla != 'R'&& tecla != 'r'&& tecla != 'S'&& tecla != 's'&& 'M'&& tecla != 'm'&& tecla != 'B'&& tecla != 'b'
              &&tecla != 'H'&& tecla != 'h'/* &&tecla != 'A'&& tecla != 'a'*/);
     if (tecla == 'M'|| tecla == 'm') {
       return 0;
@@ -193,8 +194,13 @@ int menu()
     if (tecla == 'S'|| tecla == 's') {
       return -1;
     }
-    if (tecla == 'W'|| tecla == 'w') {
-      wama();
+    if (tecla == 'B'|| tecla == 'b') {
+	int pid, status;
+	char *args[] = {"/usr/bin/minesweeper/minesweeper", ZERO};
+        if ((pid = forkexec(args[0], (const char **) args)) >= 0) {
+            waitpid(pid, &status, 0);
+	    return status;
+        }
     }
     if (tecla == 'H'|| tecla == 'h') {
       hangman();
