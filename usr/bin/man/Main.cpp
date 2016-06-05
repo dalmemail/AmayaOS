@@ -20,7 +20,7 @@
 #include <sys/stat.h>
 #include <string.h>
 
-#define VERSION "1.0"
+#define VERSION "1.0.1"
 
 /* Some of these functions come from Wama 0.7  http://git.amayaos.com */
 
@@ -91,8 +91,11 @@ int line_navigator(char *path)
 			do {
 				clean_screen();
 				int start_line = act_line;
-				if (start_line > (n_lines-22)) {
+				if (start_line > (n_lines-22) && n_lines >= 22) {
 					start_line = (n_lines-22);
+				}
+				if (n_lines < 22) {
+					start_line = 0;
 				}
 				for (int i = start_line; i < (start_line+22) && i < n_lines; i++) {
 					printf("%s\n", lines[i]);
