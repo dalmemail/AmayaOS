@@ -1,0 +1,52 @@
+WAMA(1)			GENERAL COMMANDS MANUAL
+
+NAME
+	wama - A simple text editor for the Amaya Operating System
+
+SYNOPSYS
+
+	wama [OPTIONS] [FILE]
+
+DESCRIPTION
+
+	wama is a free and simple text editor that works in the AmayaOS
+	shell. With wama you can read, create and edit simple text files
+	using a friendly environment.
+
+OPTIONS
+	--help
+		Show a summary of command line options and exit
+
+	--version
+		Show the current version number and exit
+
+	-r
+		Open a file only for read
+
+	-n
+		Creat a new file
+
+	-e
+		Edit a existing file
+
+INTERNAL WAMA COMMANDS
+
+	$exit
+		Save file and exit
+	$nav
+		Execute line navigator
+		Internal $nav Commands:
+			'w' Forward one line
+			's' Backward one line
+			'm' Move to 'x' line
+			'f' Search string in file
+			'r' Remove selected line
+
+BUGS
+	Please send any comments or bug reports to amaya@amayaos.com
+
+HOMEPAGE
+
+	http://wiki.amayaos.com/index.php/Wama
+
+June 2, 2016					WAMA(1)
