@@ -1,0 +1,16 @@
+CP(1)				USER COMMANDS
+
+NAME
+	cp - copy files
+
+SYNOPSIS
+	cp SOURCE DEST
+
+DESCRIPTION
+	Copy SOURCE to DEST, or multiple SOURCE(s) to DIRECTORY.
+
+REPORTING BUGS
+	Report cp bugs to amaya@amayaos.com
+
+June 5, 2016						CP(1)
+

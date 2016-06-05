@@ -1,36 +1,38 @@
 UNAME(1)			USER COMMANDS
 
 NAME
-       uname - print system information
+	uname - print system information
 
 SYNOPSIS
-       uname [OPTION]...
+	uname [OPTION]...
 
 DESCRIPTION
-       Print certain system information.  With no OPTION, same as -s.
+	Print certain system information.  With no OPTION, same as -s.
 
-       -a, --all
-              print all information, in the following order
+	-a, --all
+		print all information, in the following order
 
-       -s, --kernel-name
-              print the kernel name
+	-s, --kernel-name
+		print the kernel name
 
-       -n, --nodename
-              print the network node hostname
+	-n, --nodename
+		print the network node hostname
 
-       -r, --kernel-release
-              print the kernel release
+	-r, --kernel-release
+		print the kernel release
 
-       -v, --kernel-version
-              print the kernel version
+	-v, --kernel-version
+		print the kernel version
 
-       -m, --machine
-              print the machine hardware name
+	-m, --machine
+		print the machine hardware name
 
-       --help display this help and exit
+	--help display this help and exit
 
-       --version
-              output version information and exit
+	--version
+		output version information and exit
 
 REPORTING BUGS
 	Report uname bugs to amaya@amayaos.com
+
+June 5, 2016						UNAME(1)
