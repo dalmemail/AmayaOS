@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Niek Linnenbank, 2014 Dan Rulos
+ * Copyright (C) 2009 Niek Linnenbank, 2016 Dan Rulos
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,6 +24,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/stat.h>
+#include <sys/wait.h>
 
 int main(int argc, char **argv)
 {
@@ -89,7 +90,11 @@ int main(int argc, char **argv)
 
         /* Entramos al modo grafico */
 	touch("/dev/sh_history", S_IRUSR | S_IWUSR);
-	sh.execute("sh /home/live/mode2");
+	int pid, status;
+	char *args[] = {"/usr/bin/desktop/desktop", ZERO};
+        if ((pid = forkexec(args[0], (const char **) args)) >= 0) {
+            waitpid(pid, &status, 0);
+        }
         /* Entra al bucle. */
         return sh.run();
     }
