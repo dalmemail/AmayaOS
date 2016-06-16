@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Dan Rulos
+ * Copyright (C) 2016 Dan Rulos
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,7 +21,8 @@ unsigned int wordcount(char *ch)
 {
 	int state = OUT;
 	unsigned int nw = 0;
-	for (unsigned int i = 0; i < strlen(ch); i++) {
+	unsigned int ch_len = strlen(ch);
+	for (unsigned int i = 0; i < ch_len; i++) {
 		if (ch[i] == '\n' || ch[i] == ' ' || ch[i] == '\t') {
 			state = OUT;
 		}
