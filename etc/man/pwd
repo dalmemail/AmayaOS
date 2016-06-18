@@ -1,0 +1,15 @@
+PWD(1)				USER COMMANDS
+
+NAME
+	pwd - print name of current/working directory
+
+SYNOPSIS
+	pwd
+
+DESCRIPTION
+	Print the full filename of the current working directory.
+
+REPORTING BUGS
+	Report pwd bugs to amaya@amayaos.com
+
+June 18, 2016						PWD(1)
