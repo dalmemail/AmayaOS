@@ -1,0 +1,25 @@
+LS(1)				USER COMMANDS
+
+NAME
+       ls - list directory contents
+
+SYNOPSIS
+       ls [OPTION]... [PATH]...
+
+DESCRIPTION
+       List  information  about  the FILEs (the current directory by default).
+
+       Mandatory arguments to long options are  mandatory  for  short  options
+       too.
+
+       -a, --all
+              do not ignore entries starting with .
+
+BUGS
+	Please send any comments or bug reports to amaya@amayaos.com
+
+HOMEPAGE
+
+	http://wiki.amayaos.com/index.php/AmayaCoreutils
+
+June 17, 2016					LS(1)
