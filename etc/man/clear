@@ -1,0 +1,20 @@
+clear(1)							       clear(1)
+
+NAME
+	clear - clear the terminal screen
+
+SYNOPSIS
+	clear
+
+DESCRIPTION
+	clear clears your screen ignoring any command-line parameters
+	that may be present.
+
+BUGS
+	Please send any comments or bug reports to amaya@amayaos.com
+
+HOMEPAGE
+
+	http://wiki.amayaos.com/index.php/AmayaCoreutils
+
+June 17, 2016					clear(1)
