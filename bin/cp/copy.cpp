@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Dan Rulos
+ * Copyright (C) 2016 Dan Rulos
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,13 +35,18 @@ int copy_file(char *originalpath, char *destination)
 		printf("Error al leer '%s': %s\n", originalpath, strerror(errno));
 		ret = errno;
 	}
-	/* make the file 'destination' */
-	else if ((touch(destination, S_IRUSR | S_IWUSR)) < 0) {
-		printf("Error al crear '%s': %s\n", destination, strerror(errno));
-		ret = errno;
+	if ((write_fd = open(destination, O_RDONLY)) < 0) {
+		/* make the file 'destination' if it not exists */
+		if ((touch(destination, S_IRUSR | S_IWUSR)) < 0) {
+			printf("Error al crear '%s': %s\n", destination, strerror(errno));
+			ret = errno;
+		}
+	}
+	else {
+		close(write_fd);
 	}
 	/* open destination to write */
-	else if ((write_fd = open(destination, O_WRONLY)) < 0) {
+	if ((write_fd = open(destination, O_WRONLY)) < 0) {
 		printf("Error al abrir '%s': %s\n", destination, strerror(errno));
 		ret = errno;
 	}

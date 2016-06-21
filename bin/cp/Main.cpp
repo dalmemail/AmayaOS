@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Dan Rulos
+ * Copyright (C) 2016 Dan Rulos
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,12 +20,13 @@
 
 int main(int argc, char **argv)
 {
+	int ret = 0;
 	if (argc != 3) {
 		printf("%s: origen destino\n", argv[0]);
-		return -1;
+		ret = -1;
 	}
-	int ret = copy_file(argv[1], argv[2]);
+	else {
+		ret = copy_file(argv[1], argv[2]);
+	}
 	return ret;
 }
-
-
