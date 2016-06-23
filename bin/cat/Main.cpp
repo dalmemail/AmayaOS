@@ -21,17 +21,17 @@
 #include <unistd.h>
 #include <sys/stat.h>
 
-#define VERSION "v0.6"
+#define VERSION "v0.6.1"
 
 static int hflag, vflag, ret = 0;
-static int flags[8];
+static int flags[2];
 
 static void usage(void);
 static void version(void);
-static void cat(char *argv[], int argc, int flags[8]);
-static void read_file(const char *fileName, int flags[8]);
-static const char *fileName;
-int lines = 0;
+static void cat(char **filePaths, int n_files, int flags[2]);
+int lineCounter(char *c);
+static void read_file(const char *fileName, int flags[2]);
+int getNumberOfFiles(int argc, char **argv);
 
 int get_file_size(const char *fileName);
 
@@ -43,10 +43,13 @@ int main(int argc, char **argv)
         return 1;
     }
 
-    for (int i = 0; i <= 8; i++)
+    for (int i = 0; i < 2; i++)
     	flags[i] = 0;
 
-    for (int i = 1; i < argc; i++)
+	int n_files = getNumberOfFiles(argc, argv);
+	char **filePaths = new char *[n_files];
+
+    for (int i = 1, act_file = 0; i < argc; i++)
     {
     	if (strcmp(argv[i], "--help") == 0)
     	{
@@ -60,24 +63,23 @@ int main(int argc, char **argv)
     		version();
     		break;
     	}
-    	else if ((strcmp(argv[i], "-n") == 0) || (strcmp(argv[i], "--number") == 0))
+    	else if ((strcmp(argv[i], "-n") == 0) || (strcmp(argv[i], "--number") == 0)) {
 		flags[0] = 1;
-	else if ((strcmp(argv[i], "-E") == 0) || (strcmp(argv[i], "--show-ends") == 0) || (strcmp(argv[i], "-e") == 0))
+	}
+	else if ((strcmp(argv[i], "-E") == 0) || (strcmp(argv[i], "--show-ends") == 0) || (strcmp(argv[i], "-e") == 0)) {
 		flags[1] = 1;
-	else if ((strcmp(argv[i], "-t") == 0) || (strcmp(argv[i], "-T") == 0) || (strcmp(argv[i], "--show-tabs") == 0))
-		flags[2] = 1;
-	else if ((strcmp(argv[i], "-b") == 0) || (strcmp(argv[i], "--number-nonblank") == 0))
-	{
-		flags[0] = 0;
-		flags[3] = 1;
+	}
+	else {
+		filePaths[act_file] = &argv[i][0];
+		act_file++;
 	}
     }
 
-    if (hflag || vflag)
-    	return ret;
-    else
-    	cat(argv, argc, flags);
+	if (!hflag && !vflag) {
+		cat(filePaths, n_files, flags);
+	}
 
+	delete filePaths;
     return ret;
 }
 
@@ -85,12 +87,9 @@ static void usage(void)
 {
 	printf("Modo de empleo: cat [OPCION]... [FICHERO]...\n\n");
 
-	printf("  -b, --number-nonblank    No enumera las lineas en blanco, remplaza -n.\n");
 	printf("  -e                       Lo mismo que -E.\n");
 	printf("  -E, --show-ends          Muestra un $ al final de cada linea.\n");
 	printf("  -n, --number             Enumera cada linea.\n");
-	printf("  -t                       Lo mismo que -T.\n");
-	printf("  -T, --show-tabs          Muestra los caracteres de tabulacion como ^I\n");
 	printf("      --help               Muestra esta ayuda y finaliza.\n");
 	printf("      --version            Informa de la version y finaliza.\n\n");
 
@@ -109,21 +108,26 @@ static void version(void)
 	printf("No hay NINGUNA GARANTIA, hasta donde permite la ley.\n\n");
 }
 
-static void cat(char *argv[], int argc, int flags[8])
+static void cat(char **filePaths, int n_files, int flags[2])
 {
-	int fd;
-
-	for (int i = 1; i < argc; i++)
+	for (int i = 0; i < n_files; i++)
 	{
-		if ((fd = open(argv[i], O_RDONLY)) >= 0) {
-			fileName = argv[i];
-			read_file(fileName, flags);
-			close(fd);
-		}
+		read_file(filePaths[i], flags);
 	}
 }
 
-static void read_file(const char *fileName, int flags[8])
+int lineCounter(char *c)
+{
+	int n_lines = 0;
+	for (int i = 0; c[i] != '\0'; i++) {
+		if (c[i] == '\n') {
+			n_lines++;
+		}
+	}
+	return n_lines;
+}
+
+static void read_file(const char *fileName, int flags[2])
 {
 
 	int fd;
@@ -137,61 +141,35 @@ static void read_file(const char *fileName, int flags[8])
 		int file_size = get_file_size(fileName);
 		char *cnt = new char[file_size];
 		read(fd, cnt, file_size);
-
-		if (flags[0] == 1 || (flags[3] == 1 && cnt[0] != '\n'))
-		{
-			lines++;
-			printf("     %d  ", lines);
-		}
-
-		int i = 0;
-
-		for (i = 0; i < file_size - 1; i++)
-		{
-			printf("%c", cnt[i]);
-
-			if (flags[0] == 1)
-			{
-				if (cnt[i] == '\n')
-				{
-					lines++;
-					printf("     %d  ", lines);
-				}
-			}
-			
-			if (flags[1] == 1)
-			{
-				if (cnt[i + 1] == '\n')
-					printf("$");
-			}
-
-			if (flags[2] == 1)
-			{
-				if (cnt[i] == '\t')
-				{
-					printf("^I");
-					continue;
-				}
-			}
-
-			if (flags[3] == 1)
-			{
-				if (cnt[i] == '\n')
-				{
-					if (cnt[i + 1] == '\n')
-						continue;
-					else
-					{
-						lines++;
-						printf("     %d  ", lines);
+		int n_lines = lineCounter(cnt);
+		char **lines;
+		lines = new char *[n_lines];
+		lines[0] = &cnt[0];
+		int data_len = strlen(cnt);
+		if (data_len > 0) {
+			for (int i = 1, x = 0; cnt[x] != '\0'; x++) {
+				if (cnt[x] == '\n') {
+					cnt[x] = '\0';
+					if (i < n_lines) {
+						lines[i] = &cnt[x+1];
 					}
+					i++;
 				}
 			}
+			for (int act_line = 0; act_line < n_lines; act_line++) {
+				if (flags[0]) {
+					printf("%d ", (act_line+1));
+				}
+				printf("%s", lines[act_line]);
+				if (flags[1]) {
+					printf("$");
+				}
+				printf("\n");
+			}
 		}
-
-		/* Imprime el último caracter perdido */
-		printf("%c\n", cnt[i]);
+		delete lines;
 		delete cnt;
+		close(fd);
 	}
 }
 
@@ -203,4 +181,18 @@ int get_file_size(const char *fileName)
 		return -1;
 	else
 		return st.st_size;
+}
+
+int getNumberOfFiles(int argc, char **argv)
+{
+	int n_files = (argc-1);
+	for (int i = 1; i < argc; i++) {
+    		if ((strcmp(argv[i], "-n") == 0) || (strcmp(argv[i], "--number") == 0)) {
+			n_files--;
+		}
+		else if ((strcmp(argv[i], "-E") == 0) || (strcmp(argv[i], "--show-ends") == 0) || (strcmp(argv[i], "-e") == 0)) {
+			n_files--;
+		}
+	}
+	return n_files;
 }
