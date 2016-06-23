@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010 Edward, 2015 Dan Rulos
+ * Copyright (C) 2010 Edward, 2016 Dan Rulos
  *      edward1738@gmail.com, amaya@amayaos.com
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -30,62 +30,47 @@ int random(int seeder)
 	return random_n;
 }
 
-#define COLUMNAS 9
-#define FILAS 9
-#define SIN_BOMBA -2
-#define BOMBA -1
-#define SIN_JUGAR -3
+#define COLUMNS 9
+#define ROWS 9
+#define NOT_MINE -2
+#define MINE -1
 
-#define ESTADO_PERDEDOR 0
-#define ESTADO_GANADOR  1
-#define ESTADO_EN_JUEGO 2
+#define LOSER 0
+#define WINNER  1
+#define PLAYING 2
+#define END_OF_GAME 3
 
-#define VERSION "0.1.8"
-#define BUILD 13
+#define VERSION "0.2"
 
-#define MAX_BOMBAS 40
+#define MINES_MAX 20
 
-int campo[FILAS][COLUMNAS];
-bool jugadas[FILAS][COLUMNAS];
-//Casilla jugada
+#define UP 'w'
+#define DOWN 's'
+#define LEFT 'a'
+#define RIGHT 'd'
+#define EXIT 'q'
+#define SELECT '\n'
 
-int njugadas;
-int estado;
+int mines_array[ROWS][COLUMNS];
+bool moves[ROWS][COLUMNS];
 
-/*
- * 
- */
-void timecount(int starttime)
+int move;
+int state;
+
+void clean_screen()
 {
-	unsigned int secondsplaying = timeplaying(starttime);
-	printf(CYAN "Tiempo: %d:%d\n", (secondsplaying / 60), (secondsplaying % 60));
+	char str[] = {0x1b, 0x5b, 0x48, 0x1b, 0x5b, 0x4a, '\0'};
+	printf("%s", str);
 }
 
-void iniciaArr(){
-    int i,j;
-    for( i = 0; i < FILAS; i++){
-        for(j = 0; j < COLUMNAS; j++){
-            campo[i][j] = SIN_BOMBA;
-            jugadas[i][j] = false; //No se ha jugado en casilla
-        }
-    }
-}
-
-int agregaBombas(){
+void addMines(int mines){
     int i,x,y;// contador de bombas
-    char n_bombas[4];
-    int nbombas = 0;
-    do {
-	printf(YELLOW "Numero de bombas: ");
-	gets_s(n_bombas, 4);
-	nbombas = atoi(n_bombas);
-    } while(nbombas > MAX_BOMBAS);
     int seeder = 2;
-    for (i = 1; i <= nbombas; i++) {
+    for (i = 1; i <= mines; i++) {
 	x = random(seeder);
 	y = random(i+seeder);
-	if (campo[x][y] != BOMBA) {
-		campo[x][y] = BOMBA;
+	if (mines_array[x][y] != MINE) {
+		mines_array[x][y] = MINE;
 	}
 	else {
 		i--;
@@ -95,63 +80,77 @@ int agregaBombas(){
 		seeder = 2;
 	}
     }
-    return nbombas;
 }
 
-void print(){
+void print(int x, int y){
     int i,j;
     printf(WHITE "[x] 0  1  2  3  4  5  6  7  8\n");
     printf(WHITE "------------------------------\n");
-    for( i = 0; i < FILAS; i++){
+    for( i = 0; i < ROWS; i++){
         printf("[%d]", i);
-        for(j = 0; j < COLUMNAS; j++){
-            if( jugadas[i][j] ){
-                if( campo[i][j] == BOMBA){
-                    printf(RED " * ", WHITE);
+        for(j = 0; j < COLUMNS; j++){
+            if( moves[i][j] ){
+                if( mines_array[i][j] == MINE){
+			if (i != y || j != x) {
+				printf(RED " * ", WHITE);
+			}
+			else {
+				printf(RED "<*>", WHITE);
+			}
                 }else{
-                    printf(WHITE " %d ", campo[i][j]);
+			if (i != y || j != x) {
+				printf(WHITE " %d ", mines_array[i][j]);
+			}
+			else {
+				printf(WHITE "<%d>", mines_array[i][j]);
+			}
                 }
-            }else{
-                printf(WHITE " - ");
+            }else {
+		if (i != y || j != x) {
+			printf(WHITE " - ");
+		}
+		else {
+			printf(WHITE "<->");
+		}
             }
         }
         printf("\n");
     }
 }
 
-int contar2(int x, int y){
-    int nbombas = 0;
+int countNumber(int x, int y){
+    int mines = 0;
     for(int i = x-1; i < x+2; i++){
         for(int j = y-1; j < y+2; j++){
-            if( i >= 0 && i < FILAS && j >= 0 && j < COLUMNAS ){
-                if( campo[i][j] == BOMBA){ //Existe bomba
-                    nbombas++;
+            if( i >= 0 && i < ROWS && j >= 0 && j < COLUMNS ){
+                if( mines_array[i][j] == MINE){ //Existe bomba
+                    mines++;
                 }
             }
         }
     }
-    return nbombas;
+    return mines;
 }
 
-void establecerNumeros(){
-    int i,j, numero;
-    for( i = 0; i < FILAS; i++){
-        for(j = 0; j < COLUMNAS; j++){
-            if( campo[i][j] == SIN_BOMBA){ //no tiene bomba
-                numero = contar2(i,j);
-                campo[i][j] = numero;
+void putBrickNumbers(){
+    int i,j, number;
+    for( i = 0; i < ROWS; i++){
+        for(j = 0; j < COLUMNS; j++){
+            if( mines_array[i][j] == NOT_MINE){ //no tiene bomba
+                number = countNumber(i,j);
+                mines_array[i][j] = number;
             }
         }
     }
 }
 
 void printAll(){
-    for(int i = 0; i < FILAS; i++){
-        for(int j = 0; j < COLUMNAS; j++){
-            if( campo[i][j] == BOMBA){
+    for(int i = 0; i < ROWS; i++){
+        for(int j = 0; j < COLUMNS; j++){
+            if( mines_array[i][j] == MINE){
                 printf(RED " * ", WHITE);
             }else{
-                printf(WHITE " %d ", campo[i][j]);
+                printf(WHITE " %d ", mines_array[i][j]);
             }
         }
         printf("\n");
@@ -159,10 +158,10 @@ void printAll(){
 }
 
 void jugada(int x, int y){
-    if( x >= 0 && x < FILAS && y >= 0 && y < COLUMNAS ){
-        jugadas[x][y] = true;
-        if( campo[x][y] == BOMBA){
-            estado = ESTADO_PERDEDOR;
+    if( x >= 0 && x < ROWS && y >= 0 && y < COLUMNS ){
+        moves[x][y] = true;
+        if( mines_array[x][y] == MINE){
+            state = LOSER;
         }
     }else{
         printf(WHITE "Imposible jugada\n");
@@ -171,31 +170,31 @@ void jugada(int x, int y){
     }
 }
 
-int contarJugadas(){
-    int numero = 0;
-    for(int i = 0; i < FILAS; i++){
-        for(int j = 0; j < COLUMNAS; j++){
-            if ( jugadas[i][j]){
-                numero++;
+int MoveCounter(){
+    int number = 0;
+    for(int i = 0; i < ROWS; i++){
+        for(int j = 0; j < COLUMNS; j++){
+            if ( moves[i][j]){
+                number++;
             }
         }
     }
-    return numero;
+    return number;
 }
 
-void jugadaEnGrupo(int x, int y){
-    if( x >= 0 && x < FILAS && y >= 0 && y < COLUMNAS ){
-        jugadas[x][y] = true;
-        if( campo[x][y] == BOMBA){
-            estado = ESTADO_PERDEDOR;
-        }else if( campo[x][y] == 0){//Cero bombas alrededor
+void MakeMove(int x, int y){
+    if( x >= 0 && x < ROWS && y >= 0 && y < COLUMNS ){
+        moves[x][y] = true;
+        if( mines_array[x][y] == MINE){
+            state = LOSER;
+        }else if( mines_array[x][y] == 0){//Cero bombas alrededor
             for(int i = x-1; i < x+2; i++){
                 for(int j = y-1; j < y+2; j++){
-                    if( i >= 0 && i < FILAS && j >= 0 && j < COLUMNAS ){
-                        if( campo[i][j] == 0 && !jugadas[i][j]){ //Existe bomba
-                            jugadaEnGrupo(i,j);
+                    if( i >= 0 && i < ROWS && j >= 0 && j < COLUMNS ){
+                        if( mines_array[i][j] == 0 && !moves[i][j]){ //Existe bomba
+                            MakeMove(i,j);
                         }else{
-                            jugadas[i][j] = true;
+                            moves[i][j] = true;
                         }
                     }
                 }
@@ -204,80 +203,89 @@ void jugadaEnGrupo(int x, int y){
     }
 }
 
-int getMenu(){
-    printf(WHITE "1. Jugar Buscaminas\n");
-    printf(WHITE "2. Sobre el autor\n");
-    printf(WHITE "3. Salir\n");
-    printf(YELLOW "Opcion: ");
-    int opt;
-    opt = getnum();
-    printf(BLUE "%d\n", opt);
-    return opt;
-}
+void MinesWeeper(int mines){
 
-void aboutMe(){
-    printf(BLUE "By Edward -> edward1738@gmail.com\n");
-    printf(BLUE "By AmayaOS-> amaya@amayaos.com\n");
-    printf(GREEN "Version: %s Build: %d\n", VERSION, BUILD, WHITE);
-}
+	int x = 0;
+	int y = 0;
+	state = PLAYING;
+	move = 0;
+	for(int i = 0; i < ROWS; i++){
+		for(int j = 0; j < COLUMNS; j++){
+			mines_array[i][j] = NOT_MINE;
+			moves[i][j] = false; //No se ha jugado en casilla
+		}
+	}
 
-void iniciarJuego(){
+	addMines(mines);
+	putBrickNumbers();
+	char key;
 
-    int x,y;
-    estado = ESTADO_EN_JUEGO;
-    njugadas = 0;
-    iniciaArr();
-
-    int nbombas = agregaBombas();
-    establecerNumeros();
-    int starttime = getTime();
-
-    while( estado == ESTADO_EN_JUEGO){ //estado en juego
-        aboutMe();
-	timecount(starttime);
-        print();
-        printf(WHITE "Fila: ");
-        x = getnum();
-        printf(WHITE "%d\nColumna: ", x);
-        y = getnum();
-	printf(WHITE "%d\n", y);
-        jugadaEnGrupo(x,y);
-        char str[] = {0x1b, 0x5b, 0x48, 0x1b, 0x5b, 0x4a, '\0'};
-	printf("%s", str);
-        njugadas = contarJugadas();
-        if( njugadas == ( FILAS*COLUMNAS - nbombas) && estado != ESTADO_PERDEDOR){
-            estado = ESTADO_GANADOR;
-        }
+    while( state == PLAYING){
+	printf("\033[1;1H");
+        print(x,y);
+	key = getchar();
+	if (key == UP && y > 0) {
+		y--;
+	}
+	else if (key == DOWN && y < 8) {
+		y++;
+	}
+	else if (key == LEFT && x > 0) {
+		x--;
+	}
+	else if (key == RIGHT && x < 8) {
+		x++;
+	}
+	else if (key == EXIT) {
+		state = END_OF_GAME;
+	}
+	else if (key == SELECT) {
+		MakeMove(y,x);
+		move = MoveCounter();
+		if( move == ( ROWS*COLUMNS - mines) && state != LOSER){
+		    state = WINNER;
+		}
+	}
     }
 
-    if( estado == ESTADO_PERDEDOR){
-        print();
-        printf(RED "perdiste\n");
-        printf(WHITE "Solucion: \n");
-        printAll();
-    }else{
-        printf(GREEN "Ganaste !\n");
-        printAll();
-    }
+	clean_screen();
+	if( state == LOSER){
+		print(x,y);
+		printf(RED "perdiste\n");
+		printf(WHITE "Solucion: \n");
+		printAll();
+	}
+	else if (state == WINNER) {
+		printf(GREEN "Ganaste !\n");
+		printAll();
+	}
 }
 
-int main(int argc, char** argv) {
-    char str[] = {0x1b, 0x5b, 0x48, 0x1b, 0x5b, 0x4a, '\0'};
-    printf("%s", str);
-    int opt = 0;
-    do{
-        opt = getMenu();
-        switch(opt){
-            case 1:
-		iniciarJuego();
-		break;
-            case 2:
-		aboutMe();
-		break;
-        }
-        printf("Pulse una tecla para continuar\n");
-	getchar();
-	printf("%s", str);
-    }while( opt != 3);
-    return 0;
+int main(int argc, char** argv)
+{
+	int mines;
+	int ret = 0;
+	if (argc == 2 && (strcmp(argv[1], "--version")) == 0) {
+		printf("Version: %s\n", VERSION);
+	}
+	else if (argc == 3 && (strcmp(argv[1], "-m")) == 0) {
+		mines = atoi(argv[2]);
+		if (mines > MINES_MAX) {
+			printf("numero_de_minas debe ser inferior o igual que %d\n", MINES_MAX);
+			ret = 1;
+		}
+		else if (mines < 0) {
+			printf("numero_de_minas debe ser igual o superior a cero\n");
+			ret = 1;
+		}
+		else {
+			char str[] = {0x1b, 0x5b, 0x48, 0x1b, 0x5b, 0x4a, '\0'};
+			printf("%s", str);
+			MinesWeeper(mines);
+		}
+	}
+	else {
+		printf("Uso: %s -m numero_de_minas\n", argv[0]);
+	}
+	return ret;
 }

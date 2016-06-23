@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Dan Rulos
+ * Copyright (C) 2016 Dan Rulos
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,15 +18,6 @@
 #include <stdlib.h>
 #include <files.h>
 #include "minesweeper.h"
-
-int getnum()
-{
-	static char ch[1024];
-	read(0, ch, 1);
-	int n = atoi(ch);
-    
-	return n;
-}
 
 int getTime()
 {

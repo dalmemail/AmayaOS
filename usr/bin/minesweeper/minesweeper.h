@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Dan Rulos
+ * Copyright (C) 2016 Dan Rulos
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,9 +17,6 @@
  
 #ifndef MINESWEEPER_H_INCLUDED 
 #define MINESWEEPER_H_INCLUDED 
-
-/* getchar() modificado para leer numeros */
-int getnum();
 
 /* returns /dev/time value as int value */
 int getTime();
