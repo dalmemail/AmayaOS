@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Niek Linnenbank, 2012 Felipe Cabrera, 2015 Dan Rulos
+ * Copyright (C) 2009 Niek Linnenbank, 2012 Felipe Cabrera, 2016 Dan Rulos
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -91,6 +91,19 @@ int pf(int argc, char **argv, int i, char *u)
     return EXIT_SUCCESS;
 }
 
+int not_a_file(char *path)
+{
+	int ret = 0;
+	struct stat st;
+	if ((stat(path, &st)) >= 0) {
+		if (!S_ISDIR(st.st_mode)) {
+			ret = 1;
+			printf("%s\n", path);
+		}
+	}
+	return ret;
+}
+
 int main(int argc, char **argv)
 {
     for (int i = 1; i < argc; i++) {
@@ -102,17 +115,16 @@ int main(int argc, char **argv)
 	if (all) {
 		pf(1, argv, 1, argv[1]);
 	}
-	else {
+	else if (argc == 1 || not_a_file(argv[1]) == 0) {
         	pf(argc, argv, 1, argv[1]);
 	}
     }
     else {
         for(int i = 1; i < argc; i++) {
-	    if ((strcmp(argv[i], "-a")) == 0 || (strcmp(argv[i], "--all")) == 0) {
-		continue;
+	    if ((strcmp(argv[i], "-a")) != 0 && (strcmp(argv[i], "--all")) != 0 && not_a_file(argv[i]) == 0) {
+            	printf("%s:\n",argv[i]);
+            	pf(argc, argv, i, argv[i]);
 	    }
-            printf("%s:\n",argv[i]);
-            pf(argc, argv, i, argv[i]);
         }
     }
     
