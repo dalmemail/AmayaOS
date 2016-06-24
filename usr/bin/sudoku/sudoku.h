@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Dan Rulos
+ * Copyright (C) 2016 Dan Rulos
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,25 +19,14 @@
 #define LOST 0
 #define WIN 1
 
-#define EASY 0
-#define DIFFICULT 1
-#define COMPETITION_EASY 2
-#define COMPETITION_DIFF 3
-#define LOAD_SUDOKU 4
-
 /* clear_window() cleans the screen */
 void clear_window();
 
-/* get a num from the keyboard and return it.
- * if key is \b returns -1
- */
-int getnum();
-
 /* put sudoku on the screen */
-void print_sudoku(int *numbers);
+void print_sudoku(int *numbers, int act_pos);
 
 /* returns a random number from 0 to 9 */
-char randomnumber();
+int randomnumber();
 
 /* make_sudoku() returns the value of a position (pos) in a sudoku
  */

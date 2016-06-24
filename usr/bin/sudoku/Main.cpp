@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Dan Rulos
+ * Copyright (C) 2016 Dan Rulos
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,37 +22,53 @@
 #include <fcntl.h>
 #include "gamemodes.h"
 #include "sudoku.h"
-#include "multiplayer.h"
 
-#define VERSION "0.5.5"
+#define VERSION "0.6"
 
 int main(int argc, char **argv)
 {
-	int c = 1;
-	while (c != 5) {
-		clear_window();
-		printf("=== SUDOku v%s ===\n", VERSION);
-		printf("[1] Modo facil [4X4]\n");
-		printf("[2] Modo dificil [4X4]\n");
-		printf("[3] Modo campeonato [MULTIPLAYER]\n");
-		printf("[4] Cargar Sudoku (*.suk)\n");
-		printf("[5] Salir de SUDOku\n");
-		printf("Selecciona una opcion: ");
-		c = getnum();
-		printf("%c\n", c);
-		switch (c) {
-			case 1:
-				sudoku(EASY);
-				break;
-			case 2:
-				sudoku(DIFFICULT);
-				break;
-			case 3:
-				multiplayer_mode();
-				break;
-			case 4:
-				sudoku(LOAD_SUDOKU);
-				break;
+	char *path;
+	if (argc == 1) {
+		int n = -1;
+		while (n == -1) {
+			path = new char[256];
+			strcpy(path, "/etc/sudoku/sudoku_");
+			n = randomnumber() % 2;
+			if (n == 0) {
+				strcat(path, "easy");
+			}
+			else {
+				strcat(path, "difficult");
+			}
+			char *c = new char[2];
+			c[0] = (randomnumber()+'0');
+			c[1] = '\0';
+			strcat(path, c);
+			n = sudoku(path);
+			if (n == 0) {
+				clear_window();
+			}
+			delete c;
+			delete path;
+		}
+	}
+	else if (argc == 2 && (strcmp(argv[1], "--version")) == 0) {
+		printf("%s: Version %s\n", argv[0], VERSION);
+	}
+	else if (argc == 2 && (strcmp(argv[1], "--help")) == 0) {
+		printf("Uso: %s archivo.suk\n\n", argv[0]);
+		printf("--help\tMuestra esta ayuda y finaliza\n");
+		printf("--version\tMuestra la version de %s y finaliza\n", argv[0]);
+	}
+	else if (argc == 2) {
+		int fd;
+		if ((fd = open(argv[1], O_RDONLY)) < 0) {
+			printf("Error: El archivo %s no existe o no puede ser abierto\n", argv[1]);
+		}
+		else {
+			path = &argv[1][0];
+			close(fd);
+			sudoku(path);
 		}
 	}
 	return 0;

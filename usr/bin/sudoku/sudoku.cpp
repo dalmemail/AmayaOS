@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Dan Rulos
+ * Copyright (C) 2016 Dan Rulos
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,34 +27,45 @@ void clear_window()
 	printf("%s", str);
 }
 
-int getnum()
+void print_sudoku(int *numbers, int act_pos)
 {
-	static char ch[1024];
-	read(0, ch, 1);
-	if (ch[0] == '\b') {
-		return -1;
-	}
-	int n = atoi(ch);
-
-	return n;
-}
-
-void print_sudoku(int *numbers)
-{
+	char *output = new char[1024];
 	clear_window();
+	strcpy(output, "\n\t\t\t\t");
 	for (int i = 0; i < 16; i++) {
-		printf("|");
+		strcat(output, "|");
+		if (i == act_pos) {
+			strcat(output, "<");
+		}
+		else {
+			strcat(output, " ");
+		}
 		if (numbers[i] == 0) {
-			printf("X");
+			strcat(output, "X");
 		}
 		if (numbers[i] != 0) {
-			printf("%d", numbers[i]);
+			char *c = new char[2];
+			c[0] = numbers[i]+'0';
+			c[1] = '\0';
+			strcat(output, c);
+			delete c;
+		}
+		if (i == act_pos) {
+			strcat(output, ">");
+		}
+		else {
+			strcat(output, " ");
 		}
 		if ((i+1) % 4 == 0) {
-			printf("|\n");
+			strcat(output, "|\n\t\t\t\t");
 		}
 	}
-	printf("\n");
+	strcat(output, "\n\t\t\t\tw\n\t\t\t      a   d     move cursor\n\t\t\t\ts");
+	strcat(output, "\n\t\t\t\tf\tfix squares");
+	strcat(output, "\n\t\t\t\tq\tquit game");
+	strcat(output, "\n\t\t\t\tn\tnew board");
+	printf("%s\n", output);
+	delete output;
 }
 
 char *read_file(char *path)
@@ -67,10 +78,10 @@ char *read_file(char *path)
 	return ch;
 }
 
-char randomnumber()
+int randomnumber()
 {
 	char *ch = read_file("/dev/time");
-	return ((atoi(ch) % 10)+'0');
+	return (atoi(ch) % 10);
 }
 
 int make_sudoku(int pos, char *path)

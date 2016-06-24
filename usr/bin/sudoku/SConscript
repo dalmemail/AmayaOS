@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2015 Dan Rulos
+# Copyright (C) 2016 Dan Rulos
 # 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -20,5 +20,5 @@ from build import *
 env = Prepare(target, [ 'libcrt', 'liballoc', 'libposix', 'libexec', 'libc', 'libsys' ],
 		      [ 'filesystem', 'process', 'log', 'memory', 'terminal' ])
 
-env.Program('sudoku', [ 'multiplayer.cpp', 'sudoku.cpp', 'gamemodes.cpp', 'Main.cpp' ],
+env.Program('sudoku', [ 'sudoku.cpp', 'gamemodes.cpp', 'Main.cpp' ],
 		         LIBS = env['LIBS'], LIBPATH = env['LIBPATH'])
