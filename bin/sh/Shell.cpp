@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Niek Linnenbank, 2012 Felipe Cabrera, 2015 Dan Rulos
+ * Copyright (C) 2009 Niek Linnenbank, 2012 Felipe Cabrera, 2016 Dan Rulos
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -131,6 +131,8 @@ int Shell::execute(char *command)
                 (snprintf(tmp, sizeof(tmp), "/sbin/%s/%s", argv[0], argv[0]) &&
                 ((pid = forkexec(tmp, (const char **) argv)) >= 0)) ||
                 (snprintf(tmp, sizeof(tmp), "/usr/bin/%s/%s", argv[0], argv[0]) &&
+                ((pid = forkexec(tmp, (const char **) argv)) >= 0)) ||
+                (snprintf(tmp, sizeof(tmp), "/usr/games/%s/%s", argv[0], argv[0]) &&
                 ((pid = forkexec(tmp, (const char **) argv)) >= 0)))
         {
             waitpid(pid, &status, 0);
