@@ -1,0 +1,29 @@
+TANGMAN(6)			AmayaOS Games				TANGMAN(6)
+
+NAME
+	tangman - computer version of the game hangman
+
+SYNOPSIS
+	tangman [wordlist]
+
+DESCRIPTION
+	In hangman, the computer picks a word from the word list and you must
+	try to guess it.  The computer keeps track of which letters have been
+	guessed and how many wrong guesses you have made on the screen in a
+	graphic fashion.
+
+OPTIONS
+	[wordlist]	Use the specified wordlist instead of the default one
+			named below.
+
+	--help		display tangman help and exit
+
+	--version	output version information and exit
+
+FILES
+	/etc/tangman/database  Word list
+
+BUGS
+	Report uname bugs to amaya@amayaos.com
+
+June 28, 2016
