@@ -18,17 +18,9 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <time.h>
 #include "minesweeper.h"
 #include "minesweeper_colors.h"
-
-int random(int seeder)
-{
-	int random_n = (getTime()%10) + ((getTime()%100)*10);
-	while (random_n > 8) {
-		random_n = random_n / seeder;
-	}
-	return random_n;
-}
 
 #define COLUMNS 9
 #define ROWS 9
@@ -40,9 +32,9 @@ int random(int seeder)
 #define PLAYING 2
 #define END_OF_GAME 3
 
-#define VERSION "0.2"
+#define VERSION "0.2.1"
 
-#define MINES_MAX 20
+#define MINES_MAX 40
 
 #define UP 'w'
 #define DOWN 's'
@@ -65,19 +57,17 @@ void clean_screen()
 
 void addMines(int mines){
     int i,x,y;// contador de bombas
-    int seeder = 2;
+    int seeder = time(NULL);
     for (i = 1; i <= mines; i++) {
-	x = random(seeder);
-	y = random(i+seeder);
+	x = (random(seeder) % 9);
+	seeder += ((seeder % 1000)+1);
+	y = (random(seeder) % 9);
+	seeder += ((seeder % 1000)+1);
 	if (mines_array[x][y] != MINE) {
 		mines_array[x][y] = MINE;
 	}
 	else {
 		i--;
-	}
-	seeder = seeder + (getTime()%10);
-	if (seeder > 30) {
-		seeder = 2;
 	}
     }
 }

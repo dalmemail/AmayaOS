@@ -18,10 +18,7 @@
 #ifndef MINESWEEPER_H_INCLUDED 
 #define MINESWEEPER_H_INCLUDED 
 
-/* returns /dev/time value as int value */
-int getTime();
-
-/* time user play*/
-unsigned int timeplaying(int starttime);
+/* RETURNS ONE ALEATORY NUMBER */
+int random(int seed);
 
 #endif

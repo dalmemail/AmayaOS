@@ -15,21 +15,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <stdlib.h>
-#include <files.h>
-#include "minesweeper.h"
-
-int getTime()
+int random(int seed)
 {
-	file *f = new file();
-	f->setpath("/dev/time");
-	f->f_open(O_RDONLY);
-	char *ch = f->readAll();
-	f->f_close();
-	return atoi(ch);
-}
+	const unsigned int m = 1 << 31;
+	const unsigned int a = 1103515245;
+	const unsigned int c = 12345;
 
-unsigned int timeplaying(int starttime)
-{
-	return (getTime() - starttime);
+	seed = (a * seed + c) % m;
+	return seed;
 }
