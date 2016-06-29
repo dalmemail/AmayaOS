@@ -156,13 +156,13 @@ int get_size(char *path)
 
 int random_number(int max)
 {
-	int seeder = time(NULL);
-	int n = seeder;
-	int div = (seeder % 10) + (seeder % 100) + 2;
-	while (n >= max) {
-		n /= div;
-	}
-	return n;
+	int seed = time(NULL);
+	const unsigned int m = 1 << 31;
+	const unsigned int a = 1103515245;
+	const unsigned int c = 12345;
+
+	seed = (a * seed + c) % m;
+	return (seed % max);
 }
 
 void clean_screen()

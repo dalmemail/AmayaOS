@@ -15,6 +15,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-void tangman(char *word_database_path);
+int tangman(char *word_database_path);
 
 void clean_screen();
