@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Niek Linnenbank, 2015 Dan Rulos
+ * Copyright (C) 2009 Niek Linnenbank, 2016 Dan Rulos
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,7 +31,8 @@ int HelpCommand::execute(Size nparams, char **params)
     
     printf("\nEscriba 'ls /bin' para ver los comandos de usuario disponibles\r\n");
     printf("Escriba 'ls /sbin' para ver los comandos de sistema disponibles\r\n");
-    printf("Escriba 'ls /usr/bin' para ver software de usuario disponible\r\n");
+    printf("Escriba 'ls /usr/bin' para ver software de usuario disponibles\r\n");
+    printf("Escriba 'ls /usr/games' para ver los juegos de usuario disponibles\r\n");
     printf("Escriba 'ls /bin /sbin /usr/bin' para ver todos los comandos disponibles\r\n");
 
     
