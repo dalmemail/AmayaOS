@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Niek Linnenbank, 2014 Dan Rulos.
+ * Copyright (C) 2009 Niek Linnenbank, 2016 Dan Rulos.
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,6 +36,11 @@
 
 /** Bit is set in the scancode, if a key is released. */
 #define PS2_RELEASE     0x80 
+
+/* Supported Modified Keys */
+#define NO_MODIFIER_KEY 0
+#define SHIFT_KEY 1
+#define ALT_GR_KEY 2
 
 /**
  * @brief PS2 Keyboard device driver.
@@ -77,14 +82,16 @@ class Keyboard : public Device
 	/**
 	 * @brief Keyboard map table.
 	 */
-        static const char keymap[0x3a][2];
+        static const char keymap[0x80][3];
 
 	/**
-	 * @brief State of the shift key.
+	 * @brief State of the modifiers keys.
 	 *
-	 * Non-zero if pressed, and ZERO otherwise.
+	 * 0 : No modifier key is pressed.
+	 * 1 : Shift Key is pressed.
+	 * 2 : AltGr Key is pressed.
 	 */
-	u8 shiftState;
+	int modifierKey;
 	
 	/** Do we have a byte ready? */
 	bool pending;
