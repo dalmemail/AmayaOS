@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Dan Rulos
+ * Copyright (C) 2016 Dan Rulos
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,10 +25,10 @@
 
 unsigned int which(char *command)
 {
-	char *path[3] = {"/bin/", "/sbin/", "/usr/bin/"};
+	char *path[4] = {"/bin/", "/sbin/", "/usr/bin/", "/usr/games/"};
 	char path_actual[64];
 	struct stat st;
-	for (int i = 0; i < 3; i++) {
+	for (int i = 0; i < 4; i++) {
 		strcpy(path_actual, path[i]);
 		strcat(path_actual, command);
 		if ((stat(path_actual, &st)) == 0) {
