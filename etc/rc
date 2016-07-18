@@ -6,4 +6,4 @@
 /srv/filesystem/linn/server /dev/ata0 0x400000 /usr
 /srv/hostname/server
 /srv/time/server
-/bin/sh/sh
+/sbin/login/login /dev/tty0 /dev/tty0
