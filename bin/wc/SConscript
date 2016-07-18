@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2009 Niek Linnenbank
+# Copyright (C) 2016 Dan Rulos
 # 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -20,5 +20,5 @@ from build import *
 env = Prepare(target, [ 'libcrt', 'liballoc', 'libposix', 'libexec', 'libc', 'libsys' ],
 		      [ 'filesystem', 'memory' ])
 
-env.Program('wc', [ 'wordcount.cpp', 'linecount.cpp', 'charcount.cpp', 'Main.cpp' ],
+env.Program('wc', [ 'wc.cpp', 'Main.cpp' ],
 		         LIBS = env['LIBS'], LIBPATH = env['LIBPATH'])

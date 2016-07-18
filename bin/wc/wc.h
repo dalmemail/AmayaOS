@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Dan Rulos
+ * Copyright (C) 2016 Dan Rulos
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,5 +15,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* counts the number of lines on a file */
-unsigned int linecount(char *ch);
+struct wc {
+	int words;
+	int lines;
+	int chars;
+};
+
+/**
+ * @brief Counts the number of chars, words and lines from a file
+ * @param file_content The data read from the file
+ * @return A wc structure with the number of chars, words and lines
+ * of the file
+ */
+
+struct wc wordcount(char *file_content);

@@ -15,21 +15,30 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "wordcount.h"
+#include "wc.h"
 
-unsigned int wordcount(char *ch)
+#define _FALSE 0
+#define _TRUE 1
+
+struct wc wordcount(char *file_content)
 {
-	int state = OUT;
-	unsigned int nw = 0;
-	unsigned int ch_len = strlen(ch);
-	for (unsigned int i = 0; i < ch_len; i++) {
-		if (ch[i] == '\n' || ch[i] == ' ' || ch[i] == '\t') {
-			state = OUT;
+	struct wc file_wc;
+	file_wc.words = 0;
+	file_wc.lines = 0;
+	int new_word = _TRUE;
+	for (file_wc.chars = 0; file_content[file_wc.chars] != '\0'; file_wc.chars++) {
+		if (file_content[file_wc.chars] == '\n') {
+			file_wc.lines++;
+			new_word = _TRUE;
 		}
-		else if (state == OUT) {
-			state = IN;
-			nw++;
+		else if (file_content[file_wc.chars] == '\t'
+			|| file_content[file_wc.chars] == ' ') {
+			new_word = _TRUE;
+		}
+		else if (new_word) {
+			new_word = _FALSE;
+			file_wc.words++;
 		}
 	}
-	return nw;
+	return file_wc;
 }

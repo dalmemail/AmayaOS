@@ -20,9 +20,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <sys/stat.h>
-#include "wordcount.h"
-#include "linecount.h"
-#include "charcount.h"
+#include "wc.h"
 
 #define YES 1
 #define NO 0
@@ -43,7 +41,7 @@ int f_size(char *path)
 int main(int argc, char **argv)
 {
 	int fd;
-	int c = NO, l = NO,w = NO;
+	int chars = NO, lines = NO,words = NO;
 	if (argc < 2) {
 		printf("Uso: %s FILE1 FILE2...\n", argv[0]);
 		return EXIT_FAILURE;
@@ -52,60 +50,58 @@ int main(int argc, char **argv)
 	int nofiles = 0;
 	for (int i=1; i < argc; i++) {
 		if (strcmp(argv[i], "-c") == 0) {
-			c = YES;
+			chars = YES;
 			nofiles++;
 		}
 		if (strcmp(argv[i], "-l") == 0) {
-			l = YES;
+			lines = YES;
 			nofiles++;
 		}
 		if (strcmp(argv[i], "-w") == 0) {
-			w = YES;
+			words = YES;
 			nofiles++;
 		}
 	}
 	if (nofiles == 0) {
-		c = l = w = YES;
+		chars = lines = words = YES;
 	}
-	int nc = 0, nl = 0, nw = 0, sw = 0, sl = 0, sc = 0;
+	int nc = 0, nl = 0, nw = 0;
 	for (int i=1; i < argc; i++) {
 		if (strcmp(argv[i], "-c") != 0 && strcmp(argv[i], "-w") != 0 && strcmp(argv[i], "-l") != 0) {
-			char *ch = new char [f_size(argv[i])];
+			char *file_content = new char [f_size(argv[i])];
 			if ((fd = open(argv[i], O_RDONLY)) < 0) {
 				printf("Error al abrir '%s': %s\n", argv[i], strerror(errno));
 			}
 			else {
-				read(fd, ch, f_size(argv[i]));
+				read(fd, file_content, f_size(argv[i]));
 				close(fd);
-				if (l == YES) {
-					nl = linecount(ch);
-					sl += nl;
-					printf("\t%d", nl);
+				struct wc file_wc = wordcount(file_content);
+				if (lines) {
+					nl += file_wc.lines;
+					printf("\t%d", file_wc.lines);
 				}
-				if (w == YES) {
-					nw = wordcount(ch);
-					sw += nw;
-					printf("\t%d", nw);
+				if (words) {
+					nw += file_wc.words;
+					printf("\t%d", file_wc.words);
 				}
-				if (c == YES) {
-					nc = charcount(ch);
-					sc += nc;
-					printf("\t%d", nc);
+				if (chars) {
+					nc += file_wc.chars;
+					printf("\t%d", file_wc.chars);
 				}
 				printf("\t%s\n", argv[i]);
 			}
-			delete ch;
+			delete file_content;
 		}
 	}
 	if (argc - nofiles > 2) {
-		if (l == YES) {
-			printf("\t%d", sl);
+		if (lines) {
+			printf("\t%d", nl);
 		}
-		if (w == YES) {
-			printf("\t%d", sw);
+		if (words) {
+			printf("\t%d", nw);
 		}
-		if (c == YES) {
-			printf("\t%d", sc);
+		if (chars) {
+			printf("\t%d", nc);
 		}
 		printf("\ttotal\n");
 	}
