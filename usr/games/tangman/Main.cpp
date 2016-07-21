@@ -20,7 +20,7 @@
 #include <fcntl.h>
 #include "tangman.h"
 
-#define VERSION "0.4"
+#define VERSION "0.4.1"
 
 #define FALSE_ 0
 #define TRUE_ 1

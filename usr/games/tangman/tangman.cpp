@@ -16,6 +16,7 @@
  */
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <time.h>
@@ -23,7 +24,7 @@
 int wordcount(char *file_content);
 char *read_file(char *path);
 int get_size(char *path);
-int random_number(int max);
+unsigned int random_number(int max);
 void clean_screen();
 void print_hangman(char *playing_word, char *guessed);
 
@@ -130,6 +131,12 @@ int wordcount(char *file_content)
 	return n_words;
 }
 
+unsigned int random_number(int max)
+{
+	srandom(time(NULL));
+	return random() % max;
+}
+
 char *read_file(char *path)
 {
 	int file_size = get_size(path);
@@ -152,17 +159,6 @@ int get_size(char *path)
 		ssize = st.st_size;
 	}
 	return ssize;
-}
-
-int random_number(int max)
-{
-	int seed = time(NULL);
-	const unsigned int m = 1 << 31;
-	const unsigned int a = 1103515245;
-	const unsigned int c = 12345;
-
-	seed = (a * seed + c) % m;
-	return (seed % max);
 }
 
 void clean_screen()
