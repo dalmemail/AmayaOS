@@ -84,17 +84,9 @@ int main(int argc, char **argv)
             open("/dev/tty0", O_RDWR);
         }
         /* Show the user where to get help. */
-        printf("\r\n"
-                /*"Entering Shell. Type 'help' for the command list.\r\n"
-                "\r\n"*/);
+        printf("\nEntering AmayaOS Shell. Type 'help' for the command list.\r\n");
 
-        /* Entramos al modo grafico */
 	touch("/dev/sh_history", S_IRUSR | S_IWUSR);
-	int pid, status;
-	char *args[] = {"/usr/bin/desktop/desktop", ZERO};
-        if ((pid = forkexec(args[0], (const char **) args)) >= 0) {
-            waitpid(pid, &status, 0);
-        }
         /* Entra al bucle. */
         return sh.run();
     }
