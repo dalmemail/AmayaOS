@@ -41,6 +41,11 @@
 #define NO_MODIFIER_KEY 0
 #define SHIFT_KEY 1
 #define ALT_GR_KEY 2
+#define ALT_GR_SHIFT_KEY 3
+#define DIACRITIC_KEY 4
+#define DIACRITIC_SHIFT_KEY 5
+#define DIAERESIS_KEY 6
+#define DIAERESIS_KEY_SHIFT 7
 
 /**
  * @brief PS2 Keyboard device driver.
@@ -82,7 +87,7 @@ class Keyboard : public Device
 	/**
 	 * @brief Keyboard map table.
 	 */
-        static const char keymap[0x80][3];
+        static const char keymap[0x80][8];
 
 	/**
 	 * @brief State of the modifiers keys.
@@ -91,7 +96,7 @@ class Keyboard : public Device
 	 * 1 : Shift Key is pressed.
 	 * 2 : AltGr Key is pressed.
 	 */
-	int modifierKey;
+	unsigned int modifierKey;
 	
 	/** Do we have a byte ready? */
 	bool pending;
