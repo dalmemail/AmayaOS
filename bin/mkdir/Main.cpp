@@ -1,6 +1,5 @@
-/* AMAYA OS 2014 */
 /*
- * Copyright (C) 2015 Dan Rulos
+ * Copyright (C) 2016 Dan Rulos
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,31 +16,64 @@
  */
 
 #include <sys/stat.h>
+#include <dirent.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
 #include <string.h>
 #include <unistd.h>
 
-int mkfolder(char *prog, char *path)
+void make_path(const char *user_path, char *complete_path, int complete_path_size)
 {
-	int ret = EXIT_SUCCESS;
-	char final_path[128];
-	/* if there isn't a path */
-	if (path[0] != '/') {
-		getcwd(final_path, sizeof(final_path));
-		if ((strcmp(final_path, "/")) != 0) {
-			strcat(final_path, "/");
-		}
-		strcat(final_path, path);
+	if (user_path[0] != '/') {
+		getcwd(complete_path, complete_path_size);
+		if (complete_path[1] != '\0') strcat(complete_path, "/");
+		strcat(complete_path, user_path);
 	}
 	else {
-		strcpy(final_path, path);
+		strcpy(complete_path, user_path);
 	}
-	if ((mkdir(final_path, S_IRUSR | S_IWUSR)) < 0) {
-		printf("%s: error al abrir '%s': %s\r\n",
-                prog, path, strerror(errno));
-		ret = EXIT_FAILURE;
+}
+
+void get_parent(const char *path, char *dest)
+{
+	int i;
+	strcpy(dest, path);
+	for (i = strlen(dest); dest[i] != '/'; i--) {
+		dest[i] = '\0';
+	}
+	if (i > 1) dest[i] = '\0';
+}
+
+int checkDir(const char *path)
+{
+	int ret = 0;
+	struct stat st;
+	DIR *dir1;
+	if (stat(path, &st) < 0) ret = errno;
+	else if (S_ISDIR(st.st_mode)) {
+		(!(dir1 = opendir(path))) ? ret = errno : closedir(dir1);
+	}
+	else ret = ENOTDIR;
+	return ret;
+}
+
+int create_file(char *prog, char *path)
+{
+	int ret = EXIT_SUCCESS;
+	char file_path[256];
+	char file_parent[256];
+	/* check if 'path' is a real file path */
+	make_path(path, file_path, 256);
+	/* we get the file parent to check if exists */
+	get_parent(file_path, file_parent);
+	/* check if parent directory exists */
+	if ((ret = checkDir(file_parent)) != 0) {
+		printf("%s: error al abrir '%s': %s\n", prog, file_parent, strerror(ret));
+	}
+	else if ((ret = mkdir(file_path, S_IRUSR | S_IWUSR)) < 0) {
+		printf("%s: error al abrir '%s': %s\n",
+                prog, file_path, strerror(errno));
 	}
 	return ret;
 }
@@ -50,13 +82,12 @@ int main(int argc, char **argv)
 {
 	int i, ret, result = EXIT_SUCCESS;
 	if (argc < 2) {
-		printf("uso: %s DIRECTORIO1 DIRECTORIO2 ...\n", argv[0]);
-		result = EXIT_SUCCESS;
+		printf("uso: %s FILE1 FILE2 ...\n", argv[0]);
 	}
-	for (i = 1; i < argc; i++) {
-		ret = mkfolder(argv[0], argv[i]);
-		if (ret > result) {
-			result = ret;
+	else {
+		for (i = 1; i < argc; i++) {
+			ret = create_file(argv[0], argv[i]);
+			if (ret < result) result = ret;
 		}
 	}
 	return result;
