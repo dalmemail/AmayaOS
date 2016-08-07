@@ -130,3 +130,32 @@ void inicialice_var(char *var)
 		var[i] = '\0';
 	}
 }
+
+int copy_file(char *source, char *dest)
+{
+	int ret = 0;
+	struct stat st;
+	int fd;
+	if (stat(source, &st) < 0) {
+		ret = errno;
+	}
+	else {
+		char *source_content = (char *)malloc(st.st_size);
+		if ((fd = open(source, O_RDONLY)) >= 0) {
+			read(fd, source_content, st.st_size);
+			close(fd);
+			if ((fd = open(dest, O_WRONLY)) >= 0) {
+				write(fd, source_content, st.st_size);
+				close(fd);
+			}
+			else {
+				ret = errno;
+			}
+		}
+		else {
+			ret = errno;
+		}
+		free(source_content);
+	}
+	return ret;
+}

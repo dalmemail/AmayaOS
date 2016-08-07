@@ -20,3 +20,5 @@ void commander(char *path);
 int checkDir(char *path);
 
 void file_info(char *filename, char *path);
+
+void paste_file(char *copy_path, char *current_path, char *paste_filename);

@@ -37,3 +37,5 @@ char *get_last_path(char *path, char *last_dir_selected);
 char *makePath(char *path, char *filename, char *file_path);
 
 void inicialice_var(char *var);
+
+int copy_file(char *source, char *dest);

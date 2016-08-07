@@ -33,6 +33,8 @@
 #define CREATE_FILE_KEY 'f'
 #define CREATE_DIR_KEY 'd'
 #define MOVE_KEY 'm'
+#define COPY_KEY 'c'
+#define PASTE_KEY 'p'
 
 void commander(char *path)
 {
@@ -46,6 +48,8 @@ void commander(char *path)
 	print_error(strerror(checkDir(current_path)));
 	n_files = countFiles(current_path);
 	dir_content = get_dir_content(current_path, n_files);
+	char copy_path[256];
+	char *paste_filename;
 	while (key != EXIT_KEY) {
 		print_entry(dir_content, cursor_position, (n_files+1));
 		key = getchar();
@@ -209,6 +213,29 @@ void commander(char *path)
 				print_error(strerror(result));
 			}
 		}
+		else if (key == COPY_KEY) {
+			char copy_file_path[256];
+			strcpy(copy_file_path, current_path);
+			if (strcmp(current_path, "/") != 0) strcat(copy_file_path, "/");
+			strcat(copy_file_path, dir_content[cursor_position].file_name);
+			paste_filename = &dir_content[cursor_position].file_name[0];
+			int result;
+			if ((result = checkDir(copy_file_path)) == ENOTDIR) {
+				strcpy(copy_path, copy_file_path);
+			}
+			else if (!result) {
+				print_error("Es un directorio");
+			}
+			else {
+				print_error(strerror(result));
+			}
+		}
+		else if (key == PASTE_KEY) {
+			paste_file(copy_path, current_path, paste_filename);
+			free(dir_content);
+			n_files = countFiles(current_path);
+			dir_content = get_dir_content(current_path, n_files);
+		}
 		else if (key != EXIT_KEY && key != UP_KEY && key != DOWN_KEY) {
 			print_error("Comando Incorrecto");
 		}
@@ -248,4 +275,24 @@ void file_info(char *filename, char *path)
 	else {
 		print_info(st, path, filename);
 	}
+}
+
+void paste_file(char *copy_path, char *current_path, char *paste_filename)
+{
+		int result;
+		char final_path[256];
+		if ((result = checkDir(current_path)) == 0) {
+			strcpy(final_path, current_path);
+			if (strcmp(current_path, "/") != 0) strcat(final_path, "/");
+			strcat(final_path, paste_filename);
+			if (touch(final_path, S_IRUSR | S_IWUSR) < 0) {
+				print_error(strerror(errno));
+			}
+			else if ((result = copy_file(copy_path, final_path)) != 0) {
+				print_error(strerror(result));
+			}
+		}
+		else {
+			print_error(strerror(result));
+		}
 }

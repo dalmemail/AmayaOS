@@ -157,7 +157,7 @@ void about_commander()
 {
 	print_simple_window();
 	char screen[128];
-	strcpy(screen, "\033[10;28HAmaya File Commander v0.1");
+	strcpy(screen, "\033[10;27HAmaya File Commander v0.1.1");
 	strcat(screen, "\033[13;32Hamaya@amayaos.com");
 	printf("%s", screen);
 }
