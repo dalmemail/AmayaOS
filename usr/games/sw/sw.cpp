@@ -17,9 +17,9 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include "sw.h"
 #include "sw_colors.h"
-#include "random.h"
 
 #define UNKOWN_WATER 0
 #define WATER_IA 1
@@ -38,6 +38,19 @@
 #define MULTI_PLAYER 1
 
 int game_map[2][10][10];
+
+int getnum()
+{
+	int n = 0;
+	char c = getchar();
+	if (c >= '0' && c <= '9') {
+		n = c - '0';
+	}
+	else if (c == 'e') {
+		n = -1;
+	}
+	return n;
+}
 
 void clear_window()
 {
@@ -88,9 +101,11 @@ void put_ship_on_map(int mode)
 				game_map[1][i][x] = WATER_IA;
 			}
 		}
-		pos1 = getRandomNumber(10);
+		srandom(time(NULL));
+		pos1 = random() % 10;
 		pos1++;
-		pos2 = getRandomNumber(pos1);
+		srandom(time(NULL));
+		pos2 = random() % pos1;
 		pos2++;
 	}
 	for (int z = 0; z <= 1; z++) {
@@ -176,29 +191,13 @@ int CheckGameStatus()
 	return current_state;
 }
 
-int sw()
+int sw(int mode)
 {
-	int mode = ONE_PLAYER;
-	char option;
-	clear_window();
-	printf("=== MODO ===\n");
-	printf("1. Un Jugador\n");
-	printf("2. Dos Jugadores\n");
-	do {
-		option = getchar();
-	} while(option != '1' && option != '2');
-	switch (option) {
-		case '2':
-			mode = MULTI_PLAYER;
-			break;
-		default:
-			mode = ONE_PLAYER;
-	}
 	clear_window();
 	int result = EXIT_SUCCESS;
 	put_ship_on_map(mode);
-	int x = 0;
-	int y = 0;
+	short int x = 0;
+	short int y = 0;
 	int state = PLAYING;
 	while (state == PLAYING) {
 		print_map();
@@ -215,8 +214,10 @@ int sw()
 			game_map[0][y][x]++;
 		}
 		if (mode == ONE_PLAYER) {
-			x = getRandomNumber(10);
-			y = getRandomNumber(x+1);
+			srandom(time(NULL));
+			x = random() % 10;
+			srandom(time(NULL));
+			y = random() % 10;
 			if (game_map[1][x][y] != WATER && game_map[1][x][y] != SHIP) {
 				game_map[1][x][y]++;
 			}

@@ -41,6 +41,6 @@ extern C void put_ship_on_map(int mode);
  * sw() is the main function of the game Sea War *
  * @return EXIT_SUCCESS or EXIT_FAILURE (stdlib.h) */
 
-extern C int sw();
+extern C int sw(int mode);
 
 #endif
