@@ -15,28 +15,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-#include <errno.h>
-#include "wama.h"
-#include "reader.h"
- 
-int read_wama_file(char *path)
-{
-	int ret = 0;
-	if (path[0] != '/') {
-		char dev_path[128] = "/dev/";
-		strcat(dev_path, path);
-		strcpy(path, dev_path);
-	}
-	if ((open(path, O_RDONLY)) < 0) {
-		printf("Error abriendo '%s':%s.\n", path, strerror(errno));
-		ret = -1;
-	}
-	else {
-		ret = line_navigator(path, READ_MODE);
-	}
-	return ret;
-}
+void clean_screen();
+
+void up_bar(char *str1, int sp1, char *str2, int sp2);
+
+void down_bar();
+
+void clean_message_line();
+
+void add_message(char *msg);
+
+int get_start_point(int line);
+
+void print_content(char **lines, struct cursor file_cursor, int n_lines);
+
+void get_string(char *str, unsigned int max);

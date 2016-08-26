@@ -16,271 +16,255 @@
  */
 
 #include <stdio.h>
-#include <stdlib.h>
-#include <sys/stat.h>
+#include <stdio.h>
+#include "interface.h"
+#include "files.h"
 #include "wama.h"
+#include "find.h"
 
-void clean_screen()
-{
-	char str[] = {0x1b, 0x5b, 0x48, 0x1b, 0x5b, 0x4a, '\0'};
-	printf("%s", str);
-}
+#define CREATE_FILE -45
 
-int checkWamaCommand(char *line)
+#define UP_KEY 30
+#define DOWN_KEY 31
+#define LEFT_KEY 28
+#define RIGHT_KEY 29
+
+struct cursor put_char(char key, char **lines, struct cursor file_cursor);
+
+struct cursor add_line(char **lines, char **backup, struct cursor file_cursor, unsigned int nlines);
+
+void set_cursor_(struct cursor file_cursor, int start_point);
+
+struct cursor delete_line(char **lines, char **backup, struct cursor file_cursor, unsigned int nlines);
+
+void delete_pointer(char **pointer, int pointer_n);
+
+int wama_main(char *path)
 {
+	char prog[] = "Wama 0.8\0";
 	int ret = 0;
-	if ((strcmp(line, "$exit")) == 0) {
-		ret = 2;
+	clean_screen();
+	if (path == NULL) up_bar(prog, 25, "Nuevo Archivo", 35);
+	else up_bar(prog, 25, path, 35);
+	down_bar();
+	int file_status;
+	switch ((file_status = checkFile(path))) {
+		case 1:
+			add_message("Error: No es un archivo de texto");
+			break;
+		case CREATE_FILE:
+			break;
+		case 0:
+			/* all ok */
+			add_message("\e[36mWelcome to Wama\e[m");
+			break;
+		default:
+			add_message(strerror(file_status));
+			ret = -1;
+			break;
 	}
-	else if ((strcmp(line, "$nav")) == 0) {
-		ret = 1;
-	}
-	return ret;
-}
-
-int linecounter(char *c)
-{
-	int n_lines = 0;
-	int c_len = strlen(c);
-	for (int i = 0; i < c_len; i++) {
-		if (c[i] == '\n') {
-			n_lines++;
-		}
-	}
-	return n_lines;
-}
-
-/* prototipo de get_size() */
-int get_size(char *path);
-
-char *read_file(char *path)
-{
-	int file_size = get_size(path);
-	char *data = new char [file_size];
-	int fd = open(path, O_RDONLY);
-	read(fd, data, file_size);
-	close(fd);
-	/* Devolvemos el contenido del fichero */
-	return data;
-}
-
-int get_size(char *path)
-{
-	struct stat st;
-	int ssize;
-	if ((stat(path, &st)) < 0) {
-		ssize = -1;
-	}
-	else {
-		ssize = st.st_size;
-	}
-	return ssize;
-}
-
-char *edit_lines(char *str, size_t size, char *line_to_edit)
-{
-    char line[1024 + size];
-    Size total = 0;
-    Size point = 0;
-    strcpy(line, line_to_edit);
-
-    printf("%s", line_to_edit);
-    total = point = strlen(line_to_edit);
-
-    /* Leemos una linea. */
-    while (total < sizeof(line)) {
-        /* Leemos un caracter. */
-        read(0, line + point, 1);
-
-        /* Procesamos el caracter. */
-        switch (line[point]) {
-            case '\r':
-            case '\n':
-                putchar('\n');
-                line[total] = ZERO;
-                strlcpy(str, line, size);
-                return str;
-
-            case '\b':
-                if (total > 0) {
-                    line[--total] = ZERO;
-                    point--;
-                    printf("\b \b");
-                }
-                break;
-                
-            case '\a':
-                /*
-                if (point > 0) {
-                    printf("\b");
-                    point--;
-                }
-                */
-                break;
-            default:
-                printf("%c", line[point]);
-                point++;
-                total++;
-                break;
-        }
-    }
-    
-    line[total] = ZERO;
-    
-    return line_to_edit;
-}
-
-int line_navigator(char *path, int mode)
-{
-	int ret = 0;
-	char *data = read_file(path);
-	int n_lines = linecounter(data);
-	int act_line = 1;
+	char *data;
+	unsigned int nlines;
 	char **lines;
-	lines = new char *[n_lines];
-	lines[0] = &data[0];
-	int data_len = strlen(data);
-	char to_find[128];
-	to_find[0] = '\0';
-	if (data_len > 0) {
-		for (int i = 1, x = 0; data[x] != '\0'; x++) {
-			if (data[x] == '\n') {
-				data[x] = '\0';
-				if (i < n_lines) {
-					lines[i] = &data[x+1];
-				}
-				i++;
-			}
+	char **backup;
+	char search[60] = { '\0' };
+	int start_point = 0;
+	struct cursor file_cursor;
+	file_cursor.ln = 0;
+	file_cursor.col = 0;
+	if (file_status == 0 || file_status == CREATE_FILE) data = read_file(path);
+	if ((file_status == 0 || file_status == CREATE_FILE) && data != NULL) {
+		nlines = linecounter(&data[0]);
+		lines = new char*[nlines];
+		for (unsigned int i = 0; i < nlines; i++) {
+			lines[i] = new char[80];
 		}
-		if (n_lines > 0) {
-			char char_read[2];
-			do {
-				clean_screen();
-				int start_line = 0;
-				if (n_lines >= 20 && act_line >= 20) {
-					start_line = (act_line - 20);
-				}
-				for (int i = start_line; i < (start_line+20) && i < n_lines; i++) {
-					printf("\n");
-					if (i == (act_line-1)) {
-						printf("#");
-					}
-					else {
-						printf(" ");
-					}
-					printf("%d %s", (i+1), lines[i]);
-				}
-				read(0, char_read, 1);
-				if (char_read[0] == 'w' && act_line < n_lines) {
-					act_line++;
-				}
-				if (char_read[0] == 's' && act_line > 1) {
-					act_line--;
-				}
-				if (char_read[0] == 'm') {
-					char line[8];
-					clean_screen();
-					printf("Mover a: ");
-					gets_s(line, 8);
-					int line_to_move = atoi(line);
-					if (line_to_move > 0 && line_to_move < n_lines) {
-						act_line = line_to_move;
-					}
-				}
-				if (char_read[0] == 'f') {
-					clean_screen();
-					printf("Buscar: ");
-					edit_lines(to_find, 128, to_find);
-					if (strlen(to_find) > 0) {
-						int line_found = SearchInFile(to_find, data, data_len, act_line);
-						if (line_found >= 0) {
-							act_line = line_found;
+		separate_in_lines(data, lines, nlines);
+		delete data;
+		print_content(lines, file_cursor, nlines);
+		int exit = 0;
+		char key;
+		while (!exit) {
+			key = getchar();
+			start_point = get_start_point(file_cursor.ln);
+			if (key == '^') {
+				key = getchar();
+				switch (key) {
+					case 'c':
+						clean_message_line();
+						printf("\e[24;30H[Line: %d Col: %d]",
+						file_cursor.ln+1, file_cursor.col+1);
+						set_cursor_(file_cursor, start_point);
+						break;
+					case 'x':
+						exit = 1;
+						break;
+					case 'o':
+						update_file_content(path, lines, nlines);
+						set_cursor_(file_cursor, start_point);
+						break;
+					case 'w':
+						get_string(search,60);
+						if (search[0] != '\0') {
+							file_cursor = findString(search,lines,nlines,file_cursor);
+							print_content(lines,file_cursor,nlines);
+							start_point = get_start_point(file_cursor.ln);
 						}
-					}
-				}
-			} while(char_read[0] != '\n' && char_read[0] != 'x' && char_read[0] != 'r');
-			clean_screen();
-			if (char_read[0] == '\n' && mode == WRITE_MODE) {
-				char edit_line[128];
-				printf(" %d ", act_line);
-				edit_lines(edit_line, 128, lines[(act_line-1)]);
-				lines[act_line-1] = &edit_line[0];
-				int fd;
-				if ((fd = open(path, O_WRONLY)) < 0) {
-					ret = -1;
-				}
-				else {
-					int bytes_wrote = 0;
-					for (int i = 0; i < n_lines; i++) {
-						int strlen_ = strlen(lines[i]);
-						write(fd, lines[i], strlen_);
-						bytes_wrote += strlen_;
-						write(fd, "\n", 1);
-					}
-					int size = get_size(path);
-					if (bytes_wrote < size) {
-						while (bytes_wrote++ < size) {
-							write(fd, "\0", 1);
-						}
-					}
+						else set_cursor_(file_cursor, start_point);
+						break;
+					default:
+						file_cursor = put_char('^', lines, file_cursor);
+						break;
 				}
 			}
-			if (char_read[0] == 'r' && mode == WRITE_MODE) {
-				clean_screen();
-				printf("Pulse 's' para borrar la linea %d\n", act_line);
-				if (getchar() == 's') {
-					int fd;
-					if ((fd = open(path, O_WRONLY)) < 0) {
-						ret = -1;
-					}
-					else {
-						int bytes_wrote = 0;
-						for (int i = 0; i < n_lines; i++) {
-							if (i != (act_line-1)) {
-								int strlen_ = strlen(lines[i]);
-								write(fd, lines[i], strlen_);
-								bytes_wrote += strlen_;
-								write(fd, "\n", 1);
-							}
-						}
-						int size = get_size(path);
-						if (bytes_wrote < size) {
-							while (bytes_wrote++ < size) {
-								write(fd, "\0", 1);
-							}
-						}
+			else if (key == UP_KEY) {
+				if (file_cursor.ln > 0) {
+					file_cursor.ln--;
+					if (strlen(lines[file_cursor.ln]) < (file_cursor.col+1)) {
+						file_cursor.col = strlen(lines[file_cursor.ln]);
 					}
 				}
-				clean_screen();
+				print_content(lines, file_cursor, nlines);
+			}
+			else if (key == DOWN_KEY) {
+				if ((file_cursor.ln+1) < nlines) {
+					file_cursor.ln++;
+					if (strlen(lines[file_cursor.ln]) < (file_cursor.col+1)) {
+						file_cursor.col = strlen(lines[file_cursor.ln]);
+					}
+				}
+				print_content(lines, file_cursor, nlines);
+			}
+			else if (key == LEFT_KEY) {
+				if (file_cursor.col > 0) {
+					file_cursor.col--;
+				}
+				else if (file_cursor.ln > 0) {
+					file_cursor.ln--;
+					file_cursor.col = strlen(lines[file_cursor.ln]);
+				}
+				printf("\e[%d;%dH", (file_cursor.ln-start_point)+4, file_cursor.col+1);
+			}
+			else if (key == RIGHT_KEY) {
+				if (file_cursor.col < strlen(lines[file_cursor.ln])) {
+					file_cursor.col++;
+				}
+				else if ((file_cursor.ln+1) < nlines) {
+					file_cursor.ln++;
+					file_cursor.col = 0;
+				}
+				printf("\e[%d;%dH", (file_cursor.ln-start_point)+4, file_cursor.col+1);
+			}
+			else if (key == '\b' && file_cursor.col == 0) {
+				if (file_cursor.ln != 0 && strlen(lines[file_cursor.ln]) == 0) {
+					backup = new char*[nlines];
+					for (unsigned int i = 0; i < nlines; i++) {
+						backup[i] = new char[80];
+						strcpy(backup[i],lines[i]);
+					}
+					delete_pointer(lines,nlines);
+					lines = new char*[nlines-1];
+					for (unsigned int i = 0; i < (nlines-1); i++) {
+						lines[i] = new char[80];
+					}
+					file_cursor = delete_line(lines, backup, file_cursor, nlines);
+					delete_pointer(backup,nlines);
+					nlines--;
+					print_content(lines, file_cursor, nlines);
+				}
+			}
+			else if (key == '\n') {
+				backup = new char*[nlines];
+				for (unsigned int i = 0; i < nlines; i++) {
+					backup[i] = new char[80];
+					strcpy(backup[i], lines[i]);
+				}
+				delete_pointer(lines,nlines);
+				lines = new char*[nlines+1];
+				for (unsigned int i = 0; i < (nlines+1); i++) {
+					lines[i] = new char[80];
+				}
+				file_cursor = add_line(lines, backup,file_cursor, nlines);
+				delete_pointer(backup,nlines);
+				nlines++;
+				print_content(lines, file_cursor, nlines);
+			}
+			else {
+				file_cursor = put_char(key, lines, file_cursor);
+				print_content(lines, file_cursor, nlines);
 			}
 		}
 	}
-	delete lines;
-	delete data;
+	clean_screen();
 	return ret;
 }
 
-int SearchInFile(char *string, char *c, int n_bytes, int act_line)
+struct cursor put_char(char key, char **lines, struct cursor file_cursor)
 {
-	int lines = 0;
-	bool exists = false;
-	for (int i = 0; i < n_bytes; i++) {
-		lines++;
-		for (unsigned int x = 0; c[i] != '\0' && i < n_bytes; i++) {
-			if (string[x] == c[i] && !exists) {
-				x++;
-				if (x == strlen(string)) {
-					exists = true;
-				}
+	if (file_cursor.col < strlen(lines[file_cursor.ln]) && file_cursor.col < 80) {
+		unsigned int i;
+		if (key == '\b') {
+			unsigned int line_size = strlen(lines[file_cursor.ln]);
+			for (i = file_cursor.col-1; i < line_size; i++) {
+				lines[file_cursor.ln][i] = lines[file_cursor.ln][i+1];
 			}
-			else if (!exists) {
-				x = 0;
+			lines[file_cursor.ln][i] = '\0';
+			file_cursor.col--;
+		}
+		else {
+			for (i = strlen(lines[file_cursor.ln]); i > file_cursor.col; i--) {
+				lines[file_cursor.ln][i] = lines[file_cursor.ln][i-1];
 			}
+			lines[file_cursor.ln][file_cursor.col++] = key;
 		}
-		if (exists && lines > act_line) {
-			return lines;
-		}
-		exists = false;
 	}
-	return -1;
+	else if (file_cursor.col < 80) {
+		if (key == '\b') {
+			lines[file_cursor.ln][--file_cursor.col] = '\0';
+		}
+		else {
+			lines[file_cursor.ln][file_cursor.col] = key;
+			lines[file_cursor.ln][++file_cursor.col] = '\0';
+		}
+	}
+	return file_cursor;
+}
+
+struct cursor add_line(char **lines, char **backup, struct cursor file_cursor, unsigned int nlines)
+{
+	unsigned int new_lines = nlines+1;
+	file_cursor.col = 0;
+	file_cursor.ln++;
+	for (unsigned int i = 0, x = 0; i < new_lines; i++) {
+		if (i != file_cursor.ln) {
+			strcpy(lines[i], backup[x++]);
+		}
+	}
+	lines[file_cursor.ln][0] = '\0';
+	return file_cursor;
+}
+
+void set_cursor_(struct cursor file_cursor, int start_point)
+{
+	printf("\e[%d;%dH",(file_cursor.ln-start_point)+4,file_cursor.col+1);
+}
+
+void delete_pointer(char **pointer, int pointer_n)
+{
+	for (int i = 0; i < pointer_n; i++) {
+		delete pointer[i];
+	}
+	delete pointer;
+}
+
+struct cursor delete_line(char **lines, char **backup, struct cursor file_cursor, unsigned int nlines)
+{
+	file_cursor.col = strlen(backup[file_cursor.ln-1]);
+	for (unsigned int i = 0, x = 0; i < nlines; i++) {
+		if (i != file_cursor.ln) {
+			strcpy(lines[x++], backup[i]);
+		}
+	}
+	file_cursor.ln--;
+	return file_cursor;
 }

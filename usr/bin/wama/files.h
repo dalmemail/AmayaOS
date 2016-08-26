@@ -15,9 +15,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef READER_H
-#define READER_H
+int checkFile(const char *path);
 
-int read_wama_file(char *path);
+int file_size(const char *path);
 
-#endif
+char *read_file(const char *path);
+
+int linecounter(const char *data);
+
+void separate_in_lines(char *data, char **lines, int n_lines);
+
+void update_file_content(const char *path, char **lines, int nlines);

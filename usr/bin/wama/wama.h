@@ -15,26 +15,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef WAMA_H
-#define WAMA_H
+struct cursor {
+	unsigned int ln;
+	unsigned int col;
+};
 
-#define READ_MODE 0
-#define WRITE_MODE 1
-
-void clean_screen();
-
-int checkWamaCommand(char *line);
-
-int linecounter(char *c);
-
-char *read_file(char *path);
-
-int get_size(char *path);
-
-char *edit_lines(char *str, size_t size, char *line_to_edit);
-
-int line_navigator(char *path, int mode);
-
-int SearchInFile(char *string, char *c, int n_bytes, int act_line);
-
-#endif
+int wama_main(char *path);

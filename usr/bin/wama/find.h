@@ -15,10 +15,4 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef WRITTEN_H
-#define WRITTEN_H
-
-/* returns -1 in error case */
-int wama_file(int mode, char *path);
-
-#endif
+struct cursor findString(char *string, char **lines, int n_lines, struct cursor start_point);
