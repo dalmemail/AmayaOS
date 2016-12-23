@@ -1,11 +1,52 @@
+# Bulids objects and pre-compiled files
 *.o
 *.a
 *.pyc
-include/Version.h
-config.log
+*.gz
+*.iso
+
+# Cache
 .sconf_temp
 .sconsign.dblite
-boot/boot.*
-host/
+config.log
+
+# Include compiled
+include/Version.h
 include/FreeNOS
 include/Fnx
+
+# Build Files
+kernel/kernel
+boot/boot.*
+
+# /bin Build Files
+bin/bench/bench
+bin/cat/cat
+bin/echo/echo
+bin/hello/hello
+bin/hostname/hostname
+bin/ls/ls
+bin/memstat/memstat
+bin/mknod/mknod
+bin/mount/mount
+bin/ps/ps
+bin/pwd/pwd
+bin/sh/sh
+bin/sleep/sleep
+bin/stat/stat
+bin/uname/uname
+bin/parse/parse
+
+# /sbin Build Files
+sbin/img/img
+sbin/init/init
+sbin/reboot/reboot
+sbin/shutdown/shutdown
+
+# /srv Build Files
+server
+dump
+create
+detect
+
+host/
