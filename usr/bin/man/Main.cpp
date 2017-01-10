@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 Dan Rulos [amaya@amayaos.com]
+ * Copyright (C) 2016, 2017 Daniel Martín [amaya@amayaos.com]
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,7 +20,9 @@
 #include <sys/stat.h>
 #include <string.h>
 
-#define VERSION "1.0.1"
+#define VERSION "1.0.2"
+
+#define MANUAL_PAGES_PATH "/usr/share/man/"
 
 /* Some of these functions come from Wama 0.7  http://git.amayaos.com */
 
@@ -149,8 +151,11 @@ int main(int argc, char **argv)
 		if ((strcmp(argv[1], "--version")) == 0) {
 			printf("AmayaOS Man %s\n", VERSION);
 		}
+		else if (argv[1][0] == '-') {
+			printf("Error: Invalid option '%s'\n", argv[1]);
+		}
 		else {
-			strcpy(manual_path, "/etc/man/");
+			strcpy(manual_path, MANUAL_PAGES_PATH);
 			strcat(manual_path, argv[1]);
 			if (line_navigator(manual_path) <= 0) {
 				printf("No existe pagina del manual para %s\n", argv[1]);
