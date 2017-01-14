@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010 Edward, 2016 Dan Rulos
+ * Copyright (C) 2010 Edward Cacho Casas, 2015, 2016, 2017 Daniel Martín
  *      edward1738@gmail.com, amaya@amayaos.com
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -32,7 +32,7 @@
 #define PLAYING 2
 #define END_OF_GAME 3
 
-#define VERSION "0.2.1"
+#define VERSION "0.2.1.1"
 
 #define MINES_MAX 40
 
@@ -258,7 +258,7 @@ int main(int argc, char** argv)
 	if (argc == 2 && (strcmp(argv[1], "--version")) == 0) {
 		printf("Version: %s\n", VERSION);
 	}
-	else if (argc == 3 && (strcmp(argv[1], "-m")) == 0) {
+	else if (argc == 3 && ((strcmp(argv[1], "-m")) == 0 || (strcmp(argv[1], "--mines")) == 0)) {
 		mines = atoi(argv[2]);
 		if (mines > MINES_MAX) {
 			printf("numero_de_minas debe ser inferior o igual que %d\n", MINES_MAX);
@@ -269,8 +269,7 @@ int main(int argc, char** argv)
 			ret = 1;
 		}
 		else {
-			char str[] = {0x1b, 0x5b, 0x48, 0x1b, 0x5b, 0x4a, '\0'};
-			printf("%s", str);
+			clean_screen();
 			MinesWeeper(mines);
 		}
 	}
