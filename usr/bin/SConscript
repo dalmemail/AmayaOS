@@ -15,4 +15,4 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-SConscript(dirs = [ 'desktop', 'memstat', 'calendar', 'avim', 'history', 'wama', 'man', 'commander' ])
+SConscript(dirs = [ 'desktop', 'memstat', 'calendar', 'avim', 'history', 'wama', 'man', 'commander', 'cal' ])
