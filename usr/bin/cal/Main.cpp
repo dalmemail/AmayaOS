@@ -17,6 +17,8 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <time.h>
 #include "cal.h"
 
 #define NOT_ENOUGH_ARGS 0
@@ -24,6 +26,8 @@
 #define BAD_YEAR 2
 #define BAD_MONTH 3
 #define TOO_MUCH_ARGS 4
+/* If year is MIN_YEAR and month is not 11 or 12 */
+#define BAD_MIN_YEAR_DATE 5
 
 #define MIN_ARGS 2
 #define MAX_ARGS 3
@@ -32,8 +36,9 @@
 #define YEAR_MONTH_ARG 3
 
 #define MIN_YEAR 1582
+#define MAX_YEAR 1000000
 
-#define VERSION "0.1"
+#define VERSION "0.2"
 
 int months[12] = {31,28,31,30,31,30,31,31,30,31,30,31};
 char *months_names[12] = {"Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto",
@@ -56,7 +61,7 @@ int main(int argc, char **argv)
 	}
 	else if (argc == YEAR_ARG) {
 		year = atoi(argv[1]);
-		if (year < (MIN_YEAR+1)) {
+		if (year < (MIN_YEAR+1) || year > MAX_YEAR) {
 			args = BAD_YEAR;
 		}
 	}
@@ -67,19 +72,21 @@ int main(int argc, char **argv)
 			args = BAD_MONTH;
 		}
 		else if (year == MIN_YEAR) {
-			if (month < 10) args = BAD_MONTH;
+			if (month < 11) args = BAD_MIN_YEAR_DATE;
 		}
-		else if (year < MIN_YEAR) {
+		else if (year < MIN_YEAR || year > MAX_YEAR) {
 			args = BAD_YEAR;
 		}
 	}
 	if (args != ENOUGH_ARGS) printError(args);
 	else {
 		/* If we have got just the year */
-		if (month == 0) {
-			for (int i = 1; i <= 12; i++) {
-				cal(year,i);
-			}
+		if (!month) {
+			srandom(time(NULL));
+			int random_month = (random() % 12) + 1;
+			cal(year,random_month);
+			printf("\n[\e[31mWARNING\e[m] If you don't give me a month argument"
+			" I will show you a random month\n");
 		}
 		else cal(year,month);
 	}
@@ -90,10 +97,13 @@ void printError(int error_code)
 {
 	switch (error_code) {
 		case BAD_YEAR:
-			printf("cal: Year should be between %d and infinity\n", (MIN_YEAR+1));
+			printf("cal: Year should be between %d and %d\n", MIN_YEAR, MAX_YEAR);
 			break;
 		case BAD_MONTH:
 			printf("cal: Month should be between 1 and 12\n");
+			break;
+		case BAD_MIN_YEAR_DATE:
+			printf("cal: In %d year month should be 11 or 12\n", MIN_YEAR);
 			break;
 		case NOT_ENOUGH_ARGS:
 		case TOO_MUCH_ARGS:
@@ -114,21 +124,21 @@ void cal(int year, int month)
 	int weekday = week_day(year,month,1);
 	int month_days = months[month-1];
 	if (month == 2 && leap_year(year)) month_days++;
-	//char month_cal[256];
-	/*sn*/printf(/*month_cal, 256, */"   %s %d\nlu ma mi ju vi s%c do\n",
+	char month_cal[256];
+	snprintf(month_cal, 256, "   %s %d\nlu ma mi ju vi s%c do\n",
 	months_names[month-1], year, 160);
 	for (int i = 0; i < weekday; i++) {
-		printf/*strcat*/(/*month_cal, */"   ");
+		strcat(month_cal, "   ");
 	}
 	while (day <= month_days) {
-		if (day < 10) printf/*strcat*/(/*month_cal, */" ");
-		/*sn*/printf(/*month_cal, 256, */"%d ", day++);
+		if (day < 10) strcat(month_cal, " ");
+		int month_cal_pos = strlen(month_cal);
+		snprintf(&month_cal[month_cal_pos], (256-month_cal_pos), "%d ", day++);
 		weekday++;
 		if (weekday > 6) {
 			weekday = 0;
-			printf/*strcat*/(/*month_cal,*/ "\n");
+			strcat(month_cal, "\n");
 		}
 	}
-	printf("\n\n");
-	//printf("%s\n", month_cal);
+	printf("%s\n", month_cal);
 }
