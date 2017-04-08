@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2009 Niek Linnenbank, 2016 Dan Rulos, 2016 Alvaro Stagg [alvarostagg@openmailbox.org]
- * 
+ * Copyright (C) 2009 Niek Linnenbank, 2014-2017 Daniel Martín, 2016-2017 Alvaro Stagg [alvarostagg@openmailbox.org]
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,183 +16,193 @@
  */
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
-#include <fcntl.h>
-#include <unistd.h>
 #include <sys/stat.h>
 
-#define VERSION "v0.6.1"
+#define VERSION "0.6.2"
 
-static int hflag, vflag, ret = 0;
-static int flags[2];
+static int hflag = 0, vflag = 0;
+static int nflag = 0, eflag = 0, tflag = 0, bflag = 0;
 
 static void usage(void);
 static void version(void);
-static void cat(char **filePaths, int n_files, int flags[2]);
-int lineCounter(char *c);
-static void read_file(const char *fileName, int flags[2]);
-int getNumberOfFiles(int argc, char **argv);
 
-int get_file_size(const char *fileName);
+static int read_file(int, char*);
+static size_t get_file_size(const char *);
 
-int main(int argc, char **argv)
+int main(int argc, char* argv[])
 {
-    if (argc < 2)
+    int ret = 0, i = 1;
+    for (; i < argc; i++)
     {
-        printf("Uso: %s [OPCION]... [FICHERO]...\n", argv[0]);
-        return 1;
+        if (strcmp(argv[i], "--help") == 0)
+        {
+            hflag = 1;
+            usage();
+            break;
+        }
+        else if (strcmp(argv[i], "--version") == 0)
+        {
+            vflag = 1;
+            version();
+            break;
+        }
+        else if ((strcmp(argv[i], "-n") == 0) || (strcmp(argv[i], "--number") == 0))
+            nflag = 1;
+        else if ((strcmp(argv[i], "-E") == 0) || (strcmp(argv[i], "--show-ends") == 0) || (strcmp(argv[i], "-e") == 0))
+            eflag = 1;
+        else if ((strcmp(argv[i], "-t") == 0) || (strcmp(argv[i], "-T") == 0) || (strcmp(argv[i], "--show-tabs") == 0))
+            tflag = 1;
+        else if ((strcmp(argv[i], "-b") == 0) || (strcmp(argv[i], "--number-nonblank") == 0))
+        {
+            nflag = 0;
+            bflag = 1;
+        }
+        else
+        {
+            if (argv[i][0] == '-')
+            {
+                if (argv[i][1] == '-')
+                    printf("%s: unrecognized option '%s'\n", argv[0], argv[i]);
+                else
+                {
+                    printf("%s: invalid option -- '", argv[0]);
+                    for (unsigned int j = 0; j <= strlen(argv[i]); j++)
+                    {
+                        if (argv[i][j] == '-')
+                            continue;
+                        else
+                            printf("%c", argv[i][j]);
+                    }
+
+                    printf("'\n");
+                }
+
+                ret = -1;
+            }
+        }
     }
 
-    for (int i = 0; i < 2; i++)
-    	flags[i] = 0;
-
-	int n_files = getNumberOfFiles(argc, argv);
-	char **filePaths = new char *[n_files];
-
-    for (int i = 1, act_file = 0; i < argc; i++)
+    if (ret < 0)
     {
-    	if (strcmp(argv[i], "--help") == 0)
-    	{
-    		hflag = 1;
-    		usage();
-		break;
-    	}
-    	else if ((strcmp(argv[i], "--version") == 0))
-    	{
-    		vflag = 1;
-    		version();
-    		break;
-    	}
-    	else if ((strcmp(argv[i], "-n") == 0) || (strcmp(argv[i], "--number") == 0)) {
-		flags[0] = 1;
-	}
-	else if ((strcmp(argv[i], "-E") == 0) || (strcmp(argv[i], "--show-ends") == 0) || (strcmp(argv[i], "-e") == 0)) {
-		flags[1] = 1;
-	}
-	else {
-		filePaths[act_file] = &argv[i][0];
-		act_file++;
-	}
+        printf("Pruebe '%s --help' para más información.\n", argv[0]);
+        return ret;
     }
 
-	if (!hflag && !vflag) {
-		cat(filePaths, n_files, flags);
-	}
+    if (hflag || vflag)
+        return ret;
 
-	delete filePaths;
+    for (i = 1; i < argc; i++)
+    {
+        if (argv[i][0] == '-')
+            continue;
+        else
+        {
+            ret = read_file(argc, argv[i]);
+            if (ret < 0)
+            {
+                printf("%s: no se pudo abrir el archivo %s.\n", argv[0], argv[i]);
+                break;
+            }
+        }
+    }
+
     return ret;
+}
+
+static int read_file(int argc, char* fileName)
+{
+    FILE* file = fopen(fileName, "r");
+    if (!file)
+        return -1;
+
+    int fnsize = get_file_size(fileName);
+    char *cnt = (char *)malloc(fnsize);
+    unsigned int n_bytes = fread(cnt, 1, fnsize, file);
+
+    int lines = 1;
+    if (nflag)
+        printf("   %d  ", lines);
+
+    for (unsigned int i = 0; i < n_bytes; i++)
+    {
+        if (cnt[i] == '\n')
+        {
+            if (eflag)
+                printf("$");
+            if (nflag)
+            {
+                if (cnt[i + 1] == 0)
+                    continue;
+                lines++;
+                printf("%c   %d  ", cnt[i], lines);
+                cnt[i] = 0;
+            }
+            if (bflag)
+            {
+                if (cnt[i + 1] != '\n')
+                {
+                    lines++;
+                    printf("%c   %d  ", cnt[i], lines);
+                    cnt[i] = 0;
+                }
+                else
+                    lines += 0;
+            }
+        }
+
+        if (tflag)
+        {
+            if (cnt[i] == '\t')
+            {
+                printf("^I");
+                continue;
+            }
+        }
+
+        printf("%c", cnt[i]);
+    }
+
+    printf("\n");
+    fclose(file);
+    free(cnt);
+
+    return 0;
 }
 
 static void usage(void)
 {
-	printf("Modo de empleo: cat [OPCION]... [FICHERO]...\n\n");
+    printf("Modo de empleo: cat [OPCIÓN]... [FICHERO]...\n\n"
+           "  -b, --number-nonblank    No enumera las lineas en blanco, remplaza -n.\n"
+           "  -e                       Lo mismo que -E.\n"
+           "  -E, --show-ends          Muestra un $ al final de cada linea.\n"
+           "  -n, --number             Enumera cada linea.\n"
+           "  -t                       Lo mismo que -T.\n"
+           "  -T, --show-tabs          Muestra los caracteres de tabulación como ^I\n"
+           "      --help               Muestra esta ayuda y finaliza.\n"
+           "      --version            Informa de la versión y finaliza.\n\n"
 
-	printf("  -e                       Lo mismo que -E.\n");
-	printf("  -E, --show-ends          Muestra un $ al final de cada linea.\n");
-	printf("  -n, --number             Enumera cada linea.\n");
-	printf("      --help               Muestra esta ayuda y finaliza.\n");
-	printf("      --version            Informa de la version y finaliza.\n\n");
-
-	printf("AmayaOS Coreutils %s (C) 2016 AmayaOS Team & Others\n", VERSION);
-	printf("Licencia GNU GPL v3 <http://www.gnu.org/licenses/>.\n");
-	printf("Reportar errores a traves de http://bugs.amayaos.com o amaya@amayaos.com\n");
+           "AmayaOS Coreutils %s (C) 2017 AmayaOS Team\n"
+           "Licencia GNU GPL v3 <http://www.gnu.org/licenses/>.\n"
+           "Reportar errores a través de http://bugs.amayaos.com o alvarostagg@openmailbox.org\n", VERSION);
 }
 
 static void version(void)
 {
-	printf("cat (AmayaOS CoreUtils) %s\n", VERSION);
-	printf("Copyright (C) 2016 AmayaOS, Inc.\n");
-	printf("Licencia GPLv3+: GPL de GNU versión 3 o posterior\n");
-	printf("<http://gnu.org/licenses/gpl.html>.\n");
-	printf("Esto es software libre: usted es libre de cambiarlo y redistribuirlo.\n");
-	printf("No hay NINGUNA GARANTIA, hasta donde permite la ley.\n\n");
+    printf("cat (AmayaOS Coreutils) v%s\n"
+           "Copyright © 2017 AmayaOS Team.\n"
+           "Licencia GPLv3+: GPL de GNU versión 3 o posterior\n"
+           "<http://gnu.org/licenses/gpl.html>.\n"
+           "Esto es software libre: usted es libre de cambiarlo y redistribuirlo.\n"
+           "No hay NINGUNA GARANTÍA, hasta donde permite la ley.\n\n", VERSION);
 }
 
-static void cat(char **filePaths, int n_files, int flags[2])
+static size_t get_file_size(const char *fileName)
 {
-	for (int i = 0; i < n_files; i++)
-	{
-		read_file(filePaths[i], flags);
-	}
-}
+    struct stat st;
+    if (stat(fileName, &st) < 0)
+        return -1;
 
-int lineCounter(char *c)
-{
-	int n_lines = 0;
-	for (int i = 0; c[i] != '\0'; i++) {
-		if (c[i] == '\n') {
-			n_lines++;
-		}
-	}
-	return n_lines;
-}
-
-static void read_file(const char *fileName, int flags[2])
-{
-
-	int fd;
-	if ((fd = open(fileName, O_RDONLY)) < 0)
-	{
-		printf("cat: %s: No existe el fichero o el directorio.\n", fileName);
-		ret = 1;
-	}
-	else
-	{
-		int file_size = get_file_size(fileName);
-		char *cnt = new char[file_size];
-		read(fd, cnt, file_size);
-		int n_lines = lineCounter(cnt);
-		char **lines;
-		lines = new char *[n_lines];
-		lines[0] = &cnt[0];
-		int data_len = strlen(cnt);
-		if (data_len > 0) {
-			for (int i = 1, x = 0; cnt[x] != '\0'; x++) {
-				if (cnt[x] == '\n') {
-					cnt[x] = '\0';
-					if (i < n_lines) {
-						lines[i] = &cnt[x+1];
-					}
-					i++;
-				}
-			}
-			for (int act_line = 0; act_line < n_lines; act_line++) {
-				if (flags[0]) {
-					printf("%d ", (act_line+1));
-				}
-				printf("%s", lines[act_line]);
-				if (flags[1]) {
-					printf("$");
-				}
-				printf("\n");
-			}
-		}
-		delete lines;
-		delete cnt;
-		close(fd);
-	}
-}
-
-int get_file_size(const char *fileName)
-{
-	struct stat st;
-
-	if (stat(fileName, &st) < 0)
-		return -1;
-	else
-		return st.st_size;
-}
-
-int getNumberOfFiles(int argc, char **argv)
-{
-	int n_files = (argc-1);
-	for (int i = 1; i < argc; i++) {
-    		if ((strcmp(argv[i], "-n") == 0) || (strcmp(argv[i], "--number") == 0)) {
-			n_files--;
-		}
-		else if ((strcmp(argv[i], "-E") == 0) || (strcmp(argv[i], "--show-ends") == 0) || (strcmp(argv[i], "-e") == 0)) {
-			n_files--;
-		}
-	}
-	return n_files;
+    return st.st_size;
 }
