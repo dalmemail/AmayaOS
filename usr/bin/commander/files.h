@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 Dan Rulos
+ * Copyright (C) 2016, 2017 Daniel Martín
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,6 +24,12 @@
 struct dir_entry {
 	char file_name[128];
 	int fileType;
+};
+
+struct dir_info {
+	int cursor_position;
+	char path[256];
+	int n_files;
 };
 
 struct dir_entry *get_dir_content(char *path, int n_files);

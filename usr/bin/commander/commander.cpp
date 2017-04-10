@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 Dan Rulos
+ * Copyright (C) 2016, 2017 Daniel Martín
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,48 +35,87 @@
 #define MOVE_KEY 'm'
 #define COPY_KEY 'c'
 #define PASTE_KEY 'p'
+#define CHANGE_WORKSPACE_KEY ' '
 
-void commander(char *path)
+#define MAX_DIRS 2
+
+#define RUNNING 1
+#define EXITING 0
+
+struct dir_info dirs[2];
+
+void commander(char *path, char *cwd)
 {
+	int status = RUNNING;
+	int current_dir = 0;
+	int error_code = 0;
 	char key;
-	int cursor_position = 0;
-	struct dir_entry *dir_content;
-	char current_path[256];
-	strcpy(current_path, path);
-	int n_files;
-	refresh_interface(current_path);
-	print_error(strerror(checkDir(current_path)));
-	n_files = countFiles(current_path);
-	dir_content = get_dir_content(current_path, n_files);
+	struct dir_entry *dir_content[MAX_DIRS];
+	strcpy(dirs[0].path, path);
+	dirs[0].cursor_position = 0;
+	strcpy(dirs[1].path, cwd);
+	dirs[1].cursor_position = 0;
+	refresh_interface(dirs);
+	if ((error_code = checkDir(dirs[0].path)) != 0 ||
+	(error_code = checkDir(dirs[1].path)) != 0) {
+		print_error(strerror(error_code));	
+	}
+	else print_error("Welcome to Amaya File Commander");
+	dirs[0].n_files = countFiles(dirs[0].path);
+	dir_content[0] = get_dir_content(dirs[0].path, dirs[0].n_files);
+	dirs[1].n_files = countFiles(dirs[1].path);
+	dir_content[1] = get_dir_content(dirs[1].path, dirs[1].n_files);
+	int cursor_position = dirs[current_dir].cursor_position;
+	int n_files = dirs[current_dir].n_files;
+	char *current_path = &dirs[current_dir].path[0];
 	char copy_path[256];
 	char *paste_filename;
-	while (key != EXIT_KEY) {
-		print_entry(dir_content, cursor_position, (n_files+1));
-		key = getchar();
-		if ((n_files+1) > 19) {
-			refresh_interface(current_path);
+	while (status != EXITING) {
+		dirs[current_dir].cursor_position = cursor_position;
+		dirs[current_dir].n_files = n_files;
+		if (n_files > 19) {
+			refresh_interface(dirs);}
+			/*print_entry(dir_content, dirs, current_dir);
+			simple_interface();
 		}
+		else */print_entry(dir_content, dirs, current_dir);
+		key = getchar();
 		if (key == UP_KEY && cursor_position > 0) {
 			cursor_position--;
 		}
-		else if (key == DOWN_KEY && cursor_position < n_files) {
+		else if (key == EXIT_KEY) {
+			if ((status = exit_window())) refresh_interface(dirs);
+		}
+		else if (key == CHANGE_WORKSPACE_KEY) {
+			dirs[current_dir].n_files = n_files;
+			dirs[current_dir].cursor_position = cursor_position;
+			current_dir = (!current_dir) ? 1 : 0;
+			n_files = dirs[current_dir].n_files;
+			cursor_position = dirs[current_dir].cursor_position;
+			current_path = &dirs[current_dir].path[0];
+			refresh_interface(dirs);
+		}
+		else if (key == DOWN_KEY && (cursor_position+1) < n_files) {
 			cursor_position++;
 		}
 		else if (key == '\n') {
-			if (dir_content[cursor_position].fileType == DIRECTORY) {
-				if (strcmp(dir_content[cursor_position].file_name, "..") != 0) {
-					char *entry = &dir_content[cursor_position].file_name[0];
+			if (dir_content[current_dir][cursor_position].fileType == DIRECTORY) {
+				if (strcmp(dir_content[current_dir][cursor_position].file_name, "..") != 0) {
+					char *entry = &dir_content[current_dir][cursor_position].file_name[0];
 					if (strcmp(current_path, "/") != 0) {
 						strcat(current_path, "/");
 					}
 					strcat(current_path, entry);
 					int result;
 					if ((result = checkDir(current_path)) == 0) {
-						free(dir_content);
+						free(dir_content[current_dir]);
 						n_files = countFiles(current_path);
-						dir_content = get_dir_content(current_path, n_files);
-						refresh_interface(current_path);
+						dir_content[current_dir] = get_dir_content(current_path, n_files);
+						refresh_interface(dirs);
 						cursor_position = 0;
+						/* We copy new values into structure */
+						dirs[current_dir].n_files = n_files;
+						dirs[current_dir].cursor_position = cursor_position;
 					}
 					else {
 						get_last_path(current_path, entry);
@@ -91,9 +130,11 @@ void commander(char *path)
 					if ((result = checkDir(current_path)) == 0) {
 						free(dir_content);
 						n_files = countFiles(current_path);
-						dir_content = get_dir_content(current_path, n_files);
-						refresh_interface(current_path);
+						dir_content[current_dir] = get_dir_content(current_path, n_files);
+						refresh_interface(dirs);
 						cursor_position = 0;
+						dirs[current_dir].n_files = n_files;
+						dirs[current_dir].cursor_position = cursor_position;
 					}
 					else {
 						strcpy(current_path, last_path);
@@ -104,49 +145,52 @@ void commander(char *path)
 					print_error("La ruta '/' no tiene un directorio padre");
 				}
 			}
-			else if (dir_content[cursor_position].fileType == TEXTFILE) {
+			else if (dir_content[current_dir][cursor_position].fileType == TEXTFILE) {
 				char file_path[256];
 				strcpy(file_path, current_path);
 				if (strcmp(current_path, "/") != 0) {
 					strcat(file_path, "/");
 				}
-				strcat(file_path, dir_content[cursor_position].file_name);
+				strcat(file_path, dir_content[current_dir][cursor_position].file_name);
 				char *args[] = {"/usr/bin/wama/wama", "-r", &file_path[0], ZERO};
 				int pid, status;
 				if ((pid = forkexec(args[0], (const char **) args)) >= 0) {
 					waitpid(pid, &status, 0);
 				}
-				refresh_interface(current_path);
+				refresh_interface(dirs);
 			}
-			else if (dir_content[cursor_position].fileType == EXECUTABLE) {
+			else if (dir_content[current_dir][cursor_position].fileType == EXECUTABLE) {
 				char exec_path[256];
 				strcpy(exec_path, current_path);
 				if (strcmp(current_path, "/") != 0) {
 					strcat(exec_path, "/");
 				}
-				strcat(exec_path, dir_content[cursor_position].file_name);
+				strcat(exec_path, dir_content[current_dir][cursor_position].file_name);
 				char *args[] = {&exec_path[0], ZERO};
 				int pid, status;
 				if ((pid = forkexec(args[0], (const char **) args)) >= 0) {
 					waitpid(pid, &status, 0);
 				}
-				refresh_interface(current_path);
+				refresh_interface(dirs);
 			}
 		}
 		else if (key == INFO_KEY) {
-			file_info(dir_content[cursor_position].file_name, current_path);
+			file_info(dir_content[current_dir][cursor_position].file_name, current_path);
+			getchar();
+			refresh_interface(dirs);
 		}
 		else if (key == ABOUT_KEY) {
-			refresh_interface(current_path);
 			about_commander();
+			getchar();
+			refresh_interface(dirs);
 		}
 		else if (key == CREATE_FILE_KEY) {
 			char filename[48];
 			inicialice_var(filename);
-			refresh_interface(current_path);
-			print_entry(dir_content, cursor_position, (n_files+1));
+			refresh_interface(dirs);
+			print_entry(dir_content, dirs, current_dir);
 			get_string("Introduzca el nombre del archivo de texto:", filename, 48);
-			refresh_interface(current_path);
+			refresh_interface(dirs);
 			char file_path[strlen(current_path)+strlen(filename)+1];
 			inicialice_var(file_path);
 			makePath(current_path, filename, file_path);
@@ -161,7 +205,7 @@ void commander(char *path)
 				}
 				n_files = countFiles(current_path);
 				free(dir_content);
-				dir_content = get_dir_content(current_path, n_files);
+				dir_content[current_dir] = get_dir_content(current_path, n_files);
 			}
 			else {
 				print_error(strerror(result));
@@ -170,10 +214,10 @@ void commander(char *path)
 		else if (key == CREATE_DIR_KEY) {
 			char dirname[48];
 			inicialice_var(dirname);
-			refresh_interface(current_path);
-			print_entry(dir_content, cursor_position, (n_files+1));
+			refresh_interface(dirs);
+			print_entry(dir_content, dirs, current_dir);
 			get_string("Introduzca el nombre del directorio:", dirname, 48);
-			refresh_interface(current_path);
+			refresh_interface(dirs);
 			char dir_path[strlen(current_path)+strlen(dirname)+1];
 			inicialice_var(dir_path);
 			makePath(current_path, dirname, dir_path);
@@ -188,7 +232,7 @@ void commander(char *path)
 				}
 				n_files = countFiles(current_path);
 				free(dir_content);
-				dir_content = get_dir_content(current_path, n_files);
+				dir_content[current_dir] = get_dir_content(current_path, n_files);
 			}
 			else {
 				print_error(strerror(result));
@@ -196,20 +240,20 @@ void commander(char *path)
 		}
 		else if (key == MOVE_KEY) {
 			char new_path[256];
-			refresh_interface(current_path);
-			print_entry(dir_content, cursor_position, (n_files+1));
+			refresh_interface(dirs);
+			print_entry(dir_content, dirs, current_dir);
 			get_string("Introduzca el nombre del directorio:", new_path, 256);
 			int result;
 			if ((result = checkDir(new_path)) == 0) {
 				strcpy(current_path, new_path);
-				refresh_interface(current_path);
+				refresh_interface(dirs);
 				free(dir_content);
 				n_files = countFiles(current_path);
-				dir_content = get_dir_content(current_path, n_files);
+				dir_content[current_dir] = get_dir_content(current_path, n_files);
 				cursor_position = 0;
 			}
 			else {
-				refresh_interface(current_path);
+				refresh_interface(dirs);
 				print_error(strerror(result));
 			}
 		}
@@ -217,8 +261,8 @@ void commander(char *path)
 			char copy_file_path[256];
 			strcpy(copy_file_path, current_path);
 			if (strcmp(current_path, "/") != 0) strcat(copy_file_path, "/");
-			strcat(copy_file_path, dir_content[cursor_position].file_name);
-			paste_filename = &dir_content[cursor_position].file_name[0];
+			strcat(copy_file_path, dir_content[current_dir][cursor_position].file_name);
+			paste_filename = &dir_content[current_dir][cursor_position].file_name[0];
 			int result;
 			if ((result = checkDir(copy_file_path)) == ENOTDIR) {
 				strcpy(copy_path, copy_file_path);
@@ -234,7 +278,7 @@ void commander(char *path)
 			paste_file(copy_path, current_path, paste_filename);
 			free(dir_content);
 			n_files = countFiles(current_path);
-			dir_content = get_dir_content(current_path, n_files);
+			dir_content[current_dir] = get_dir_content(current_path, n_files);
 		}
 		else if (key != EXIT_KEY && key != UP_KEY && key != DOWN_KEY) {
 			print_error("Comando Incorrecto");
@@ -273,7 +317,7 @@ void file_info(char *filename, char *path)
 		print_error(strerror(errno));
 	}
 	else {
-		print_info(st, path, filename);
+		print_info(st, filename);
 	}
 }
 

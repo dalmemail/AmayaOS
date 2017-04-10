@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 Dan Rulos
+ * Copyright (C) 2016, 2017 Daniel Martín
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,20 +15,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-void print_entry(struct dir_entry *dir_content, int cursor, int n_files);
+void print_entry(struct dir_entry *dir_content[2], struct dir_info dirs[2], int current_dir);
 
 void simple_interface();
 
 void clean_screen();
 
-void print_path(char *path);
+void print_path(char *first_path, char *second_path);
 
 void print_error(char *error);
 
-void refresh_interface(char *path);
+void refresh_interface(struct dir_info dirs[2]);
 
-void print_info(struct stat st, char *path, char *filename);
+void print_info(struct stat st, char *filename);
 
 void about_commander();
 
 char *get_string(char *message, char *str, int size);
+
+int exit_window();

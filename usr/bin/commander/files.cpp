@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 Dan Rulos
+ * Copyright (C) 2016, 2017 Daniel Martín
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,11 +35,11 @@ struct dir_entry *get_dir_content(char *path, int n_files)
 	if (!(directory = opendir(path))) {
 	}
 	else {
-		dir_content = (struct dir_entry*)malloc((n_files+1) * sizeof(struct dir_entry));
+		dir_content = (struct dir_entry*)malloc((n_files) * sizeof(struct dir_entry));
 		strcpy(dir_content[0].file_name, "..");
 		dir_content[0].fileType = DIRECTORY;
 		int i = 1;
-		while ((dent = readdir(directory)) && i < (n_files+1)) {
+		while ((dent = readdir(directory)) && i < n_files) {
 			if (dent->d_name[0] != '.') {
 				strcpy(dir_content[i].file_name, dent->d_name);
 				switch (dent->d_type) {
@@ -84,7 +84,8 @@ unsigned int countFiles(char *path)
 		}
 		closedir(dir1);
 	}
-	return n_files;
+	/* We count also the ".." dir */
+	return (n_files+1);
 }
 
 char *search_parent(char *path)

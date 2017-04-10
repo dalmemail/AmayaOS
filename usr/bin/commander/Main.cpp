@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 Dan Rulos
+ * Copyright (C) 2016, 2017 Daniel Martín
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@
 #include <unistd.h>
 #include "commander.h"
 
-#define VERSION "0.1.1"
+#define VERSION "0.2"
 
 void help();
 
@@ -46,7 +46,7 @@ int main(int argc, char **argv)
 		help();
 	}
 	else {
-		commander(path);
+		commander(path, cwd);
 	}
 	return 0;
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 Dan Rulos
+ * Copyright (C) 2016, 2017 Daniel Martín
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,31 +24,20 @@
 void simple_interface();
 void clean_screen();
 
-void print_entry(struct dir_entry *dir_content, int cursor, int n_files)
+void print_entry(struct dir_entry *dir_content[2], struct dir_info dirs[2], int current_dir)
 {
 	char colors[5][6] = { "\e[m", "\e[34m", "\e[32m", "\e[33m", "\e[36m"};
-	char content[512] = "\0";
-	char column[8];
-	int i = (n_files > 19) ? cursor : 0;
-	int sp = 0;
-	for (int x = strlen(content); x < 512 && (i+4) < (23+cursor) && i < n_files; i++, sp++) {
-		strcat(content, "\033[");
-		itoa(column, 10, (sp+4));
-		strcat(content, column);
-		strcat(content, ";2H");
-		if (i == cursor) {
-			strcat(content, "\e[031m");
-			x = strlen(content);
-			content[x++] = 254;
+	char content[2][512] = {"\0", "\0"};
+	int init_position[2];
+	for (int y = 0; y < 2; y++) {
+		init_position[y] = (dirs[y].n_files < 19) ? 0 : dirs[y].cursor_position;
+		int bw = 0;
+		for (int x = 0; x < 19 && x < dirs[y].n_files; x++) {
+			snprintf(&content[y][bw], (512-bw), "\033[%d;%dH %s%s", (x+4), ((40*y)+2),colors[dir_content[y][init_position[y]+x].fileType],dir_content[y][init_position[y]+x].file_name);
+			bw = strlen(content[y]);
 		}
-		else {
-			x = strlen(content);
-			content[x++] = ' ';
-		}
-		strcat(content, colors[dir_content[i].fileType]);
-		strcat(content, dir_content[i].file_name);
 	}
-	printf("%s\033[24;80H\e[m", content);
+	printf("%s%s\033[%d;%dH\e[31m%c\033[24;80H\e[m", content[0], content[1], (dirs[current_dir].cursor_position+4-init_position[current_dir]), ((current_dir*40)+2), 254);
 }
 
 void simple_interface()
@@ -58,9 +47,9 @@ void simple_interface()
 		bar[i] = 219;
 	}
 	bar[80] = '\0';
-	printf("\033[1;1H%s\n%c\033[2;80H%c\n%s\n", bar, 179, 179, bar);
+	printf("\033[1;1H%s\n%c\033[2;41H%c\033[2;80H%c\n%s\n", bar, 179, 179, 179, bar);
 	for (int i = 4; i < 23; i++) {
-		printf("%c\033[%d;80H%c\n", 179, i, 179);
+		printf("%c\033[%d;41H%c\033[%d;80H%c\n", 179, i, 179, i, 179);
 	}
 	printf("%s\n%c\033[24;80H%c\n%s", bar, 179, 179, bar);
 }
@@ -71,16 +60,9 @@ void clean_screen()
 	printf("%s", str);
 }
 
-void print_path(char *path)
+void print_path(char *first_path, char *second_path)
 {
-	char clear[78];
-	unsigned int i;
-	unsigned int path_size = strlen(path);
-	for (i = 0; i < (79-path_size); i++) {
-		clear[i] = ' ';
-	}
-	clear[i] = '\0';
-	printf("\033[2;2H%s%s", path, clear);
+	printf("\033[2;2H%s\033[2;42H%s", first_path, second_path);
 }
 
 void print_error(char *error)
@@ -95,15 +77,20 @@ void print_error(char *error)
 	printf("\033[24;2H%s%s", error, clear);
 }
 
-void refresh_interface(char *path)
+void refresh_interface(struct dir_info dirs[2])
 {
 	clean_screen();
 	simple_interface();
-	print_path(path);
+	print_path(dirs[0].path, dirs[1].path);
 }
 
 void print_simple_window()
 {
+	char cleaner[31];
+	for (int i = 0; i < 30; i++) {
+		cleaner[i] = ' ';
+	}
+	cleaner[30] = '\0';
 	char bar[31];
 	for (int i = 0; i < 30; i++) {
 		bar[i] = 219;
@@ -111,14 +98,13 @@ void print_simple_window()
 	bar[30] = '\0';
 	printf("\033[7;25H%s\033[17;25H%s", bar, bar);
 	for (int i = 8; i < 17; i++) {
-		printf("\033[%d;25H%c\033[%d;54H%c", i, 179, i, 179);
+		printf("\033[%d;25H%s\033[%d;25H%c\033[%d;54H%c", i, cleaner, i, 179, i, 179);
 	}
 	printf("\033[24;80H");
 }
 
-void print_info(struct stat st, char *path, char *filename)
+void print_info(struct stat st, char *filename)
 {
-	refresh_interface(path);
 	print_simple_window();
 	char screen[512];
 	strcpy(screen, "\033[8;26HFichero: ");
@@ -150,15 +136,15 @@ void print_info(struct stat st, char *path, char *filename)
 	char size[12];
 	itoa(size, 10, st.st_size);
 	strcat(screen, size);
-	printf("%s", screen);
+	printf("%s\033[25;1H", screen);
 }
 
 void about_commander()
 {
 	print_simple_window();
 	char screen[128];
-	strcpy(screen, "\033[10;27HAmaya File Commander v0.1.1");
-	strcat(screen, "\033[13;32Hamaya@amayaos.com");
+	strcpy(screen, "\033[10;30HAmaya File Commander");
+	strcat(screen, "\033[13;32Hamaya@amayaos.com\033[25;1H");
 	printf("%s", screen);
 }
 
@@ -228,4 +214,12 @@ char *get_string(char *message, char *str, int size)
 	line[total] = ZERO;
 
 	return str;
+}
+
+int exit_window()
+{
+	print_simple_window();
+	printf("\033[10;27HYou are exiting Commander\033[12;30HAre you sure? (Y/N)\033[7;25H");
+	char key = getchar();
+	return (key == 'y' || key == 'Y') ? 0 : 1;
 }
