@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Niek Linnenbank, 2012 Felipe Cabrera, 2016 Dan Rulos
+ * Copyright (C) 2009 Niek Linnenbank, 2012 Felipe Cabrera, 2016-2017 Daniel Martín
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -54,7 +54,6 @@ char *read_file(char *path)
 int Shell::run()
 {
     char *cmdStr;
-    char oldcmdStr[128] = "\0";
     char host[128], cwd[128] = "/home/";
     
     /* Retrieve current hostname. */
@@ -83,21 +82,11 @@ int Shell::run()
         if (strlen(cmdStr) == 0)
             continue;
 
-	if (strcmp(cmdStr, "!!") == 0) {
-		if (oldcmdStr[0] == '\0') {
-			continue;
-		}
-		execute(oldcmdStr);
-	}
-
-	else {
-		/* Guarda el comando (/dev/sh_history) */
-		write(fd, cmdStr, strlen(cmdStr));
-		write(fd, "\n", 1);
-		strcpy(oldcmdStr, cmdStr);
-		/* Ejecuta el comando. */
-		execute(cmdStr);
-	}
+	/* Guarda el comando (/dev/sh_history) */
+	write(fd, cmdStr, strlen(cmdStr));
+	write(fd, "\n", 1);
+	/* Ejecuta el comando. */
+	execute(cmdStr);
     }
     close(fd);
     return EXIT_SUCCESS;
