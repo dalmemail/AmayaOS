@@ -35,7 +35,7 @@
 #define MOVE_KEY 'm'
 #define COPY_KEY 'c'
 #define PASTE_KEY 'p'
-#define CHANGE_WORKSPACE_KEY ' '
+#define CHANGE_WORKSPACE_KEY '\t'
 
 #define MAX_DIRS 2
 
@@ -73,12 +73,10 @@ void commander(char *path, char *cwd)
 	while (status != EXITING) {
 		dirs[current_dir].cursor_position = cursor_position;
 		dirs[current_dir].n_files = n_files;
-		if (n_files > 19) {
-			refresh_interface(dirs);}
-			/*print_entry(dir_content, dirs, current_dir);
-			simple_interface();
+		if (n_files > 18) {
+			refresh_interface(dirs);
 		}
-		else */print_entry(dir_content, dirs, current_dir);
+		print_entry(dir_content, dirs, current_dir);
 		key = getchar();
 		if (key == UP_KEY && cursor_position > 0) {
 			cursor_position--;
@@ -176,12 +174,10 @@ void commander(char *path, char *cwd)
 		}
 		else if (key == INFO_KEY) {
 			file_info(dir_content[current_dir][cursor_position].file_name, current_path);
-			getchar();
 			refresh_interface(dirs);
 		}
 		else if (key == ABOUT_KEY) {
 			about_commander();
-			getchar();
 			refresh_interface(dirs);
 		}
 		else if (key == CREATE_FILE_KEY) {
@@ -199,7 +195,7 @@ void commander(char *path, char *cwd)
 			strcpy(parent_path, file_path);
 			search_parent(parent_path);
 			int result;
-			if ((result = checkDir(parent_path)) == 0) {
+			if (filename[0] && (result = checkDir(parent_path)) == 0) {
 				if (touch(file_path, S_IRUSR | S_IWUSR) < 0) {
 					print_error(strerror(errno));
 				}
@@ -207,7 +203,7 @@ void commander(char *path, char *cwd)
 				free(dir_content);
 				dir_content[current_dir] = get_dir_content(current_path, n_files);
 			}
-			else {
+			else if (filename[0]) {
 				print_error(strerror(result));
 			}
 		}
@@ -226,7 +222,7 @@ void commander(char *path, char *cwd)
 			strcpy(parent_path, dir_path);
 			search_parent(parent_path);
 			int result;
-			if ((result = checkDir(parent_path)) == 0) {
+			if (dirname[0] && (result = checkDir(parent_path)) == 0) {
 				if (mkdir(dir_path, S_IRUSR | S_IWUSR) < 0) {
 					print_error(strerror(errno));
 				}
@@ -234,7 +230,7 @@ void commander(char *path, char *cwd)
 				free(dir_content);
 				dir_content[current_dir] = get_dir_content(current_path, n_files);
 			}
-			else {
+			else if (dirname[0]) {
 				print_error(strerror(result));
 			}
 		}
@@ -244,7 +240,7 @@ void commander(char *path, char *cwd)
 			print_entry(dir_content, dirs, current_dir);
 			get_string("Introduzca el nombre del directorio:", new_path, 256);
 			int result;
-			if ((result = checkDir(new_path)) == 0) {
+			if (new_path[0] && (result = checkDir(new_path)) == 0) {
 				strcpy(current_path, new_path);
 				refresh_interface(dirs);
 				free(dir_content);
@@ -254,7 +250,7 @@ void commander(char *path, char *cwd)
 			}
 			else {
 				refresh_interface(dirs);
-				print_error(strerror(result));
+				if (new_path[0]) print_error(strerror(result));
 			}
 		}
 		else if (key == COPY_KEY) {

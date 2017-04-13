@@ -33,7 +33,13 @@ void print_entry(struct dir_entry *dir_content[2], struct dir_info dirs[2], int 
 		init_position[y] = (dirs[y].n_files < 19) ? 0 : dirs[y].cursor_position;
 		int bw = 0;
 		for (int x = 0; x < 19 && x < dirs[y].n_files; x++) {
-			snprintf(&content[y][bw], (512-bw), "\033[%d;%dH %s%s", (x+4), ((40*y)+2),colors[dir_content[y][init_position[y]+x].fileType],dir_content[y][init_position[y]+x].file_name);
+			if (strlen(dir_content[y][init_position[y]+x].file_name) > 32) {
+				char shortFileName[33];
+				strlcpy(shortFileName, dir_content[y][init_position[y]+x].file_name, 32);
+				snprintf(&shortFileName[30], 3, "..\0");
+				snprintf(&content[y][bw], (512-bw), "\033[%d;%dH %s%s", (x+4), ((40*y)+2),colors[dir_content[y][init_position[y]+x].fileType],shortFileName);
+			}
+			else snprintf(&content[y][bw], (512-bw), "\033[%d;%dH %s%s", (x+4), ((40*y)+2),colors[dir_content[y][init_position[y]+x].fileType],dir_content[y][init_position[y]+x].file_name);
 			bw = strlen(content[y]);
 		}
 	}
@@ -62,6 +68,18 @@ void clean_screen()
 
 void print_path(char *first_path, char *second_path)
 {
+	char shortFirstPath[37];
+	char shortSecondPath[37];
+	if (strlen(first_path) > 36) {
+		strlcpy(shortFirstPath, first_path, 36);
+		snprintf(&shortFirstPath[34], 3, "..\0");
+		first_path = &shortFirstPath[0];
+	}
+	if (strlen(second_path) > 36) {
+		strlcpy(shortSecondPath, second_path, 36);
+		snprintf(&shortSecondPath[34], 3, "..\0");
+		second_path = &shortSecondPath[0];
+	}
 	printf("\033[2;2H%s\033[2;42H%s", first_path, second_path);
 }
 
@@ -105,6 +123,12 @@ void print_simple_window()
 
 void print_info(struct stat st, char *filename)
 {
+	char shortFileName[16] = "\0";
+	if (strlen(filename) > 16) {
+		strlcpy(shortFileName, filename, 16);
+		snprintf(&shortFileName[14], 3, "..\0");
+		filename = &shortFileName[0];
+	}
 	print_simple_window();
 	char screen[512];
 	strcpy(screen, "\033[8;26HFichero: ");
@@ -136,39 +160,56 @@ void print_info(struct stat st, char *filename)
 	char size[12];
 	itoa(size, 10, st.st_size);
 	strcat(screen, size);
-	printf("%s\033[25;1H", screen);
+	printf("%s\033[14;37H[ OK ]\033[14;38H", screen);
+	while (getchar() != '\n');
 }
 
 void about_commander()
 {
 	print_simple_window();
 	char screen[128];
-	strcpy(screen, "\033[10;30HAmaya File Commander");
-	strcat(screen, "\033[13;32Hamaya@amayaos.com\033[25;1H");
+	strcpy(screen, "\033[10;30HAmaya File Commander\033[11;34HVersion 0.3");
+	strcat(screen, "\033[13;28HWritten by Daniel Martin\033[15;37H[ OK ]\033[15;38H");
 	printf("%s", screen);
+	while (getchar() != '\n');
 }
 
 void print_simple_dialog()
 {
+	char clean[51];
 	char bar[51];
 	for (int i = 0; i < 50; i++) {
 		bar[i] = 219;
+		clean[i] = ' ';
 	}
 	bar[50] = '\0';
-	printf("\033[12;15H%s\033[13;15H%c\033[13;64H%c\033[14;15H%c\
-	\033[14;64H%c\033[15;15H%s", bar, 179, 179, 179, 179, bar);
+	clean[50] = '\0';
+	printf("\033[12;15H%s\033[13;15H%s\033[13;15H%c\033[13;64H%c\033[14;15H%s\033[14;15H%c\
+	\033[14;64H%c\033[15;15H%s\033[15;15H%c\033[15;28H[ Aceptar ] [ Cancelar ]\033[15;64H%c\033[16;15H%s", bar, clean, 179, 179, clean, 179, 179, clean, 179, 179, bar);
 }
 
 char *get_string(char *message, char *str, int size)
 {
 	print_simple_dialog();
-	printf("\033[13;16H%s\033[14;16H", message);
+	printf("\033[13;16H%s", message);
 	char line[size];
 	Size total = 0;
 	Size point = 0;
+	int option = 0;
 
 	/* Leemos una linea. */
 	while (total < sizeof(line)) {
+		switch (option) {
+			case 0:
+				printf("\033[14;%dH", (16+total));
+			break;
+			case 1:
+				printf("\033[15;29H");
+			break;
+			case 2:
+				printf("\033[15;41H");
+			break;
+		}
 		/* Leemos un caracter. */
 		read(0, line + point, 1);
 
@@ -176,12 +217,15 @@ char *get_string(char *message, char *str, int size)
 		switch (line[point]) {
 			case '\r':
 			case '\n':
-				line[total] = ZERO;
-				strlcpy(str, line, size);
-				return str;
+				if (option < 2) {
+					line[total] = ZERO;
+					strlcpy(str, line, size);
+					return str;
+				}
+				else return (char *)NULL;
 
 			case '\b':
-				if (total > 0) {
+				if (!option && total > 0) {
 					line[--total] = ZERO;
 					point--;
 					printf("\b \b");
@@ -196,16 +240,19 @@ char *get_string(char *message, char *str, int size)
                 
 			case '\a':
 			break;
+
+			case '\t':
+				if (option != 2) option++;
+				else option = 0;
+			break;
                 
 			default:
-				point++;
-				total++;
-				line[point] = ZERO;
-				if (total > 48) {
-					printf("\033[14;16H%s", &line[total-48]);
-				}
-				else {
-					printf("\033[14;16H%s", line);
+				if (!option) {
+					point++;
+					total++;
+					line[point] = ZERO;
+					if (total > 48) printf("\033[14;16H%s", &line[total-48]);
+					else printf("\033[14;16H%s", line);
 				}
 			break;
 		}
@@ -218,8 +265,19 @@ char *get_string(char *message, char *str, int size)
 
 int exit_window()
 {
+	int option = 0;
+	int ret = 0;
+	char key = '\n';
 	print_simple_window();
-	printf("\033[10;27HYou are exiting Commander\033[12;30HAre you sure? (Y/N)\033[7;25H");
-	char key = getchar();
-	return (key == 'y' || key == 'Y') ? 0 : 1;
+	printf("\033[10;27HDo you really want to exit?\033[13;32H[ \e[31mY\e[mes ] [ \e[31mN\e[mo ]");
+	do {
+		/* Set the cursor position */
+		if (!option) printf("\033[13;33H");
+		else printf("\033[13;41H");
+		key = getchar();
+		if (key == '\t') option ^= 1;
+	} while(key != '\n' && key != 'y' && key != 'Y' && key != 'N' && key != 'n');
+	if (key == '\n') ret = option;
+	else ret = (key == 'y' || key == 'Y') ? 0 : 1;
+	return ret;
 }

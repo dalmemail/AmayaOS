@@ -19,7 +19,7 @@
 #include <unistd.h>
 #include "commander.h"
 
-#define VERSION "0.2"
+#define VERSION "0.3"
 
 void help();
 
