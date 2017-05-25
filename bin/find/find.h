@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Dan Rulos [amaya@amayaos.com]
+ * Copyright (C) 2015, 2017 Daniel Martín [amaya@amayaos.com]
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,5 +15,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* find() seeks file on path */
-int find(char *path, char *file);
+struct find_params {
+	int fname;
+	char *name;
+};
+
+int find(char *path, struct find_params params);

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Dan Rulos [amaya@amayaos.com]
+ * Copyright (C) 2015, 2017 Daniel Martín [amaya@amayaos.com]
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,8 +21,9 @@
 #include <string.h>
 #include <errno.h>
 #include <unistd.h>
+#include "find.h"
 
-int find(char *path, char *file)
+int find(char *path, struct find_params params)
 {
 	DIR *d;
 	struct dirent *dent;
@@ -43,18 +44,13 @@ int find(char *path, char *file)
 						strcat(path_, "/");
 					}
 					strcat(path_, dent->d_name);
-					find(path_, file);
+					find(path_, params);
 				}
 				break;
 			default:
-				if ((strcmp(dent->d_name, file)) == 0) {
-					if ((strcmp("/", path)) == 0) {
-						printf("/%s\n", file);
-					}
-					else {
-						printf("%s/%s\n", path, file);
-					}
-				}
+				int check = 1;
+				if (params.fname && (strcmp(dent->d_name, params.name)) != 0) check = 0;
+				if (check) printf("%s/%s\n", path, dent->d_name);				
 		}
 		for (int i = 0; i < 128; i++) {
 			path_[i] = '\0';
