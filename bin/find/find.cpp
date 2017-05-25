@@ -50,7 +50,10 @@ int find(char *path, struct find_params params)
 			default:
 				int check = 1;
 				if (params.fname && (strcmp(dent->d_name, params.name)) != 0) check = 0;
-				if (check) printf("%s/%s\n", path, dent->d_name);				
+				if (check) {
+					if (strcmp(path, "/") != 0) printf("%s/%s\n", path, dent->d_name);
+					else printf("/%s\n", dent->d_name);
+				}
 		}
 		for (int i = 0; i < 128; i++) {
 			path_[i] = '\0';
