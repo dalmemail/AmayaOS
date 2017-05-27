@@ -143,10 +143,42 @@ int Shell::execute(char *command)
 
 char * Shell::getCommand()
 {
-    char line[1024];
-    
-    gets(line);
-    
+    static char line[1024];
+    Size total = 0;
+
+    /* Read a line. */
+    while (total < sizeof(line))
+    {
+        /* Read a character. */
+	read(0, line + total, 1);
+	
+	/* Process character. */
+	switch (line[total])
+	{
+	    case '\r':
+	    case '\n':
+	    	printf("\r\n");
+		line[total] = ZERO;
+		return line;
+
+	    case '\b':
+		if (total > 0)
+		{
+		    total--;
+		    printf("\b \b");
+		}
+		break;
+
+	    case '\t':
+		break;
+	    
+	    default:
+		printf("%c", line[total]);
+		total++;
+		break;
+	}
+    }
+    line[total] = ZERO;
     return line;
 }
 
