@@ -26,6 +26,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include "CommandLineCompletion.h"
 
 int get_size(char *path)
 {
@@ -170,6 +171,8 @@ char * Shell::getCommand()
 		break;
 
 	    case '\t':
+		line[total] = ZERO;
+		total = tab_completion(line, sizeof(line), total);
 		break;
 	    
 	    default:
@@ -182,7 +185,7 @@ char * Shell::getCommand()
     return line;
 }
 
-void Shell::prompt()
+void prompt()
 {
     char host[128], cwd[128];
     

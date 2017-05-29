@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Niek Linnenbank
+ * Copyright (C) 2009 Niek Linnenbank, 2017 Daniel Martín
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,6 +23,11 @@
 
 /** Maximum number of supported command arguments. */
 #define MAX_ARGV 16
+
+/**
+ * Output a prompt.
+ */
+void prompt();
 
 /**
  * Very basic command shell.
@@ -53,11 +58,6 @@ class Shell
 	 * @return Pointer to a command.
 	 */
 	char * getCommand();
-    
-	/**
-	 * Output a prompt.
-	 */
-	void prompt();
 
 	/**
 	 * Parses an input string into seperate pieces.

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2009 Niek Linnenbank
+# Copyright (C) 2009 Niek Linnenbank, 2017 Daniel Martin
 # 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -23,5 +23,5 @@ env = Prepare(target, [ 'libcrt', 'liballoc', 'libposix', 'libexec', 'libc', 'li
 
 env.Program('sh', [ 'Main.cpp', 'Shell.cpp', 'HelpCommand.cpp', 
 		    'ShellCommand.cpp', 'WriteCommand.cpp', 'ExitCommand.cpp',
-		    'ChangeDirCommand.cpp' ],
+		    'ChangeDirCommand.cpp', 'CommandLineCompletion.cpp' ],
 		     LIBS = env['LIBS'], LIBPATH = env['LIBPATH'])
