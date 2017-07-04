@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 Dan Rulos [amaya@amayaos.com]
+ * Copyright (C) 2016, 2017 Daniel Martín [amaya@amayaos.com]
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -117,7 +117,9 @@ void update_file_content(const char *path, char **lines, int nlines)
 			}
 		}
 		close(fd);
-		add_message("Guardado Correctamente");
+		char msg[64];
+		snprintf(msg, 64, "Wrote %d lines", nlines);
+		add_message(msg);
 	}
 	else {
 		add_message(strerror(errno));

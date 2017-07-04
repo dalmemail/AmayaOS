@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 Dan Rulos [amaya@amayaos.com]
+ * Copyright (C) 2016, 2017 Daniel Martín [amaya@amayaos.com]
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,7 +50,7 @@ int main(int argc, char **argv)
 			else file_path = &argv[i][0];
 		}
 		else {
-			printf("Opci%cn no reconocida: %s\n", 162, argv[i]);
+			printf("Option not found: '%s'\n", argv[i]);
 			hflag = 1;
 			ret = EXIT_FAILURE;
 		}
@@ -61,17 +61,20 @@ int main(int argc, char **argv)
 	else if (vflag) {
 		version();
 	}
-	else {
+	else if (file_path != NULL) {
 		ret = wama_main(file_path);
+	}
+	else {
+		printf("Error: Filename or path must be given\n");
 	}
 	return ret;
 }
 
 void help(void)
 {
-	printf("Uso: wama [OPCIONES] [FICHERO]\n");
-	printf("\n--help\t\tMuestra esta ayuda y cierra\n");
-	printf("--version\tMuestra la versi%cn y cierra\n", 162);
+	printf("Usage: wama [OPTION(s)] [FILE]\n");
+	printf("\n--help\t\tPrints this help and exit Wama\n");
+	printf("--version\tPrints Wama version and exit\n");
 }
 
 void version(void)

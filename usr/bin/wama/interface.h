@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 Dan Rulos [amaya@amayaos.com]
+ * Copyright (C) 2016, 2017 Daniel Martín [amaya@amayaos.com]
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@ void clean_screen();
 
 void up_bar(char *str1, int sp1, char *str2, int sp2);
 
-void down_bar();
+void down_bar(int optpos);
 
 void clean_message_line();
 
