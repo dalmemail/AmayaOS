@@ -5,7 +5,7 @@ NAME
 
 SYNOPSYS
 
-	wama [OPTIONS] [FILE]
+	wama [OPTION(s)] [FILE]
 
 DESCRIPTION
 
@@ -20,27 +20,18 @@ OPTIONS
 	--version
 		Show the current version number and exit
 
-	-r
-		Open a file only for read
-
-	-n
-		Creat a new file
-
-	-e
-		Edit a existing file
-
 INTERNAL WAMA COMMANDS
 
-	$exit
+	[TAB+X]
+		Exit without saving
+	[TAB+V]
 		Save file and exit
-	$nav
-		Execute line navigator
-		Internal $nav Commands:
-			'w' Forward one line
-			's' Backward one line
-			'm' Move to 'x' line
-			'f' Search string in file
-			'r' Remove selected line
+	[TAB+C]
+		Print cursor current position
+	[TAB+F]
+		Find a string in the file content, if it exists
+	[TAB+WASD]
+		Navigate in the file content
 
 BUGS
 	Please send any comments or bug reports to amaya@amayaos.com
@@ -49,4 +40,4 @@ HOMEPAGE
 
 	http://wiki.amayaos.com/index.php/Wama
 
-June 2, 2016					WAMA(1)
+July 5, 2017					WAMA(1)
