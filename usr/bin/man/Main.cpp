@@ -20,7 +20,7 @@
 #include <sys/stat.h>
 #include <string.h>
 
-#define VERSION "1.0.2"
+#define VERSION "1.1"
 
 #define MANUAL_PAGES_PATH "/usr/share/man/"
 
@@ -66,17 +66,16 @@ char *read_file(char *path)
 	return data;
 }
 
-int line_navigator(char *path)
+int line_navigator(char *path, char *doc_page)
 {
 	int ret = 0;
 	char *data = read_file(path);
 	int n_lines = linecounter(data);
-	int act_line = 1;
+	int act_line = 0;
 	char **lines;
 	lines = new char *[n_lines];
 	lines[0] = &data[0];
 	int data_len = strlen(data);
-	char *doc_page = &path[9];
 	if (data_len > 0) {
 		for (int i = 1, x = 0; data[x] != '\0'; x++) {
 			if (data[x] == '\n') {
@@ -103,36 +102,35 @@ int line_navigator(char *path)
 					printf("%s\n", lines[i]);
 				}
 				printf("\n\nManual page for %s line %d "
-				"(press 'h' for help or 'q' to exit\n", doc_page, act_line);
+				"(press 'h' for help or 'q' to exit)", doc_page, act_line+1);
 				read(0, char_read, 1);
 				if (char_read[0] == 'e' && act_line < n_lines) {
 					act_line++;
 				}
-				if (char_read[0] == 'y' && act_line > 1) {
+				if (char_read[0] == 'y' && act_line > 0) {
 					act_line--;
 				}
 				if (char_read[0] == 'm') {
 					char line[8];
 					clean_screen();
-					printf("Mover a: ");
+					printf("Move to line: ");
 					gets_s(line, 8);
 					int line_to_move = atoi(line);
 					if (line_to_move > 0 && line_to_move < n_lines) {
-						act_line = line_to_move;
+						act_line = (line_to_move-1);
 					}
 				}
 				if (char_read[0] == 'h') {
 					clean_screen();
-					printf("SUMMARY OF LESS COMMANDS\n");
-					printf("h\t\tDisplay this help\n");
-					printf("q\t\tExit\n");
-					printf("MOVING\n");
-					printf("e\t\tForward one line\n");
-					printf("y\t\tBackward one line\n");
-					printf("m\t\tMoves to 'n' line\n");
-					printf("\nPress 'q' when done\n");
-					while (getchar() != 'q') {
-					}
+					printf("\e[9;32HSUMMARY OF LESS COMMANDS\n");
+					printf("\e[10;30Hh\t\tDisplay this help\n");
+					printf("\e[11;30Hq\t\tExit\n");
+					printf("\e[12;40HMOVING\n");
+					printf("\e[13;30He\t\tForward one line\n");
+					printf("\e[14;30Hy\t\tBackward one line\n");
+					printf("\e[15;30Hm\t\tMove to 'n' line\n");
+					printf("\e[17;35HPress 'q' when done\e[1;1H");
+					while (getchar() != 'q');
 				}
 			} while(char_read[0] != 'q');
 			clean_screen();
@@ -155,16 +153,16 @@ int main(int argc, char **argv)
 			printf("Error: Invalid option '%s'\n", argv[1]);
 		}
 		else {
-			strcpy(manual_path, MANUAL_PAGES_PATH);
+			strlcpy(manual_path, MANUAL_PAGES_PATH, 128);
 			strcat(manual_path, argv[1]);
-			if (line_navigator(manual_path) <= 0) {
-				printf("No existe pagina del manual para %s\n", argv[1]);
+			if (line_navigator(manual_path, argv[1]) <= 0) {
+				printf("No manual entry for %s\n", argv[1]);
 				ret = 1;
 			}
 		}
 	}
 	else if (argc == 1) {
-		printf("Indique la pagina del manual que desea ver\n");
+		printf("You must specify the man page to display\n");
 	}
 	return ret;
 }
