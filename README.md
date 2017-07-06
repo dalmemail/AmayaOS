@@ -27,7 +27,7 @@ You can test this operating system with a virtual machine (Using VirtualBox or V
    
 For testing AmayaOS on a real PC you may burn the boot ISO image in an empty CD/DVD, and reboot. You must set up your boot from CD/DVD device in the BIOS to use AmayaOS
 
-*NOTE 3: AmayaOS can't be compiled on x86_64 computers.*
+*NOTE: AmayaOS can't be compiled on x86_64 computers.*
 
 - - -
 
@@ -43,6 +43,7 @@ For testing AmayaOS on a real PC you may burn the boot ISO image in an empty CD/
  * SCons detecta todos los cambios e ignora todos los archivos que no han sido alterados, pero en ciertos casos necesitarás compilar desde cero. En estos casos debes escribir:
  
   `$ sh ./clean`
+  
 2. Probar AmayaOS:
 Para probar este sistema operativo, puedes hacerlo desde una máquina virtual (VirtualBox y VMWare, por ejemplo), un emulador (QEMU y BOCHS, p.ej.) o en un computador real.
 
@@ -60,4 +61,4 @@ Para probar este sistema operativo, puedes hacerlo desde una máquina virtual (V
 
 Para probar AmayaOS en una PC real debes quemar la imagen ISO en un CD virgen e insertarlo en tu PC, luego reinicias y se iniciará AmayaOS. En caso de no ocurrir esto último, deberás configurar la BIOS para que inicie desde tu lector/grabador de CD/DVD.
 
-*NOTA 3: AmayaOS actualmente no puede ser compilado en arquitecturas de 64 bits.*
+*NOTA: AmayaOS actualmente no puede ser compilado en arquitecturas de 64 bits.*
