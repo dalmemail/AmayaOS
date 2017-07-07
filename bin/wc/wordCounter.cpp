@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 Dan Rulos
+ * Copyright (C) 2016 SuperTau, 2017 Daniel Martín
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,17 +15,35 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-struct wc {
-	int words;
-	int lines;
-	int chars;
-};
+#define isDelim(x) (x == ' ' || x == '\n')
+#define isToken(x) (x != ' ' && x != '\n')
 
-/**
- * @brief Counts the number of chars, words and lines from a file
- * @param file_content The data read from the file
- * @return A wc structure with the number of chars, words and lines
- * of the file
- */
+unsigned int sw = 0;
+unsigned int tw = 0;
+unsigned char w_readTokens = 1, w_readDelimiters = 1;
 
-struct wc wordcount(char *file_content);
+void wordCounter(char c)
+{
+	if(c == -1) return;
+
+	if(isToken(c) && w_readTokens)
+	{
+		sw++;
+		w_readTokens = 0;
+		w_readDelimiters = 1;
+	}
+
+	if(isDelim(c) && w_readDelimiters)
+	{
+		w_readDelimiters = 0;
+		w_readTokens = 1;
+	}
+}
+
+void resetWordCounter()
+{
+	tw += sw;
+	sw = 0;
+	w_readTokens = 1;
+	w_readDelimiters = 1;
+}

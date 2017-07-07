@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 Dan Rulos
+ * Copyright (C) 2016 SuperTau, 2017 Daniel Martín
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,30 +15,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "wc.h"
+unsigned int sl = 0;
+unsigned int tl = 0;
+char lineCounter_old = 0;
 
-#define _FALSE 0
-#define _TRUE 1
-
-struct wc wordcount(char *file_content)
+void lineCounter(char c)
 {
-	struct wc file_wc;
-	file_wc.words = 0;
-	file_wc.lines = 0;
-	int new_word = _TRUE;
-	for (file_wc.chars = 0; file_content[file_wc.chars] != '\0'; file_wc.chars++) {
-		if (file_content[file_wc.chars] == '\n') {
-			file_wc.lines++;
-			new_word = _TRUE;
-		}
-		else if (file_content[file_wc.chars] == '\t'
-			|| file_content[file_wc.chars] == ' ') {
-			new_word = _TRUE;
-		}
-		else if (new_word) {
-			new_word = _FALSE;
-			file_wc.words++;
-		}
-	}
-	return file_wc;
+	if((c == '\n') || (c == -1 && lineCounter_old != '\n')) sl++;
+	lineCounter_old = c;
+}
+
+void resetLineCounter()
+{
+	tl += sl;
+	sl = 0;
+	lineCounter_old = 0;
 }
