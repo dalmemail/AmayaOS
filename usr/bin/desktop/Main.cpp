@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2016 Dan Rulos
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -94,7 +94,7 @@ int main(int argc, char **argv)
     if (menu() == -1) {
 	char clean[] = {0x1b, 0x5b, 0x48, 0x1b, 0x5b, 0x4a, '\0'};
 	printf("%s", clean);
-	int file = open("/home/live/shell_welcome", O_RDONLY);
+	int file = open("/etc/issue", O_RDONLY);
 	char shell_welcome[300];
 	read(file, shell_welcome, 300);
 	close(file);
