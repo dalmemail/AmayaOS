@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2009 Niek Linnenbank, 2012 Felipe Cabrera, 2016 Dan Rulos
+# Copyright (C) 2009 Niek Linnenbank, 2012 Felipe Cabrera, 2014-2017 Daniel Martin
 # 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -46,7 +46,7 @@ for v in version:
     versionPower -= 8
 
 
-    currentRev = current + "-alpha1"
+    currentRev = current + "-alpha3"
 
 # Attempt to retrieve the correct compiler version
 try:
