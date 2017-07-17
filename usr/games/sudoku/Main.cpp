@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 Dan Rulos
+ * Copyright (C) 2016, 2017 Daniel Martín
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,36 +20,21 @@
 #include <unistd.h>
 #include <string.h>
 #include <fcntl.h>
+#include <time.h>
 #include "gamemodes.h"
 #include "sudoku.h"
+#include "sudoku_database.h"
 
-#define VERSION "0.6"
+#define VERSION "0.6.1"
 
 int main(int argc, char **argv)
 {
-	char *path;
 	if (argc == 1) {
-		int n = -1;
-		while (n == -1) {
-			path = new char[256];
-			strcpy(path, "/etc/sudoku/sudoku_");
-			n = randomnumber() % 2;
-			if (n == 0) {
-				strcat(path, "easy");
-			}
-			else {
-				strcat(path, "difficult");
-			}
-			char *c = new char[2];
-			c[0] = (randomnumber()+'0');
-			c[1] = '\0';
-			strcat(path, c);
-			n = sudoku(path);
-			if (n == 0) {
-				clear_window();
-			}
-			delete c;
-			delete path;
+		int playSudoku = 1;
+		while (playSudoku) {
+			int sud_n = random() % N_SUDOKUS;
+			playSudoku = sudoku(sudb[sud_n]);
+			if (!playSudoku) clear_window();
 		}
 	}
 	else if (argc == 2 && (strcmp(argv[1], "--version")) == 0) {
@@ -66,9 +51,9 @@ int main(int argc, char **argv)
 			printf("Error: El archivo %s no existe o no puede ser abierto\n", argv[1]);
 		}
 		else {
-			path = &argv[1][0];
 			close(fd);
-			sudoku(path);
+			unsigned int sudokuFromFile[16];
+			if (getSudokuFromFile(argv[1], sudokuFromFile)) sudoku(sudokuFromFile);
 		}
 	}
 	return 0;

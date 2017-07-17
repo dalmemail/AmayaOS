@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 Dan Rulos
+ * Copyright (C) 2016, 2017 Daniel Martín
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,7 +16,7 @@
  */
 
 /* main void of the game */
-int sudoku(char *path);
+int sudoku(unsigned int numbers_def[16]);
 
 /* checkSudoku() returns 1 if Sudoku it's resolved and 0 if not */
-int checkSudoku(int numbers[16]);
+int checkSudoku(unsigned int numbers[16]);

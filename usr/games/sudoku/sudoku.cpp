@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 Dan Rulos
+ * Copyright (C) 2016, 2017 Daniel Martín
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,7 +18,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
-#include <files.h>
+#include <string.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 #include "sudoku.h"
 
 void clear_window()
@@ -27,7 +29,7 @@ void clear_window()
 	printf("%s", str);
 }
 
-void print_sudoku(int *numbers, int act_pos)
+void print_sudoku(unsigned int *numbers, int act_pos)
 {
 	char *output = new char[1024];
 	clear_window();
@@ -68,24 +70,45 @@ void print_sudoku(int *numbers, int act_pos)
 	delete output;
 }
 
+int getSize(char *path)
+{
+	struct stat st;
+	int ssize;
+	if ((stat(path, &st)) < 0) {
+		ssize = -1;
+	}
+	else {
+		ssize = st.st_size;
+	}
+	return ssize;
+}
+
 char *read_file(char *path)
 {
-	file *f = new file();
-	f->setpath(path);
-	f->f_open(O_RDONLY);
-	char *ch = f->readAll();
-	f->f_close();
-	return ch;
+	int fd;
+	char *content;
+	int fsize = getSize(path);
+	if (fsize == -1) {
+		printf("Error: %s\n", strerror(errno));
+		return (char *)NULL;
+	}
+	if ((fd = open(path, O_RDONLY)) < 0) {
+		printf("Error: %s\n", strerror(errno));
+		return (char *)NULL;
+	}
+	content = new char[17];
+	read(fd, content, 16);
+	return content;
 }
 
-int randomnumber()
+unsigned int getSudokuFromFile(char *path, unsigned int *Sudoku)
 {
-	char *ch = read_file("/dev/time");
-	return (atoi(ch) % 10);
-}
-
-int make_sudoku(int pos, char *path)
-{
-	char *ch = read_file(path);
-	return (ch[pos]-'0');
+	char *content = read_file(path);
+	if (content == NULL) return 0;
+	for (unsigned int i = 0; i < 16; i++) {
+		Sudoku[i] = content[i]-'0';
+		if (content[i] < '0' || content[i] > '4') Sudoku[i] = 0;
+	}
+	delete content;
+	return 1;
 }

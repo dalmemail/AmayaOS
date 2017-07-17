@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 Dan Rulos
+ * Copyright (C) 2016, 2017 Daniel Martín
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,11 +23,7 @@
 void clear_window();
 
 /* put sudoku on the screen */
-void print_sudoku(int *numbers, int act_pos);
+void print_sudoku(unsigned int *numbers, int act_pos);
 
-/* returns a random number from 0 to 9 */
-int randomnumber();
-
-/* make_sudoku() returns the value of a position (pos) in a sudoku
- */
-int make_sudoku(int pos, char *path);
+/* Creates a Sudoku valid array from a file */
+unsigned int getSudokuFromFile(char *path, unsigned int *Sudoku);

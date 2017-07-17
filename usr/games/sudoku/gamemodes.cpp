@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 Dan Rulos
+ * Copyright (C) 2016, 2017 Daniel Martín
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,22 +29,10 @@
 #define RIGHT 'd'
 #define NEW 'n'
 
-int sudoku(char *path)
+int sudoku(unsigned int numbers_def[16])
 {
 	clear_window();
-	int numbers[16];
-	int numbers_def[16];
-	/* get sudoku */
-	for (int i = 0; i < 16; i++) {
-		numbers_def[i] = make_sudoku(i, path);
-		if (numbers_def[i] < 0 || numbers_def[i] > 4) {
-			clear_window();
-			printf("Error: El archivo '%s' es erroneo o corrupto\n", path);
-			printf("Pulsa una tecla para continuar.\n");
-			getchar();
-			return -2;
-		}
-	}
+	unsigned int numbers[16];
 	for (int i = 0; i < 16; i++) {
 		numbers[i] = numbers_def[i];
 	}
@@ -54,13 +42,13 @@ int sudoku(char *path)
 		option = getchar();
 		if (option == FIX) {
 			clear_window();
-			if (checkSudoku(numbers) == WIN) {
+			if (checkSudoku(numbers)) {
 				printf("\n\t\t\t\tYou win!\n");
 			}
 			else {
 				printf("\n\t\t\t\tYou lost\n");
 			}
-			printf("\t\t\t\tPress any other key to exit\n");
+			printf("\t\t\t\tPress any key to exit\n");
 			getchar();
 			return 0;
 		}
@@ -80,13 +68,13 @@ int sudoku(char *path)
 			numbers[i] = (option - '0');
 		}
 		else if (option == NEW) {
-			return -1;
+			return 1;
 		}
 	}
 	return 0;
 }
 
-int checkSudoku(int numbers[16])
+int checkSudoku(unsigned int numbers[16])
 {
 	int sudoku4x4[4][4];
 	int subregions[4][4];
