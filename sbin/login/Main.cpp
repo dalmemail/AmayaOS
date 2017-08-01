@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Niek Linnenbank, 2016 Dan Rulos
+ * Copyright (C) 2015 Niek Linnenbank, 2016-2017 Daniel Martín
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -90,78 +90,68 @@ char * getstring(int mode, char string[])
 
 int main(int argc, char **argv)
 {
-    char user[USER_MAX_LONG];
-    char password[PASSWORD_MAX_LONG];
-    const char *sh_argv[] = { "/bin/sh/sh", 0 };
-    char amaya_user[USER_MAX_LONG] = "\0";
-    char amaya_password[PASSWORD_MAX_LONG] = "\0";
+	char user[USER_MAX_LONG] = "\0";
+	char password[PASSWORD_MAX_LONG] = "\0";
+	const char *sh_argv[] = { "/bin/sh/sh", 0 };
+	const char amaya_user[] = "live";
+	const char amaya_password[] = "amaya";
 
-    pid_t pid;
-    int status;
+	pid_t pid;
+	int status;
 
-    // Check arguments
-    if (argc < 3)
-    {
-        printf("usage: %s INPUT OUTPUT\n", argv[0]);
-        return EXIT_FAILURE;
-    }
+	// Check arguments
+	if (argc < 3)
+	{
+		printf("usage: %s INPUT OUTPUT\n", argv[0]);
+		return EXIT_FAILURE;
+	}
 
-    // Wait until the I/O files are available (busy loop)
-    while (true)
-    {
-        // Re-open standard I/O
-        close(0);
-        close(1);
-        close(2);
+	// Wait until the I/O files are available (busy loop)
+	while (true)
+	{
+		// Re-open standard I/O
+		close(0);
+		close(1);
+		close(2);
 
-        // Stdin
-        if (open(argv[1], O_RDONLY) == -1)
-            continue;
+		// Stdin
+		if (open(argv[1], O_RDONLY) == -1)
+			continue;
 
-        // Stdout
-        if (open(argv[2], O_RDWR) == -1)
-            continue;
+		// Stdout
+		if (open(argv[2], O_RDWR) == -1)
+			continue;
 
-        // Stderr
-        if (open(argv[2], O_RDWR) == -1)
-            continue;
+		// Stderr
+		if (open(argv[2], O_RDWR) == -1)
+			continue;
 
-        // Done
-        break;
-    }
+		// Done
+		break;
+	}
 
-    // Loop forever with a login prompt
-    while (true)
-    {
-        banner();
-        getstring(USER, user);
+	// Loop forever with a login prompt
+	printf("Welcome! The default user is 'live' identified by the password 'amaya'\n");
+	while (true)
+	{
+		banner();
+		getstring(USER, user);
 
-        if (strlen(user) > 0)
-        {
-	    printf("Password: ");
-	    getstring(PASSWORD, password);
-	    if (strlen(password) > 0) {
-		    if (strlen(amaya_user) == 0) {
-			strcpy(amaya_user, user);
-			strcpy(amaya_password, password);
-		    }
-		    if ((strcmp(user, amaya_user)) == 0 && ((strcmp(password, amaya_password)) == 0)) {
-			    // Start the shell
-			    if ((pid = forkexec("/bin/sh/sh", sh_argv)) != (pid_t) -1)
-			    {
-				waitpid(pid, &status, 0);
-			    }
-			    else
-			    {
-				printf("forkexec '%s' failed: %s\r\n", argv[0],
-				        strerror(errno));
-			    }
-		    }
-		    else {
-			printf("Login Incorrect\n");
-		    }
-	    }
-        }
-    }
-    return EXIT_SUCCESS;
+		if (strlen(user) > 0)
+		{
+			printf("Password: ");
+			getstring(PASSWORD, password);
+			if (strlen(password) > 0) {
+				if (!strcmp(user, amaya_user) && !strcmp(password, amaya_password)) {
+					// Start the shell
+					if ((pid = forkexec("/bin/sh/sh", sh_argv)) != (pid_t) -1)
+						waitpid(pid, &status, 0);
+			    		else
+					printf("forkexec '%s' failed: %s\r\n",argv[0],strerror(errno));
+				}
+				else printf("Login Incorrect\n");
+			}
+		}
+	}
+	return EXIT_SUCCESS;
 }
