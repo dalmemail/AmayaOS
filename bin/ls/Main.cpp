@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 Niek Linnenbank, 2012 Felipe Cabrera, 2016 Dan Rulos
+ * Copyright (C) 2009 Niek Linnenbank, 2012 Felipe Cabrera, 2016-2017 Daniel Martín
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,110 +24,93 @@
 #include <sys/stat.h>
 #include <TerminalCodes.h>
 
-bool all = false;
+#define OPT_A 1
 
-int pf(int argc, char **argv, int i, char *u)
+int listDir(char *dirName, unsigned char listOpt)
 {
-    DIR *d;
-    struct dirent *dent;
-    struct stat st;
-    char path[255], tmp[255];
-    
-    /* Obtenemos los argumentos, en caso de existir */
-    if (argc > 1) {
-        strncpy(path, u, sizeof(path));
-        path[sizeof(path) - 1] = 0;
-    }
-    
-    else
-        getcwd(path, sizeof(path));
+	DIR *d;
+	struct dirent *dent;
+	struct stat st;
+	char tmp[256];
 
-    /* Intentamos abrir el directorio. */
-    if (!(d = opendir(path))) {
-        printf("%s: error al abrir '%s': %s\n",
-                argv[0], path, strerror(errno));
-        return EXIT_FAILURE;
-    }
+	/* Intentamos abrir el directorio. */
+	if (!(d = opendir(dirName))) {
+		printf("ls: error al abrir '%s': %s\n", dirName, strerror(errno));
+		return EXIT_FAILURE;
+	}
     
-    /* Leemos el directorio. */
-    while ((dent = readdir(d))) {
-        if(dent->d_name[0]=='.' && !all)
-            continue;
-        /* Esta es la parte entretenida. A colorear! */
-        switch (dent->d_type) {
-            case DT_DIR:
-                printf("%s", BLUE);
-                break;
+	/* Leemos el directorio. */
+	while ((dent = readdir(d))) {
+		if(dent->d_name[0]=='.' && !(listOpt & OPT_A))
+			continue;
+		/* Esta es la parte entretenida. A colorear! */
+		switch (dent->d_type) {
+			case DT_DIR:
+				printf("%s", BLUE);
+			break;
 
-            case DT_BLK:
-            case DT_CHR:
-                if (!strncmp(dent->d_name, "stdin", strlen("stdin")) ||
-                    !strncmp(dent->d_name, "stdout", strlen("stdout")))
-                    printf("%s", CYAN);
-                else
-                    printf("%s", YELLOW);
-                break;
-                
-            case DT_REG:
-            default:
-                /* Construimos la ruta completa. */
-                snprintf(tmp, sizeof(tmp),
-                        "%s/%s", path, dent->d_name);
+			case DT_BLK:
+			case DT_CHR:
+				printf("%s", YELLOW);
+	                break;
 
-                /* Es un ejecutable? */
-                if (stat(tmp, &st) != -1 && st.st_mode & 0100)
-                    printf("%s", GREEN);
-                else
-                    printf("%s", WHITE);
-        }
-        printf("%s ", dent->d_name);
-    }
-    
-    printf("%s\n", WHITE);
+			case DT_REG:
+			default:
+				/* Construimos la ruta completa. */
+				snprintf(tmp, sizeof(tmp), "%s/%s", dirName, dent->d_name);
 
-    /* Cerramos. */
-    closedir(d);
-    
-    return EXIT_SUCCESS;
+				/* Es un ejecutable? */
+				if (stat(tmp, &st) != -1 && st.st_mode & 0100) 
+					printf("%s", GREEN);
+				else
+					printf("%s", WHITE);
+		}
+		printf("%s ", dent->d_name);
+	}
+
+	printf("%s\n\n", WHITE);
+
+	/* Cerramos. */
+	closedir(d);
+
+	return EXIT_SUCCESS;
 }
 
-int not_a_file(char *path)
+unsigned int IsDir(char *path)
 {
-	int ret = 0;
+	unsigned int ret = 0;
 	struct stat st;
 	if ((stat(path, &st)) >= 0) {
-		if (!S_ISDIR(st.st_mode)) {
-			ret = 1;
-			printf("%s\n", path);
-		}
+		if (S_ISDIR(st.st_mode)) ret = 1;
 	}
 	return ret;
 }
 
 int main(int argc, char **argv)
 {
-    for (int i = 1; i < argc; i++) {
-	if ((strcmp(argv[i], "-a")) == 0 || (strcmp(argv[i], "--all")) == 0) {
-		all = true;
+	unsigned int FilesNum = 0;
+	unsigned int BadArg = 0;
+	unsigned char listOpt = 0;
+	char currentPath[256];
+	for (unsigned int i = 1; i < (unsigned)argc; i++) {
+		if (!strcmp(argv[i], "-a") || !strcmp(argv[i], "--all")) listOpt |= OPT_A;
+		else if (argv[i][0] != '-') FilesNum++;
+		else {
+			BadArg = 1;
+			printf("%s: Invalid option '%s'\n", argv[0], argv[i]);
+		}
 	}
-    }
-    if(argc < 3) {
-	if (all) {
-		pf(1, argv, 1, argv[1]);
+	if (BadArg) return EXIT_FAILURE;
+	for (unsigned int i = 1; i < (unsigned)argc; i++) {
+		if (argv[i][0] != '-') {
+			if (FilesNum > 1) printf("%s:\n", argv[i]);
+			if (IsDir(argv[i])) listDir(argv[i], listOpt);
+			else printf("%s\n", argv[i]);
+		}
 	}
-	else if (argc == 1 || not_a_file(argv[1]) == 0) {
-        	pf(argc, argv, 1, argv[1]);
+	if (!FilesNum) {
+		getcwd(currentPath, sizeof(currentPath));
+		listDir(currentPath, listOpt);
 	}
-    }
-    else {
-        for(int i = 1; i < argc; i++) {
-	    if ((strcmp(argv[i], "-a")) != 0 && (strcmp(argv[i], "--all")) != 0 && not_a_file(argv[i]) == 0) {
-            	printf("%s:\n",argv[i]);
-            	pf(argc, argv, i, argv[i]);
-	    }
-        }
-    }
-    
-    /* Listo. */
-    return EXIT_SUCCESS;
+	return EXIT_SUCCESS;
 }
