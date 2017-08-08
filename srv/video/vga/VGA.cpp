@@ -48,10 +48,6 @@ Error VGA::initialize()
     ProcessCtl(SELF, AllowIO, VGA_IOADDR);
     ProcessCtl(SELF, AllowIO, VGA_IODATA);
     
-    /* Disable hardware cursor. */
-    outb(VGA_IOADDR, 0x0a);
-    outb(VGA_IODATA, 1 << 5);
-    
     /* Successfull. */
     return ESUCCESS;
 }
